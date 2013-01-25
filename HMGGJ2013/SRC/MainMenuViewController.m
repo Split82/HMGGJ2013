@@ -7,9 +7,10 @@
 //
 
 #import "MainMenuViewController.h"
+#import "AboutViewController.h"
+#import "AchievemntNameDefinitions.h"
 #import "CCDirector.h"
 #import "MainGameScene.h"
-#import "AchievemntNameDefinitions.h"
 #import <GameKit/GameKit.h>
 
 @interface MainMenuViewController () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
@@ -117,6 +118,12 @@
 - (IBAction)showAchievementsButtonPressed:(id)sender {
     GKAchievementViewController *controller = [[GKAchievementViewController alloc] init];
     [controller setAchievementDelegate:self];
+    [self presentViewController:controller animated:YES completion:NULL];
+}
+
+- (IBAction)showAboutButtonPressed:(id)sender {
+    AboutViewController *controller = [[AboutViewController alloc] init];
+    [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     [self presentViewController:controller animated:YES completion:NULL];
 }
 
