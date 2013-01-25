@@ -7,7 +7,7 @@
 //
 
 #import "MainGameScene.h"
-#import "TextureNameDefinitions.h"
+#import "GameDataNameDefinitions.h"
 #import "CoinSprite.h"
 
 #define PIXEL_ART_SPRITE_SCALE 4
@@ -26,6 +26,8 @@
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
+
+    CCParticleBatchNode *particleBatchNode;
 
     BOOL sceneInitWasPerformed;
 }
@@ -61,10 +63,14 @@
 
     CCSpriteFrame *placeholderSpriteFrame = [frameCache spriteFrameByName:kPlaceholderTextureFrameName];
 
-    // Batch
+    // Sprite batch
     mainSpriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:100];
     [mainSpriteBatch.texture setAliasTexParameters];
     [self addChild:mainSpriteBatch];
+
+    // Particle batch
+    particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10];
+    [self addChild:particleBatchNode];
 
     CGSize size;
 
@@ -85,7 +91,23 @@
     [mainSpriteBatch addChild:foregroundSprite];
 
     [self scheduleUpdate];
+
+    CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
+    test.position = ccp(100, 100);
+    [particleBatchNode addChild:test];
 }
+
+#pragma mark - Objects
+
+- (void)addCoinAtPos:(CGPoint)pos {
+
+    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos];
+
+    [coins addObject:newCoin];
+    [mainSpriteBatch addChild:newCoin];
+}
+
+#pragma mark - Update
 
 - (void)update:(ccTime)deltaTime {
 
@@ -102,11 +124,16 @@
 
     while (calcTime >= FRAME_TIME_INTERVAL) {
 
+        // Coin
         for (CoinSprite *coin in coins) {
             [coin update:calcTime];
         }
 
         calcTime -= FRAME_TIME_INTERVAL;
+    }
+
+    if (rand() % 100 == 1) {
+        [self addCoinAtPos:ccp((rand() / (float)RAND_MAX) * 320, 20)];
     }
 }
 

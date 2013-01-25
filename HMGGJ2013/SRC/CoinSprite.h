@@ -10,6 +10,7 @@
 
 @interface CoinSprite : CCSprite
 
+- (id)initWithStartPos:(CGPoint)startPos;
 - (void)update:(ccTime)deltaTime;
 
 @end

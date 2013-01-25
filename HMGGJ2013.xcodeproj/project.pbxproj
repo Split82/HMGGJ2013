@@ -132,12 +132,14 @@
 		553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA18C16B3103C00B4E22B /* MainMenuViewController.m */; };
 		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
+		553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */; };
+		553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
 		55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C116B2199900D5BA8D /* GameObjects.plist */; };
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
-		55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */; };
+		55B862C816B21AC900D5BA8D /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B862C716B21AC900D5BA8D /* GameDataNameDefinitions.m */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 /* End PBXBuildFile section */
 
@@ -402,6 +404,8 @@
 		553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenuViewController.xib; sourceTree = "<group>"; };
 		553BA19716B3214000B4E22B /* CoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinSprite.h; sourceTree = "<group>"; };
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
+		553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
+		553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -409,8 +413,8 @@
 		55B860AE16B206F800D5BA8D /* MainGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainGameScene.m; sourceTree = "<group>"; };
 		55B862C116B2199900D5BA8D /* GameObjects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GameObjects.plist; sourceTree = "<group>"; };
 		55B862C216B2199900D5BA8D /* GameObjects.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameObjects.png; sourceTree = "<group>"; };
-		55B862C616B21AC900D5BA8D /* TextureNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureNameDefinitions.h; sourceTree = "<group>"; };
-		55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextureNameDefinitions.m; sourceTree = "<group>"; };
+		55B862C616B21AC900D5BA8D /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
+		55B862C716B21AC900D5BA8D /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -861,6 +865,15 @@
 			name = GameObjects;
 			sourceTree = "<group>";
 		};
+		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
+			isa = PBXGroup;
+			children = (
+				553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */,
+				553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */,
+			);
+			name = ParticleSystems;
+			sourceTree = "<group>";
+		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
@@ -888,6 +901,7 @@
 		55B862BF16B2160500D5BA8D /* GameData */ = {
 			isa = PBXGroup;
 			children = (
+				553BA1AB16B32DEE00B4E22B /* ParticleSystems */,
 				55B862C016B2161600D5BA8D /* Textures */,
 			);
 			path = GameData;
@@ -905,8 +919,8 @@
 		55B862C516B21AA400D5BA8D /* Global */ = {
 			isa = PBXGroup;
 			children = (
-				55B862C616B21AC900D5BA8D /* TextureNameDefinitions.h */,
-				55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */,
+				55B862C616B21AC900D5BA8D /* GameDataNameDefinitions.h */,
+				55B862C716B21AC900D5BA8D /* GameDataNameDefinitions.m */,
 			);
 			name = Global;
 			sourceTree = "<group>";
@@ -987,6 +1001,8 @@
 				55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */,
 				55B862C416B2199900D5BA8D /* GameObjects.png in Resources */,
 				553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */,
+				553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */,
+				553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1100,7 +1116,7 @@
 				55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */,
 				55B860AA16B206CD00D5BA8D /* main.m in Sources */,
 				55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */,
-				55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */,
+				55B862C816B21AC900D5BA8D /* GameDataNameDefinitions.m in Sources */,
 				553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */,
 				653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */,
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
