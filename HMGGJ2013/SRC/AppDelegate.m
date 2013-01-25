@@ -8,16 +8,30 @@
 
 #import "AppDelegate.h"
 #import "MainMenuViewController.h"
+#import <GameKit/GameKit.h>
 
-@interface AppDelegate() {
 
+@interface AppDelegate()
+{
 	UIWindow *window;
 }
+
+@property (retain,readwrite) NSString *currentPlayerID;
+@property (readwrite, getter = isGameCenterAuthenticationComplete) BOOL gameCenterAuthenticationComplete;
 
 @end
 
 
 @implementation AppDelegate
+
+#pragma mark -
+
++ (PlayerModel *) player
+{
+    return [(id)[[UIApplication sharedApplication] delegate] player];
+}
+
+#pragma mark UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -29,6 +43,26 @@
 
 	[window makeKeyAndVisible];
 	
+    [self setGameCenterAuthenticationComplete:NO];
+    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
+        if ([localPlayer isAuthenticated]) {
+            [self setGameCenterAuthenticationComplete:YES];
+            
+            if (![self currentPlayerID] || ! [self.currentPlayerID isEqualToString:localPlayer.playerID]) {
+                if (![self.currentPlayerID isEqualToString:localPlayer.playerID]) {
+                    [self setPlayer:[[PlayerModel alloc] init]];
+                }
+                [self.player synchronize];
+                [viewController setDisplayGameCenter:YES];
+                //TODO: SPLIT/LOKI load new game...
+            }
+        } else {
+            // Player se logoutnul killnout aktualni hru?
+            [self setGameCenterAuthenticationComplete:NO];
+            [viewController setDisplayGameCenter:NO];
+        }
+    }];
 	return YES;
 }
 
@@ -48,6 +82,8 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application {
+    [self setGameCenterAuthenticationComplete:NO];
+    [(MainMenuViewController *)[self.window rootViewController] setDisplayGameCenter:NO];
     
     [[CCDirector sharedDirector] stopAnimation];
 }

@@ -9,8 +9,10 @@
 #import "MainMenuViewController.h"
 #import "CCDirector.h"
 #import "MainGameScene.h"
+#import "AchievemntNameDefinitions.h"
+#import <GameKit/GameKit.h>
 
-@interface MainMenuViewController ()
+@interface MainMenuViewController () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
 
 @end
 
@@ -95,10 +97,39 @@
     [self presentViewController:director animated:NO completion:nil];
 }
 
-- (IBAction)StartGameButtonPressed:(id)sender {
+- (void)setDisplayGameCenter:(BOOL)displayGameCenter {
+    _displayGameCenter = displayGameCenter;
+    [self.topScoreButton setEnabled:displayGameCenter];
+    [self.achievementsButton setEnabled:displayGameCenter];
+}
 
+- (IBAction)startGameButtonPressed:(id)sender {
     [self startGame];
 }
 
+- (IBAction)showLeaderboardButtonPressed:(id)sender {
+    GKLeaderboardViewController *controller = [[GKLeaderboardViewController alloc] init];
+    [controller setCategory:kTopScoreName];
+    [controller setLeaderboardDelegate:self];
+    [self presentViewController:controller animated:YES completion:NULL];
+}
+
+- (IBAction)showAchievementsButtonPressed:(id)sender {
+    GKAchievementViewController *controller = [[GKAchievementViewController alloc] init];
+    [controller setAchievementDelegate:self];
+    [self presentViewController:controller animated:YES completion:NULL];
+}
+
+#pragma mark GKLeaderboardViewControllerDelegate
+
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+#pragma mark GKAchievementViewControllerDelegate
+
+- (void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
 
 @end

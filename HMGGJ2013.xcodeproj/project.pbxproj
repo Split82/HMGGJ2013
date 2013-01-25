@@ -138,6 +138,7 @@
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
 		55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
+		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -410,6 +411,8 @@
 		55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextureNameDefinitions.m; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
+		653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievemntNameDefinitions.h; sourceTree = "<group>"; };
+		653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievemntNameDefinitions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -894,6 +897,8 @@
 			children = (
 				55B862C616B21AC900D5BA8D /* TextureNameDefinitions.h */,
 				55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */,
+				653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */,
+				653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */,
 			);
 			name = Global;
 			sourceTree = "<group>";
@@ -1090,6 +1095,7 @@
 				55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */,
 				553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */,
 				653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */,
+				653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1148,6 +1154,7 @@
 				GCC_PREFIX_HEADER = HMGGJ2013/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HMGGJ2013/libs/kazmath/include\"";
 				INFOPLIST_FILE = HMGGJ2013/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1168,6 +1175,7 @@
 				GCC_PREFIX_HEADER = HMGGJ2013/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HMGGJ2013/libs/kazmath/include\"";
 				INFOPLIST_FILE = HMGGJ2013/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",

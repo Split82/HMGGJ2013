@@ -10,4 +10,12 @@
 
 @interface MainMenuViewController : UIViewController
 
+@property (nonatomic, weak) IBOutlet UIButton *topScoreButton;
+@property (nonatomic, weak) IBOutlet UIButton *achievementsButton;
+@property (nonatomic, getter = isGameCenterDisplayed) BOOL displayGameCenter;
+
+- (IBAction)startGameButtonPressed:(id)sender;
+- (IBAction)showLeaderboardButtonPressed:(id)sender;
+- (IBAction)showAchievementsButtonPressed:(id)sender;
+
 @end
