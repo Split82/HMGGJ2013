@@ -83,7 +83,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication*)application {
     [self setGameCenterAuthenticationComplete:NO];
-    [(MainMenuViewController *)[self.window rootViewController] setDisplayGameCenter:NO];
+    [(MainMenuViewController *)[window rootViewController] setDisplayGameCenter:NO];
     
     [[CCDirector sharedDirector] stopAnimation];
 }
