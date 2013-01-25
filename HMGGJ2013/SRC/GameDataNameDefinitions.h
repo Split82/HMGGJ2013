@@ -1,5 +1,5 @@
 //
-//  TextureNameDefinitions.h
+//  GameDataNameDefinitions.h
 //  HMGGJ2013
 //
 //  Created by Jan Ilavsky on 1/25/13.
@@ -8,3 +8,6 @@
 
 NSString * const kGameObjectsSpriteFramesFileName;
 NSString * const kPlaceholderTextureFrameName;
+
+NSString * const kSimpleParticleTextureFileName;
+NSString * const kExplosionParticleSystemFileName;
