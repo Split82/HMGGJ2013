@@ -6,6 +6,6 @@
 //  Copyright __MyCompanyName__ 2013. All rights reserved.
 //
 
-@interface AppDelegate : NSObject <UIApplicationDelegate, CCDirectorDelegate>
+@interface AppDelegate : NSObject <UIApplicationDelegate>
 
 @end

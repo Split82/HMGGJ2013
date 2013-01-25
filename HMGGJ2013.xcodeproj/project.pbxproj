@@ -129,6 +129,8 @@
 		5537445A16B1FC2200D860C2 /* TGAlib.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440316B1FC2200D860C2 /* TGAlib.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445B16B1FC2200D860C2 /* TransformUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440516B1FC2200D860C2 /* TransformUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445C16B1FC2200D860C2 /* ZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440916B1FC2200D860C2 /* ZipUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA18C16B3103C00B4E22B /* MainMenuViewController.m */; };
+		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -393,6 +395,9 @@
 		5537440716B1FC2200D860C2 /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
 		5537440816B1FC2200D860C2 /* ZipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipUtils.h; sourceTree = "<group>"; };
 		5537440916B1FC2200D860C2 /* ZipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipUtils.m; sourceTree = "<group>"; };
+		553BA18B16B3103C00B4E22B /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuViewController.h; sourceTree = "<group>"; };
+		553BA18C16B3103C00B4E22B /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
+		553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenuViewController.xib; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -831,11 +836,22 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		553BA19116B3105000B4E22B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				553BA18B16B3103C00B4E22B /* MainMenuViewController.h */,
+				553BA18C16B3103C00B4E22B /* MainMenuViewController.m */,
+				553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
 				55B862C516B21AA400D5BA8D /* Global */,
 				55B860AB16B206DE00D5BA8D /* Scenes */,
+				553BA19116B3105000B4E22B /* Controllers */,
 				55B860A316B206CD00D5BA8D /* AppDelegate.h */,
 				55B860A416B206CD00D5BA8D /* AppDelegate.m */,
 				55B860A716B206CD00D5BA8D /* main.m */,
@@ -944,6 +960,7 @@
 				5537431916B1F72C00D860C2 /* ChangeLog in Resources */,
 				55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */,
 				55B862C416B2199900D5BA8D /* GameObjects.png in Resources */,
+				553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1058,6 +1075,7 @@
 				55B860AA16B206CD00D5BA8D /* main.m in Sources */,
 				55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */,
 				55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */,
+				553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
