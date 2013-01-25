@@ -7,7 +7,7 @@
 //
 
 #import "EnemySprite.h"
-#import "TextureNameDefinitions.h"
+#import "GameDataNameDefinitions.h"
 
 #define WALKING_SPEED 10.0f
 #define WALKING_BORDER_OFFSET 5.0f
