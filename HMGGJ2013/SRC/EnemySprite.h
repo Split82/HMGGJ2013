@@ -9,15 +9,22 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    kSwipeEnemy,
-    kTapEnemy,
+    kEnemyTypeSwipe,
+    kEnemyTypeTap,
 } EnemyType;
 
-@interface Enemy : CCNode
+typedef enum {
+    kEnemyStateWalking,
+    kEnemyStateClimbing,
+    kEnemyStateFalling,
+} EnemyState;
 
--(void) initWithType:(EnemyType)type;
+@interface EnemySprite : CCSprite
+
+-(id) initWithType:(EnemyType)type;
 -(void) update:(ccTime)time;
 
 @property (nonatomic, assign) EnemyType type;
+@property (nonatomic, assign) EnemyState state;
 
 @end
