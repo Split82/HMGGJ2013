@@ -99,6 +99,7 @@
     CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     test.position = ccp(100, 100);
     [particleBatchNode addChild:test];
+    //[self scheduleNewEnemySpawn];
 }
 
 #pragma mark - Objects
@@ -109,6 +110,27 @@
 
     [coins addObject:newCoin];
     [mainSpriteBatch addChild:newCoin];
+}
+
+- (void)addEnemy {
+
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+
+    if (enemy.type == kEnemyTypeSwipe) {
+
+        [swipeEnemies addObject:enemy];
+    }
+    else {
+
+        [tapEnemies addObject:enemy];
+    }
+
+    [self scheduleNewEnemySpawn];
+}
+
+- (void)scheduleNewEnemySpawn {
+
+    [self scheduleOnce:@selector(addEnemy) delay:ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME - ENEMY_SPAWN_DELTA_TIME / 2.0f];
 }
 
 #pragma mark - Update
@@ -148,27 +170,5 @@
         [self addCoinAtPos:ccp((rand() / (float)RAND_MAX) * 320, 20)];
     }
 }
-
-- (void)addEnemy {
-    
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
-    
-    if (enemy.type == kEnemyTypeSwipe) {
-        
-        [swipeEnemies addObject:enemy];
-    }
-    else {
-        
-        [tapEnemies addObject:enemy];
-    }
-    
-    [self scheduleNewEnemySpawn];
-}
-
-- (void)scheduleNewEnemySpawn {
-    
-    [self scheduleOnce:@selector(addEnemy) delay:ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME - ENEMY_SPAWN_DELTA_TIME / 2.0f];
-}
-
 
 @end
