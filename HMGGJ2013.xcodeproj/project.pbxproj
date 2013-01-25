@@ -46,9 +46,6 @@
 		5537432F16B1F72C00D860C2 /* vec2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5537432E16B1F72C00D860C2 /* vec2.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537433116B1F72C00D860C2 /* vec3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5537433016B1F72C00D860C2 /* vec3.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537433316B1F72C00D860C2 /* vec4.c in Sources */ = {isa = PBXBuildFile; fileRef = 5537433216B1F72C00D860C2 /* vec4.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		5537433816B1F72C00D860C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537433716B1F72C00D860C2 /* main.m */; };
-		5537433B16B1F72C00D860C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537433A16B1F72C00D860C2 /* AppDelegate.m */; };
-		5537433E16B1F72C00D860C2 /* IntroScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537433D16B1F72C00D860C2 /* IntroScene.m */; };
 		5537440A16B1FC2200D860C2 /* CCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537434916B1FC2200D860C2 /* CCAction.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537440B16B1FC2200D860C2 /* CCActionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537434B16B1FC2200D860C2 /* CCActionCamera.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537440C16B1FC2200D860C2 /* CCActionCatmullRom.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537434D16B1FC2200D860C2 /* CCActionCatmullRom.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -132,6 +129,12 @@
 		5537445A16B1FC2200D860C2 /* TGAlib.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440316B1FC2200D860C2 /* TGAlib.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445B16B1FC2200D860C2 /* TransformUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440516B1FC2200D860C2 /* TransformUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445C16B1FC2200D860C2 /* ZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440916B1FC2200D860C2 /* ZipUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
+		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
+		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
+		55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C116B2199900D5BA8D /* GameObjects.plist */; };
+		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
+		55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -200,11 +203,6 @@
 		5537433216B1F72C00D860C2 /* vec4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = vec4.c; path = libs/kazmath/src/vec4.c; sourceTree = "<group>"; };
 		5537433416B1F72C00D860C2 /* LICENSE_Kazmath.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE_Kazmath.txt; path = libs/LICENSE_Kazmath.txt; sourceTree = "<group>"; };
 		5537433616B1F72C00D860C2 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		5537433716B1F72C00D860C2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5537433916B1F72C00D860C2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		5537433A16B1F72C00D860C2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5537433C16B1F72C00D860C2 /* IntroScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroScene.h; sourceTree = "<group>"; };
-		5537433D16B1F72C00D860C2 /* IntroScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntroScene.m; sourceTree = "<group>"; };
 		5537434816B1FC2200D860C2 /* CCAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAction.h; sourceTree = "<group>"; };
 		5537434916B1FC2200D860C2 /* CCAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCAction.m; sourceTree = "<group>"; };
 		5537434A16B1FC2200D860C2 /* CCActionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCActionCamera.h; sourceTree = "<group>"; };
@@ -395,6 +393,15 @@
 		5537440716B1FC2200D860C2 /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
 		5537440816B1FC2200D860C2 /* ZipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipUtils.h; sourceTree = "<group>"; };
 		5537440916B1FC2200D860C2 /* ZipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipUtils.m; sourceTree = "<group>"; };
+		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		55B860AD16B206F800D5BA8D /* MainGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainGameScene.h; sourceTree = "<group>"; };
+		55B860AE16B206F800D5BA8D /* MainGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainGameScene.m; sourceTree = "<group>"; };
+		55B862C116B2199900D5BA8D /* GameObjects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GameObjects.plist; sourceTree = "<group>"; };
+		55B862C216B2199900D5BA8D /* GameObjects.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameObjects.png; sourceTree = "<group>"; };
+		55B862C616B21AC900D5BA8D /* TextureNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureNameDefinitions.h; sourceTree = "<group>"; };
+		55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextureNameDefinitions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -453,10 +460,8 @@
 		553741C116B1F72900D860C2 /* HMGGJ2013 */ = {
 			isa = PBXGroup;
 			children = (
-				5537433916B1F72C00D860C2 /* AppDelegate.h */,
-				5537433A16B1F72C00D860C2 /* AppDelegate.m */,
-				5537433C16B1F72C00D860C2 /* IntroScene.h */,
-				5537433D16B1F72C00D860C2 /* IntroScene.m */,
+				55B860A216B206CD00D5BA8D /* SRC */,
+				55B862BF16B2160500D5BA8D /* GameData */,
 				553741C216B1F72900D860C2 /* Resources */,
 				553741DC16B1F72900D860C2 /* libs */,
 				5537433516B1F72C00D860C2 /* Supporting Files */,
@@ -593,7 +598,6 @@
 			isa = PBXGroup;
 			children = (
 				5537433616B1F72C00D860C2 /* Prefix.pch */,
-				5537433716B1F72C00D860C2 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -827,6 +831,53 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		55B860A216B206CD00D5BA8D /* SRC */ = {
+			isa = PBXGroup;
+			children = (
+				55B862C516B21AA400D5BA8D /* Global */,
+				55B860AB16B206DE00D5BA8D /* Scenes */,
+				55B860A316B206CD00D5BA8D /* AppDelegate.h */,
+				55B860A416B206CD00D5BA8D /* AppDelegate.m */,
+				55B860A716B206CD00D5BA8D /* main.m */,
+			);
+			path = SRC;
+			sourceTree = "<group>";
+		};
+		55B860AB16B206DE00D5BA8D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				55B860AD16B206F800D5BA8D /* MainGameScene.h */,
+				55B860AE16B206F800D5BA8D /* MainGameScene.m */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		55B862BF16B2160500D5BA8D /* GameData */ = {
+			isa = PBXGroup;
+			children = (
+				55B862C016B2161600D5BA8D /* Textures */,
+			);
+			path = GameData;
+			sourceTree = "<group>";
+		};
+		55B862C016B2161600D5BA8D /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				55B862C116B2199900D5BA8D /* GameObjects.plist */,
+				55B862C216B2199900D5BA8D /* GameObjects.png */,
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
+		55B862C516B21AA400D5BA8D /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				55B862C616B21AC900D5BA8D /* TextureNameDefinitions.h */,
+				55B862C716B21AC900D5BA8D /* TextureNameDefinitions.m */,
+			);
+			name = Global;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -891,6 +942,8 @@
 				553741D816B1F72900D860C2 /* Icon@2x.png in Resources */,
 				553741DB16B1F72900D860C2 /* iTunesArtwork in Resources */,
 				5537431916B1F72C00D860C2 /* ChangeLog in Resources */,
+				55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */,
+				55B862C416B2199900D5BA8D /* GameObjects.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,9 +971,6 @@
 				5537432F16B1F72C00D860C2 /* vec2.c in Sources */,
 				5537433116B1F72C00D860C2 /* vec3.c in Sources */,
 				5537433316B1F72C00D860C2 /* vec4.c in Sources */,
-				5537433816B1F72C00D860C2 /* main.m in Sources */,
-				5537433B16B1F72C00D860C2 /* AppDelegate.m in Sources */,
-				5537433E16B1F72C00D860C2 /* IntroScene.m in Sources */,
 				5537440A16B1FC2200D860C2 /* CCAction.m in Sources */,
 				5537440B16B1FC2200D860C2 /* CCActionCamera.m in Sources */,
 				5537440C16B1FC2200D860C2 /* CCActionCatmullRom.m in Sources */,
@@ -1004,6 +1054,10 @@
 				5537445A16B1FC2200D860C2 /* TGAlib.m in Sources */,
 				5537445B16B1FC2200D860C2 /* TransformUtils.m in Sources */,
 				5537445C16B1FC2200D860C2 /* ZipUtils.m in Sources */,
+				55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */,
+				55B860AA16B206CD00D5BA8D /* main.m in Sources */,
+				55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */,
+				55B862C816B21AC900D5BA8D /* TextureNameDefinitions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,6 +1165,7 @@
 				5537434616B1F72C00D860C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

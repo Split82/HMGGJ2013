@@ -379,6 +379,7 @@ static CCDirector *_sharedDirector = nil;
 	NSUInteger index = [scenesStack_ count];
 
 	sendCleanupToScene_ = YES;
+    
 	[scenesStack_ replaceObjectAtIndex:index-1 withObject:scene];
 	nextScene_ = scene;	// nextScene_ is a weak ref
 }
