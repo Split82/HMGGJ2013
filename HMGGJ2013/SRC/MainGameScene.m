@@ -9,6 +9,7 @@
 #import "MainGameScene.h"
 #import "GameDataNameDefinitions.h"
 #import "CoinSprite.h"
+#import "EnemySprite.h"
 
 #define PIXEL_ART_SPRITE_SCALE 4
 
@@ -17,6 +18,9 @@
 #define MAX_DELTA_TIME 0.1f
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
+
+#define ENEMY_SPAWN_TIME 2.0f
+#define ENEMY_SPAWN_DELTA_TIME 2.0f
 
 @interface MainGameScene() {
 
@@ -129,6 +133,14 @@
             [coin update:calcTime];
         }
 
+        for (EnemySprite *enemy in tapEnemies) {
+            [enemy update:calcTime];
+        }
+        
+        for (EnemySprite *enemy in swipeEnemies) {
+            [enemy update:calcTime];
+        }
+        
         calcTime -= FRAME_TIME_INTERVAL;
     }
 
@@ -136,5 +148,27 @@
         [self addCoinAtPos:ccp((rand() / (float)RAND_MAX) * 320, 20)];
     }
 }
+
+- (void)addEnemy {
+    
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+    
+    if (enemy.type == kEnemyTypeSwipe) {
+        
+        [swipeEnemies addObject:enemy];
+    }
+    else {
+        
+        [tapEnemies addObject:enemy];
+    }
+    
+    [self scheduleNewEnemySpawn];
+}
+
+- (void)scheduleNewEnemySpawn {
+    
+    [self scheduleOnce:@selector(addEnemy) delay:ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME - ENEMY_SPAWN_DELTA_TIME / 2.0f];
+}
+
 
 @end

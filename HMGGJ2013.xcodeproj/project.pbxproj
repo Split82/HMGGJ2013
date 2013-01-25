@@ -141,6 +141,7 @@
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
 		55B862C816B21AC900D5BA8D /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B862C716B21AC900D5BA8D /* GameDataNameDefinitions.m */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
+		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -417,6 +418,8 @@
 		55B862C716B21AC900D5BA8D /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
+		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
+		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -861,6 +864,8 @@
 			children = (
 				553BA19716B3214000B4E22B /* CoinSprite.h */,
 				553BA19816B3214000B4E22B /* CoinSprite.m */,
+				E619264416B31E4A00904535 /* EnemySprite.h */,
+				E619264516B31E4A00904535 /* EnemySprite.m */,
 			);
 			name = GameObjects;
 			sourceTree = "<group>";
@@ -1120,6 +1125,7 @@
 				553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */,
 				653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */,
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
+				E619264616B31E4A00904535 /* EnemySprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
