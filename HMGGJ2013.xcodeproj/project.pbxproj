@@ -846,10 +846,18 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		553BA19216B3148100B4E22B /* GameObjects */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = GameObjects;
+			sourceTree = "<group>";
+		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
 				55B862C516B21AA400D5BA8D /* Global */,
+				553BA19216B3148100B4E22B /* GameObjects */,
 				55B860AB16B206DE00D5BA8D /* Scenes */,
 				553BA19116B3105000B4E22B /* Controllers */,
 				55B860A316B206CD00D5BA8D /* AppDelegate.h */,

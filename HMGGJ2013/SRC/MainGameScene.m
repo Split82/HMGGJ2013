@@ -7,13 +7,18 @@
 //
 
 #import "MainGameScene.h"
-
 #import "TextureNameDefinitions.h"
+
+#define PIXEL_ART_SPRITE_SCALE 4
+
+#define TOP_HEIGHT 80
 
 @interface MainGameScene() {
 
-    CCSpriteBatchNode *spriteBatch;
-    CCSprite *testSprite;
+    CCSpriteBatchNode *mainSpriteBatch;
+    NSMutableArray *tapEnemies;
+    NSMutableArray *swipeEnemies;
+    NSMutableArray *coins;
 
     BOOL sceneInitWasPerformed;
 }
@@ -37,32 +42,41 @@
     }
 
     sceneInitWasPerformed = YES;
-    
+
+    // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
     [frameCache addSpriteFramesWithFile:kGameObjectsSpriteFramesFileName];
 
     CCSpriteFrame *placeholderSpriteFrame = [frameCache spriteFrameByName:kPlaceholderTextureFrameName];
 
-    spriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:10];
-    [self addChild:spriteBatch];
+    // Batch
+    mainSpriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:100];
+    [mainSpriteBatch.texture setAliasTexParameters];
+    [self addChild:mainSpriteBatch];
 
-    testSprite = [CCSprite spriteWithSpriteFrame:placeholderSpriteFrame];
-    testSprite.anchorPoint = ccp(0.5f, 0.5f);
-    testSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5f);
-    [spriteBatch addChild:testSprite];
+    CGSize size;
+
+    // Background
+    CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
+    backgroundSprite.anchorPoint = ccp(0, 1);
+    backgroundSprite.position = ccp(0, [CCDirector sharedDirector].winSize.height);
+    size = backgroundSprite.contentSize;
+    backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / backgroundSprite.contentSize.width;
+    backgroundSprite.scaleY = TOP_HEIGHT / backgroundSprite.contentSize.height;
+    [mainSpriteBatch addChild:backgroundSprite];
+
+    // Foreground
+    CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
+    foregroundSprite.anchorPoint = ccp(0, 0);
+    foregroundSprite.position = ccp(0, 0);
+    foregroundSprite.scale = PIXEL_ART_SPRITE_SCALE;
+    [mainSpriteBatch addChild:foregroundSprite];
 
     [self scheduleUpdate];
 }
 
 - (void)update:(ccTime)deltaTime {
 
-    static double elapsedTime = 0;
-
-    elapsedTime += deltaTime;
-
-    CGPoint pos = testSprite.position;
-    pos.x = sin(elapsedTime) * 100 + [CCDirector sharedDirector].winSize.width * 0.5f;
-    testSprite.position = pos;
 }
 
 @end
