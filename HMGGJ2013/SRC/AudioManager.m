@@ -71,7 +71,7 @@ const int BUFF_EFFECTS = kASC_Right;
     [self playEffect:SOUND_BRUM];
 }
 
-- (void)startBackgroundTrack {
+- (void)startBackgroundMusic {
     //[soundEngine playSound:SOUND_GANDAM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }
 

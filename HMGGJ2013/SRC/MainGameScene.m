@@ -29,6 +29,10 @@
 
 #define GROUND_Y 45
 
+#define SLIME_WIDTH 280
+#define SLIME_GROUND_Y 46
+#define SLIME_MAX_HEIGHT 300
+
 @interface MainGameScene() {
 
     float calcTime;
@@ -48,6 +52,9 @@
     NSMutableArray *killedBombs;
 
     BombSpawner *bombSpawner;
+
+    CCSprite *slimeFillSprite;
+    CCSprite *slimeTopSprite;
     
     CCParticleBatchNode *particleBatchNode;
 
@@ -123,6 +130,15 @@
     backgroundSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, [CCDirector sharedDirector].winSize.height * 0.5);
     backgroundSprite.scale = [UIScreen mainScreen].scale * 2;    
     [mainSpriteBatch addChild:backgroundSprite];
+
+    // Slime
+    slimeFillSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankWater.png"];
+    slimeFillSprite.scaleX = SLIME_WIDTH / slimeFillSprite.contentSize.width;
+    slimeFillSprite.scaleY = SLIME_MAX_HEIGHT / slimeFillSprite.contentSize.height;
+    slimeFillSprite.anchorPoint = ccp(0.5, 0);
+    slimeFillSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
+    [mainSpriteBatch addChild:slimeFillSprite];
+    
 
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
