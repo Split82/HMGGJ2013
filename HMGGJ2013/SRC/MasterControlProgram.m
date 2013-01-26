@@ -14,10 +14,10 @@
 // init values
 const float INIT_ENEMIES_PER_WAVE = 1.0f;
 const float INIT_WAVE_PERIOD = 15.0f; // seconds
-const float INIT_SWIPE_TAP_ENEMIES_RATIO = 0.1;
+const float INIT_SWIPE_TAP_ENEMIES_RATIO = 0.12;
 
-const float ENEMIES_GROWTH_PER_WAVE = 1.2;
-const float SWIPE_TAP_RATIO_GROWTH_PER_WAVE = 0.025;
+const float ENEMIES_GROWTH_PER_WAVE = 1.0;
+const float SWIPE_TAP_RATIO_GROWTH_PER_WAVE = 0.02;
 const float WAVE_LENGHT_DECREASE = 0.75; // second
 
 const float MIN_WAVE_LENGTH = 5.0f; // seconds
@@ -28,7 +28,7 @@ const float ENEMY_SPAWN_TIME = 7.0f;
 const float ENEMY_SPAWN_DELTA_TIME = 3.0f;
 
 const float WAVE_ENEMY_SPAWN_TIME = 0.5f;
-const float WAVE_ENEMY_SPAWN_DELTA_TIME = 0.5f;
+const float WAVE_ENEMY_SPAWN_DELTA_TIME = 1.0f;
 const float WAVE_WAIT_FOR_USER = 5.0f; // how many seconds to wait for player to kill all the enemies
 
 const float INCREASE_SPAWN_SPEED_FACTOR = 1.25f;
@@ -151,8 +151,8 @@ float frand() {
         swipeTapRatio = increase(swipeTapRatio, SWIPE_TAP_RATIO_GROWTH_PER_WAVE, MAX_TAP_RATION_PER_WAVE);
         
     } else {
-        enemiesPerWave = increase(enemiesPerWave / LEVEL2_GROWTH_PENALTY, ENEMIES_GROWTH_PER_WAVE, MAX_ENEMIES_PER_WAVE);
-        swipeTapRatio = increase(swipeTapRatio / LEVEL2_GROWTH_PENALTY, SWIPE_TAP_RATIO_GROWTH_PER_WAVE, MAX_TAP_RATION_PER_WAVE);
+        enemiesPerWave = increase(enemiesPerWave, ENEMIES_GROWTH_PER_WAVE / LEVEL2_GROWTH_PENALTY, MAX_ENEMIES_PER_WAVE);
+        swipeTapRatio = increase(swipeTapRatio, SWIPE_TAP_RATIO_GROWTH_PER_WAVE / LEVEL2_GROWTH_PENALTY, MAX_TAP_RATION_PER_WAVE);
         wavePeriod = decrease(wavePeriod, WAVE_LENGHT_DECREASE, MIN_WAVE_LENGTH);
     }
     
@@ -162,7 +162,7 @@ float frand() {
     }
     
     enemiesToGenerate = (int)round(enemiesPerWave);
-    NSLog(@"Starting wave, spawning %d enemies", enemiesToGenerate);
+    NSLog(@"Starting wave[waveNum: %d, enemies: %d, swipeTapRation: %f, wavePeriod: %f]", waveNumber, enemiesToGenerate, swipeTapRatio, wavePeriod);
     
     enemySpawnTime = WAVE_ENEMY_SPAWN_TIME / waveSpawnSpeedFactor;
     enemySpawnTimeDelta = WAVE_ENEMY_SPAWN_DELTA_TIME / waveSpawnSpeedFactor;
@@ -203,7 +203,7 @@ float frand() {
 - (void)spawnCoin {
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     
-    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), winSize.height * frand() + GROUND_Y)];
+    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
     [self sheduleNewCoinSpawn];
 }
 
