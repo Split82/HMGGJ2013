@@ -60,7 +60,7 @@
 
     if (lifeTime > START_BLINKING_TIME) {
         [self setDisplayFrame:animationFrames[(int)round(lifeTime / BLINKING_SPEED) % 2]];
-        [self setScale:self.scale + (scaleChange ? 0.15 : -0.15)];
+        [self setScale:self.scale + 0.015];
         scaleChange = !scaleChange;
     }
 

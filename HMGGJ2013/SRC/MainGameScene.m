@@ -594,6 +594,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self updateUI];
         [AppDelegate player].rage = 0;
     }
+    [[AppDelegate player] calc:deltaTime];
 
     [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
     [slimeSprite calc:deltaTime];
