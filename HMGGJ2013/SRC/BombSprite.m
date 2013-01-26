@@ -30,7 +30,7 @@
 
 - (id)initWithStartPos:(CGPoint)startPos groundY:(CGFloat)initGroundY {
 
-    self = [self initWithSpriteFrameName:@"Bomb.png"];
+    self = [self initWithSpriteFrameName:@"BombNormal.png"];
     if (self) {
         self.anchorPoint = ccp(0.5, 0);
         self.position = startPos;
@@ -39,8 +39,8 @@
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
         animationFrames = @[
-        [spriteFrameCache spriteFrameByName:@"Bomb.png"],
-        [spriteFrameCache spriteFrameByName:@"BombRed.png"]
+        [spriteFrameCache spriteFrameByName:@"BombNormal.png"],
+        [spriteFrameCache spriteFrameByName:@"BombDetonate.png"]
         ];
     }
     return self;
