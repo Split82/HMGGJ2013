@@ -139,6 +139,13 @@
 		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
 		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
+		554AD1E416B4277000441632 /* SlimeSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E316B4277000441632 /* SlimeSprite.m */; };
+		554AD1E716B42AE600441632 /* MonsterSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E616B42AE600441632 /* MonsterSprite.m */; };
+		554AD1EA16B43AF700441632 /* EnemyBodyDebris.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E916B43AF600441632 /* EnemyBodyDebris.m */; };
+		554AD1EF16B4469A00441632 /* progress.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1EB16B4469900441632 /* progress.png */; };
+		554AD1F016B4469A00441632 /* progressBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1EC16B4469900441632 /* progressBack.png */; };
+		554AD1F116B4469A00441632 /* progressBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1ED16B4469A00441632 /* progressBar.png */; };
+		554AD1F216B4469A00441632 /* progressBarBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1EE16B4469A00441632 /* progressBarBack.png */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
@@ -156,6 +163,7 @@
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
+		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -430,6 +438,16 @@
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
 		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
 		553BA1B816B33CA000B4E22B /* GestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureRecognizer.m; sourceTree = "<group>"; };
+		554AD1E216B4277000441632 /* SlimeSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlimeSprite.h; sourceTree = "<group>"; };
+		554AD1E316B4277000441632 /* SlimeSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlimeSprite.m; sourceTree = "<group>"; };
+		554AD1E516B42AE600441632 /* MonsterSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonsterSprite.h; sourceTree = "<group>"; };
+		554AD1E616B42AE600441632 /* MonsterSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonsterSprite.m; sourceTree = "<group>"; };
+		554AD1E816B43AF600441632 /* EnemyBodyDebris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyBodyDebris.h; sourceTree = "<group>"; };
+		554AD1E916B43AF600441632 /* EnemyBodyDebris.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyBodyDebris.m; sourceTree = "<group>"; };
+		554AD1EB16B4469900441632 /* progress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progress.png; sourceTree = "<group>"; };
+		554AD1EC16B4469900441632 /* progressBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progressBack.png; sourceTree = "<group>"; };
+		554AD1ED16B4469A00441632 /* progressBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progressBar.png; sourceTree = "<group>"; };
+		554AD1EE16B4469A00441632 /* progressBarBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progressBarBack.png; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -456,6 +474,8 @@
 		653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievemntNameDefinitions.m; sourceTree = "<group>"; };
 		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
+		E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteTextureFrameInfo.h; sourceTree = "<group>"; };
+		E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteTextureFrameInfo.m; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -923,12 +943,20 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				554AD1E816B43AF600441632 /* EnemyBodyDebris.h */,
+				554AD1E916B43AF600441632 /* EnemyBodyDebris.m */,
+				554AD1E516B42AE600441632 /* MonsterSprite.h */,
+				554AD1E616B42AE600441632 /* MonsterSprite.m */,
+				554AD1E216B4277000441632 /* SlimeSprite.h */,
+				554AD1E316B4277000441632 /* SlimeSprite.m */,
 				55CDD44316B3708100704F3B /* BombSpawner.h */,
 				55CDD44416B3708100704F3B /* BombSpawner.m */,
 				55CDD43F16B3670E00704F3B /* BombSprite.h */,
 				55CDD44016B3670E00704F3B /* BombSprite.m */,
 				553BA19716B3214000B4E22B /* CoinSprite.h */,
 				553BA19816B3214000B4E22B /* CoinSprite.m */,
+				E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */,
+				E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */,
 				E619264416B31E4A00904535 /* EnemySprite.h */,
 				E619264516B31E4A00904535 /* EnemySprite.m */,
 				E6A61C7716B33AD8000912CA /* WallGrid.h */,
@@ -996,6 +1024,10 @@
 		55B862C016B2161600D5BA8D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				554AD1EB16B4469900441632 /* progress.png */,
+				554AD1EC16B4469900441632 /* progressBack.png */,
+				554AD1ED16B4469A00441632 /* progressBar.png */,
+				554AD1EE16B4469A00441632 /* progressBarBack.png */,
 				55B862C116B2199900D5BA8D /* GameObjects.plist */,
 				55B862C216B2199900D5BA8D /* GameObjects.png */,
 			);
@@ -1100,6 +1132,10 @@
 				55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */,
 				55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */,
 				6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */,
+				554AD1EF16B4469A00441632 /* progress.png in Resources */,
+				554AD1F016B4469A00441632 /* progressBack.png in Resources */,
+				554AD1F116B4469A00441632 /* progressBar.png in Resources */,
+				554AD1F216B4469A00441632 /* progressBarBack.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1226,6 +1262,10 @@
 				55CDD44116B3670E00704F3B /* BombSprite.m in Sources */,
 				55CDD44516B3708100704F3B /* BombSpawner.m in Sources */,
 				3891715A16B4206C00EFAB71 /* MasterControlProgram.m in Sources */,
+				554AD1E416B4277000441632 /* SlimeSprite.m in Sources */,
+				554AD1E716B42AE600441632 /* MonsterSprite.m in Sources */,
+				554AD1EA16B43AF700441632 /* EnemyBodyDebris.m in Sources */,
+				E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,12 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 #import "AppDelegate.h"
+#import "SlimeSprite.h"
+#import "MonsterSprite.h"
 #import "MasterControlProgram.h"
+
+
+#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
 #define TOP_HEIGHT 80
 
@@ -27,7 +32,6 @@
 #define TAP_MIN_DISTANCE2 (60*60)
 #define SWIPE_MIN_DISTANCE2 (20*20)
 
-#define GROUND_Y 45
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
@@ -44,7 +48,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 #define SLIME_WIDTH 280
-#define SLIME_GROUND_Y 46
+#define SLIME_GROUND_Y (GROUND_Y + 1)
 #define SLIME_MAX_HEIGHT 300
 
 @interface MainGameScene() {
@@ -59,16 +63,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
     NSMutableArray *bombs;
+    NSMutableArray *enemyBodyDebrises;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
+    NSMutableArray *killedEnemyBodyDebrises;
 
     BombSpawner *bombSpawner;
-
-    CCSprite *slimeFillSprite;
-    CCSprite *slimeTopSprite;
+    SlimeSprite *slimeSprite;
+    MonsterSprite *monsterSprite;
     
     MasterControlProgram *masterControlProgram;
     
@@ -119,11 +124,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
     bombs = [[NSMutableArray alloc] initWithCapacity:10];
+    enemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
+    killedEnemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -147,14 +154,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     backgroundSprite.scale = [UIScreen mainScreen].scale * 2;    
     [mainSpriteBatch addChild:backgroundSprite];
 
+    // Monster
+    monsterSprite = [[MonsterSprite alloc] init];
+    monsterSprite.anchorPoint = ccp(0.5, 0);
+    monsterSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y + 1);
+    [mainSpriteBatch addChild:monsterSprite];
+
     // Slime
-    slimeFillSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankWater.png"];
-    slimeFillSprite.scaleX = SLIME_WIDTH / slimeFillSprite.contentSize.width;
-    slimeFillSprite.scaleY = SLIME_MAX_HEIGHT / slimeFillSprite.contentSize.height;
-    slimeFillSprite.anchorPoint = ccp(0.5, 0);
-    slimeFillSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
-    [mainSpriteBatch addChild:slimeFillSprite];
-    
+    slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    slimeSprite.anchorPoint = ccp(0.5, 0);
+    slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
+    [mainSpriteBatch addChild:slimeSprite];
 
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
@@ -264,7 +274,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)addBombAtPosX:(CGFloat)posX {
 
-    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 500) groundY:GROUND_Y];
+    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 520 + (rand() / (float)RAND_MAX) * 20) groundY:GROUND_Y];
     newBomb.delegate = self;
     [bombs addObject:newBomb];
     [mainSpriteBatch addChild:newBomb];
@@ -275,21 +285,48 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coin removeFromParentAndCleanup:YES];
 }
 
+- (void)createEnemyBodyExplosionAtPos:(CGPoint)pos velocity:(CGPoint)velocity enemyType:(EnemyType)enemyType {
+
+    int numberOfBodyPars = rand() % 3 + 3;
+
+    for (int i = 0; i < numberOfBodyPars; i++) {
+
+        CGPoint randVelocity = velocity;
+        randVelocity.x += rand() / (float)RAND_MAX;
+        randVelocity.y += rand() / (float)RAND_MAX;
+        EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:enemyType velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+        enemyBodyDebris.position = pos;
+        enemyBodyDebris.delegate = self;
+        [enemyBodyDebrises addObject:enemyBodyDebris];
+        [mainSpriteBatch addChild:enemyBodyDebris];
+    }
+}
+
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
+    
     NSInteger kills = 0;
     
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+
             [killedTapEnemies addObject:enemy];
-            [self kill:enemy];
+
+            CGPoint velocity = ccpSub(enemy.position, pos);
+            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self enemyDidDie:enemy];
+
             kills++;
         }
     }
 
     for (EnemySprite *enemy in swipeEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+
             [killedSwipeEnemies addObject:enemy];
-            [self kill:enemy];
+
+            CGPoint velocity = ccpSub(enemy.position, pos);
+            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self enemyDidDie:enemy];
             kills++;
         }
     }
@@ -332,7 +369,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
     
     if ([AppDelegate player].health == 0) {
-        [self gameOver];
+        [self showGameOver];
     }
     [self updateUI];
 }
@@ -342,6 +379,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
 
     [self addBombAtPosX:bombSpawner.pos.x];
+
+    [[AppDelegate player] updateDropBombCount:1];
+
+    [AppDelegate player].coins -= BOMB_COINS_COST;
+    [self updateUI];
+}
+
+#pragma mark - EnemyBodyDebrisDelegate
+
+- (void)enemyBodyDebrisDidDie:(EnemyBodyDebris *)enemyBodyDebris {
+
+    [killedEnemyBodyDebrises addObject:enemyBodyDebris];
 }
 
 #pragma mark - MainframeDelegate
@@ -360,8 +409,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
-    NSLog(@"LongPress start");
-    [self dropBombAtPos:pos];
+    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
+        [bombSpawner startSpawningAtPos:pos];
+    }
 }
 
 - (void)longPressEnded {
@@ -433,7 +483,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                                                         [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
         
         [nearestCoin runAction:action];
-        [self addCoin];
+        [self coinWasAdded];
         return;
     }
     
@@ -465,31 +515,20 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 #pragma mark -
 
-- (void) kill:(EnemySprite *)enemy
+- (void) enemyDidDie:(EnemySprite *)enemy
 {
     [AppDelegate player].kills++;
     [self addCoinAtPos:enemy.position];
     [self updateUI];
 }
 
-- (void) addCoin
+- (void) coinWasAdded
 {
     [AppDelegate player].coins++;
     [self updateUI];
 }
 
-- (void) dropBombAtPos:(CGPoint)pos
-{
-    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
-        [bombSpawner startSpawningAtPos:pos];
-        [[AppDelegate player] updateDropBombCount:1];
-
-        [AppDelegate player].coins -= BOMB_COINS_COST;
-        [self updateUI];
-    }
-}
-
-- (void) gameOver
+- (void) showGameOver
 {
     if (gameOver) {
         return;
@@ -513,7 +552,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[CCDirector sharedDirector].view addSubview:restartButton];
 }
 
-- (void) restart
+- (void) restartGame
 {
     [gameOverLabel removeFromSuperview];
     gameOverLabel = nil;
@@ -557,6 +596,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [enemy calc:deltaTime];
     }
 
+    for (EnemyBodyDebris *enemyBodyDebris in enemyBodyDebrises) {
+        [enemyBodyDebris calc:deltaTime];
+    }
+
     // Killed
     for (CoinSprite *coin in killedCoins) {
         [coins removeObject:coin];
@@ -583,6 +626,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [killedSwipeEnemies removeAllObjects];
 
+    for (EnemyBodyDebris *enemyBodyDebris in killedEnemyBodyDebrises) {
+
+        [enemyBodyDebrises removeObject:enemyBodyDebris];
+        [enemyBodyDebris removeFromParentAndCleanup:YES];
+    }
+    [killedEnemyBodyDebrises removeAllObjects];
+
     [masterControlProgram calc:deltaTime];
     
     if ([AppDelegate player].rage >= 1) {
@@ -595,6 +645,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self updateUI];
         [AppDelegate player].rage = 0;
     }
+    [[AppDelegate player] calc:deltaTime];
+
+    [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
+    [slimeSprite calc:deltaTime];
+
+    [monsterSprite calc:deltaTime];
 }
 
 - (void)update:(ccTime)deltaTime {
