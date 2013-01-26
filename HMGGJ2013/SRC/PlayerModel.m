@@ -175,7 +175,7 @@
 - (void) setRage:(float)rage
 {
     if (rage == 0) {
-        _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + kPlayerDefRageDealy * 2;
+        _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + kPlayerDefRageDealy;
     } else if (_disabledRageTimeinteval && [NSDate timeIntervalSinceReferenceDate] < _disabledRageTimeinteval) {
         return;
     } else {

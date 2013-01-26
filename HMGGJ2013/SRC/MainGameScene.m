@@ -657,7 +657,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (gameOver) {
         return;
     }
-
+    gestureRecognizer.delegate = nil;
+    masterControlProgram = nil;
+    
     gameOver = YES;
     CGSize screen = [CCDirector sharedDirector].winSize;
     gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
@@ -684,6 +686,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void) restartGame
 {
+    masterControlProgram = [[MasterControlProgram alloc] init];
+    masterControlProgram.mainframe = self;
+    
     [gameOverLabel removeFromSuperview];
     gameOverLabel = nil;
     [restartButton removeFromSuperview];
@@ -694,6 +699,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedTapEnemies addObjectsFromArray:tapEnemies];
     [killedSwipeEnemies addObjectsFromArray:swipeEnemies];
 
+    gestureRecognizer.delegate = self; 
+    
     [[AppDelegate player] newGame];
     [self updateUI];
     gameOver = NO;
