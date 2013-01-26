@@ -9,6 +9,14 @@
 #import "PlayerModel.h"
 
 
+#define kPlayerDefCoins         10
+#define kPlayerDefHealth        100
+#define kPlayerDefRageDealy     15
+#define kPlayerDefRageMultipler 10
+#define kPlayerDefRageReduction 3
+
+#define kPlayerSyncTimer        30
+
 #define kPlayerFirstKill            @"kPlayerFirstKill"
 #define kPlayerBloodBath            @"kPlayerBloodBath"
 #define kPlayerGlobalGameCount      @"kPlayerGlobalGameCount"
@@ -93,7 +101,7 @@
                 [_achievements setObject:achivement forKey:kAchievemntPartyBoyName];
             }
         }
-        _timer = [NSDate timeIntervalSinceReferenceDate] + 30;
+        _timer = [NSDate timeIntervalSinceReferenceDate] + kPlayerSyncTimer;
     }
     return self;
 }
@@ -105,12 +113,12 @@
     if (_rage > 0 && _rageInterval < interval) {
         if (_rageInterval != 0)
             [self _rageReduction];
-        _rageInterval = interval + 3;
+        _rageInterval = interval + kPlayerDefRageReduction;
     }
     
     if (_timer < interval) {
         [self synchronize];
-        _timer = interval + 30;
+        _timer = interval + kPlayerSyncTimer;
     }
     
     if (_lastKillTime + 60 < interval) {
@@ -133,7 +141,7 @@
     else if (newPoints >= 2)
         multiplier += 0.5;
     _points += newPoints;
-    self.rage += (float)newPoints / 2;
+    self.rage += (float)newPoints / kPlayerDefRageMultipler;
     _rageInterval = 0;
 }
 
@@ -167,7 +175,7 @@
 - (void) setRage:(float)rage
 {
     if (rage == 0) {
-        _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 30;
+        _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + kPlayerDefRageDealy * 2;
     } else if (_disabledRageTimeinteval && [NSDate timeIntervalSinceReferenceDate] < _disabledRageTimeinteval) {
         return;
     } else {
@@ -180,10 +188,10 @@
 {
     _points = 0;
     _kills = 0;
-    _coins = 10;
-    _health = 100;
+    _coins = kPlayerDefCoins;
+    _health = kPlayerDefHealth;
     _rage = 0;
-    _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 15;
+    _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + kPlayerDefRageDealy;
     _rageInterval = 0;
 }
 
