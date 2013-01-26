@@ -8,7 +8,8 @@
 
 #import "MainMenuViewController.h"
 #import "AboutViewController.h"
-#import "AchievemntNameDefinitions.h"
+#import "AppDelegate.h"
+#import "PlayerModel.h"
 #import "CCDirector.h"
 #import "MainGameScene.h"
 #import <GameKit/GameKit.h>
@@ -33,6 +34,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    [[AudioManager sharedManager] preloadSounds];
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,7 +45,6 @@
 }
 
 - (void)startGame {
-    [[AudioManager sharedManager] scream];
     
     // Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
     CCGLView *glView = [CCGLView viewWithFrame:self.view.window.bounds
@@ -109,6 +111,7 @@
 
 - (IBAction)startGameButtonPressed:(id)sender {
     [self startGame];
+    [[AppDelegate player] gameStarted];
 }
 
 - (IBAction)showLeaderboardButtonPressed:(id)sender {

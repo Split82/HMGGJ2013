@@ -12,6 +12,8 @@
 
 + (id)sharedManager;
 
+- (void)preloadSounds;
+
 - (void)scream;
 
 @end

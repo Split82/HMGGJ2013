@@ -11,9 +11,10 @@
 
 const int SOUND_BRUM = 1;
 const int SOUND_SCREAM = 2;
+const int SOUND_MUHAHA = 3;
 
-const int BUFF_BG = 1;
-const int BUFF_EFFECTS = 31;
+const int BUFF_BG = kASC_Left;
+const int BUFF_EFFECTS = kASC_Right;
 
 @implementation AudioManager {
     CDSoundEngine* soundEngine;
@@ -36,18 +37,11 @@ const int BUFF_EFFECTS = 31;
     if (self = [super init]) {
         soundEngine = [CDAudioManager sharedManager].soundEngine;
         
-        NSArray *sourceGroups = [NSArray arrayWithObjects:[NSNumber numberWithInt:BUFF_BG], [NSNumber numberWithInt:BUFF_EFFECTS], nil];
+        NSArray *sourceGroups = [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:31], nil];
         [soundEngine defineSourceGroups:sourceGroups];
         
         // only this app will be playing sound
-        [CDAudioManager initAsynchronously:kAMM_FxPlusMusic];
-    
-        //Load sound buffers asynchrounously
-        NSMutableArray *loadRequests = [[NSMutableArray alloc] init];
-        
-        [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BRUM filePath:@"brum.mp3"]];
-        [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_SCREAM filePath:@"WilhelmScream.mp3"]];
-        [soundEngine loadBuffersAsynchronously:loadRequests];
+        [CDAudioManager initAsynchronously:kAMM_FxPlusMusic];        
     }
     
     return self;
@@ -55,11 +49,19 @@ const int BUFF_EFFECTS = 31;
 
 - (void)preloadSounds {
     
+    //Load sound buffers asynchrounously
+    NSMutableArray *loadRequests = [[NSMutableArray alloc] init];
+    
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BRUM filePath:@"brum.mp3"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_SCREAM filePath:@"WilhelmScream.mp3"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_MUHAHA filePath:@"muhaha.wav"]];
+    
+    [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
 - (void)scream {
-    [soundEngine playSound:SOUND_SCREAM sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:YES];
-    NSLog(@"hello");
+    [soundEngine playSound:SOUND_BRUM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:1.0f loop:NO];
+   // NSLog(@"hello %d", soundEngine.sourceTotal);
 }
 
 @end
