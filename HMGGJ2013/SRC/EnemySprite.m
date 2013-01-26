@@ -109,7 +109,7 @@
 }
 
 
-- (void) update:(ccTime) time {
+- (void) calc:(ccTime) time {
     
     animTime += time;
     moveTime += time;

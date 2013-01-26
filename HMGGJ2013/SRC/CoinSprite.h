@@ -8,9 +8,20 @@
 
 #import "CCSprite.h"
 
+@protocol CoinSpriteDelegate;
+
+
 @interface CoinSprite : CCSprite
 
+@property (nonatomic, weak) id <CoinSpriteDelegate> delegate;
+
 - (id)initWithStartPos:(CGPoint)startPos;
-- (void)update:(ccTime)deltaTime;
+- (void)calc:(ccTime)deltaTime;
+
+@end
+
+@protocol CoinSpriteDelegate <NSObject>
+
+- (void)coinDidDie:(CoinSprite*)coinSprite;
 
 @end

@@ -10,4 +10,8 @@
 
 @interface AudioManager : NSObject
 
++ (id)sharedManager;
+
+- (void)scream;
+
 @end
