@@ -12,7 +12,7 @@
 #define kPlayerFirstKill            @"kPlayerFirstKill"
 #define kPlayerGlobalKillCount      @"kPlayerGlobalKillCount"
 #define kPlayerGlobalBombDropCount  @"kPlayerGlobalBombDropCount"
-#define kPlayerGlobalCoinCount      @"kPlayerGlobalCoinCount"
+#define kPlayerGlobalCoinsCount     @"kPlayerGlobalCoinsCount"
 
 
 @interface PlayerModel ()
@@ -55,7 +55,7 @@
         } else {
             _achievements = [NSMutableDictionary dictionary];
         }
-        _timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -95,13 +95,19 @@
 - (void) resetAchivements
 {
     [GKAchievement resetAchievementsWithCompletionHandler:^(NSError *error) {
-         if (!error) {
-             [_achievements removeAllObjects];
-             [[NSFileManager defaultManager] removeItemAtPath:[self _achievementsFilePath] error:nil];
-         } else {
-             NSLog(@"failed to reset achievements: %@", error);
-         }
-     }];
+        if (!error) {
+            [_achievements removeAllObjects];
+            [[NSFileManager defaultManager] removeItemAtPath:[self _achievementsFilePath] error:nil];
+        } else {
+            NSLog(@"failed to reset achievements: %@", error);
+        }
+    }];
+    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+    [df setBool:NO forKey:kPlayerFirstKill];
+    [df setInteger:0 forKey:kPlayerGlobalKillCount];
+    [df setInteger:0 forKey:kPlayerGlobalBombDropCount];
+    [df setInteger:0 forKey:kPlayerGlobalCoinsCount];
+    [df synchronize];
 }
 
 - (void) updateKillCount:(NSInteger)kills
@@ -109,11 +115,9 @@
     NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
     allKills += kills;
     
-    GKAchievement *achivement;
-    
     if (allKills > 0 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerFirstKill]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerFirstKill];
-        achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
         [achivement setPercentComplete:1];
         [_achievements setObject:achivement forKey:kAchievemntKill100Name];
     }
@@ -124,37 +128,63 @@
     }
 }
 
+- (void) updateDropBombCount:(NSInteger)bombs
+{
+    NSInteger allBombs = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalBombDropCount];
+    allBombs += bombs;
+    [[NSUserDefaults standardUserDefaults] setInteger:allBombs forKey:kPlayerGlobalBombDropCount];
+}
+
+- (void) updateCoinsCount:(NSInteger)coins
+{
+    NSInteger allCoins = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalCoinsCount];
+    allCoins += coins;
+    [[NSUserDefaults standardUserDefaults] setInteger:allCoins forKey:kPlayerGlobalCoinsCount];
+}
+
 - (void) synchronize
 {
     NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
+    NSInteger allBombs = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalBombDropCount];
+    NSInteger allCoins = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalCoinsCount];
     
     // kills achievements
     GKAchievement *achivement;
-    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
-    [achivement setPercentComplete:allKills >= 100 ? 1 : allKills / 100];
-    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    NSArray *keys; NSInteger count = 100;
+    keys = @[kAchievemntKill100Name, kAchievemntKill1000Name, kAchievemntKill10000Name, kAchievemntKill100000Name, kAchievemntKill1000000Name];
+    for (NSString *key in keys) {
+        achivement = [[GKAchievement alloc] initWithIdentifier:key];
+        [achivement setPercentComplete:allKills >= count ? 1 : allKills / count];
+        [_achievements setObject:achivement forKey:key];
+        count *= 10;
+    }
     
-    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
-    [achivement setPercentComplete:allKills >= 1000 ? 1 : allKills / 1000];
-    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    // bomb drop achievements
+    count = 100;
+    keys = @[kAchievemntDrop100Name, kAchievemntDrop1000Name, kAchievemntDrop10000Name, kAchievemntDrop100000Name, kAchievemntDrop1000000Name];
+    for (NSString *key in keys) {
+        achivement = [[GKAchievement alloc] initWithIdentifier:key];
+        [achivement setPercentComplete:allBombs >= count ? 1 : allBombs / count];
+        [_achievements setObject:achivement forKey:key];
+        count *= 10;
+    }
     
-    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
-    [achivement setPercentComplete:allKills >= 10000 ? 1 : allKills / 10000];
-    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
-    
-    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
-    [achivement setPercentComplete:allKills >= 100000 ? 1 : allKills / 100000];
-    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
-    
-    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
-    [achivement setPercentComplete:allKills >= 1000000 ? 1 : allKills / 1000000];
-    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
-    
+    // coins achievements
+    count = 100;
+    keys = @[kAchievemntCollect100Name, kAchievemntCollect1000Name, kAchievemntCollect10000Name, kAchievemntCollect100000Name, kAchievemntCollect1000000Name];
+    for (NSString *key in keys) {
+        achivement = [[GKAchievement alloc] initWithIdentifier:key];
+        [achivement setPercentComplete:allCoins >= count ? 1 : allCoins / count];
+        [_achievements setObject:achivement forKey:key];
+        count *= 10;
+    }
     [self _submitScores];
     [self _saveScore];
     
     [self _submitAchievements];
     [self _saveAchievements];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark -
