@@ -21,6 +21,7 @@
     CGPoint velocity;
     NSTimeInterval lifeTime;
     NSArray *animationFrames;
+    BOOL scaleChange;
 }
 
 @end
@@ -59,6 +60,8 @@
 
     if (lifeTime > START_BLINKING_TIME) {
         [self setDisplayFrame:animationFrames[(int)round(lifeTime / BLINKING_SPEED) % 2]];
+        [self setScale:self.scale + (scaleChange ? 0.15 : -0.15)];
+        scaleChange = !scaleChange;
     }
 
     if (lifeTime > LIFE_TIME) {
