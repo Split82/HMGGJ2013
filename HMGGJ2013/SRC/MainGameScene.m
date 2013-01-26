@@ -619,6 +619,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) dismissToMenu {
+    if (!gameOver) {
+        [[AppDelegate player] storeScore:[AppDelegate player].points];
+    }
     [[CCDirector sharedDirector] popScene];
     
     [UIView animateWithDuration:0.25 animations:^{
@@ -708,6 +711,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView bringSubviewToFront:pauseButton];
     [rageView setAlpha:0];
     [rageBackgroundView setAlpha:0];
+    
+    [[AppDelegate player] storeScore:[AppDelegate player].points];
 }
 
 - (void) restartGame
