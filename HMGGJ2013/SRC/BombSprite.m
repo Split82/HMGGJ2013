@@ -20,6 +20,7 @@
     float groundY;
     CGPoint velocity;
     NSTimeInterval lifeTime;
+    NSArray *animationFrames;
 }
 
 @end
@@ -28,12 +29,18 @@
 
 - (id)initWithStartPos:(CGPoint)startPos groundY:(CGFloat)initGroundY {
 
-    self = [self initWithSpriteFrameName:@"coin1.png"];
+    self = [self initWithSpriteFrameName:@"Bomb.png"];
     if (self) {
         self.anchorPoint = ccp(0.5, 0);
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
         groundY = initGroundY;
+
+        CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
+        animationFrames = @[
+        [spriteFrameCache spriteFrameByName:@"Bomb.png"],
+        [spriteFrameCache spriteFrameByName:@"BombRed.png"]
+        ];
     }
     return self;
 }
@@ -51,7 +58,7 @@
     }
 
     if (lifeTime > START_BLINKING_TIME) {
-        self.visible = ((int)round(lifeTime / BLINKING_SPEED) % 2) == 0;
+        [self setDisplayFrame:animationFrames[(int)round(lifeTime / BLINKING_SPEED) % 2]];
     }
 
     if (lifeTime > LIFE_TIME) {

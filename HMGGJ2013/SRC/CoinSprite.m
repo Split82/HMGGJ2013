@@ -39,7 +39,7 @@
         self.anchorPoint = ccp(0.5, 0);
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
-        groundY = startPos.y;
+        groundY = 20;
         velocity = ccp(25 - 50 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
