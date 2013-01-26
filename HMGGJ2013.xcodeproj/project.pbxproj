@@ -145,8 +145,8 @@
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
 		55CDD44116B3670E00704F3B /* BombSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44016B3670E00704F3B /* BombSprite.m */; };
 		55CDD44516B3708100704F3B /* BombSpawner.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44416B3708100704F3B /* BombSpawner.m */; };
-		55CDD44C16B3852600704F3B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD44B16B3852600704F3B /* ExplosionParticleSystem.plist */; };
-		55CDD44E16B385D900704F3B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD44D16B385D900704F3B /* SimpleParticleTexture.png */; };
+		55CDD45716B38B4600704F3B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD45516B38B4600704F3B /* ExplosionParticleSystem.plist */; };
+		55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
@@ -437,8 +437,8 @@
 		55CDD44016B3670E00704F3B /* BombSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSprite.m; sourceTree = "<group>"; };
 		55CDD44316B3708100704F3B /* BombSpawner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombSpawner.h; sourceTree = "<group>"; };
 		55CDD44416B3708100704F3B /* BombSpawner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSpawner.m; sourceTree = "<group>"; };
-		55CDD44B16B3852600704F3B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
-		55CDD44D16B385D900704F3B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
+		55CDD45516B38B4600704F3B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
+		55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
 		65259BCD16B337690012B735 /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
 		65259BCE16B337690012B735 /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		65259BD016B338670012B735 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -934,8 +934,8 @@
 		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
 			isa = PBXGroup;
 			children = (
-				55CDD44D16B385D900704F3B /* SimpleParticleTexture.png */,
-				55CDD44B16B3852600704F3B /* ExplosionParticleSystem.plist */,
+				55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */,
+				55CDD45516B38B4600704F3B /* ExplosionParticleSystem.plist */,
 			);
 			name = ParticleSystems;
 			sourceTree = "<group>";
@@ -1088,9 +1088,9 @@
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
 				388E061E16B356450090B788 /* brum.mp3 in Resources */,
 				386BAE7E16B36684002C4EF5 /* muhaha.wav in Resources */,
-				55CDD44C16B3852600704F3B /* ExplosionParticleSystem.plist in Resources */,
-				55CDD44E16B385D900704F3B /* SimpleParticleTexture.png in Resources */,
 				38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */,
+				55CDD45716B38B4600704F3B /* ExplosionParticleSystem.plist in Resources */,
+				55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
