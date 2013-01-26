@@ -11,16 +11,16 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 
-#define PIXEL_ART_SPRITE_SCALE 4
-
 #define TOP_HEIGHT 80
 
 #define MAX_DELTA_TIME 0.1f
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
 
-#define ENEMY_SPAWN_TIME 3.0f
+#define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
+
+#define BOMB_KILL_PERIMETER 60
 
 @interface MainGameScene() {
 
@@ -33,11 +33,15 @@
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
+    NSMutableArray *bombs;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
+    NSMutableArray *killedBombs;
 
+    BombSpawner *bombSpawner;
+    
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
@@ -73,11 +77,13 @@
     // Game objects
     tapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
-    killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
-    killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
+    bombs = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
+    killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -97,20 +103,26 @@
     CGSize size;
 
     // Background
-    CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
-    backgroundSprite.anchorPoint = ccp(0, 1);
-    backgroundSprite.position = ccp(0, [CCDirector sharedDirector].winSize.height);
+    CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"BG.png"];
+    backgroundSprite.anchorPoint = ccp(0, 0);
+    backgroundSprite.position = ccp(0, 0);
     size = backgroundSprite.contentSize;
     backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / backgroundSprite.contentSize.width;
-    backgroundSprite.scaleY = TOP_HEIGHT / backgroundSprite.contentSize.height;
+    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / backgroundSprite.contentSize.height;
     [mainSpriteBatch addChild:backgroundSprite];
 
     // Foreground
-    CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
+    CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"FG.png"];
     foregroundSprite.anchorPoint = ccp(0, 0);
     foregroundSprite.position = ccp(0, 0);
-    foregroundSprite.scale = PIXEL_ART_SPRITE_SCALE;
+    foregroundSprite.scale = [UIScreen mainScreen].scale * 2;
     [mainSpriteBatch addChild:foregroundSprite];
+
+    // Bomb spawner
+    bombSpawner = [[BombSpawner alloc] init];
+    bombSpawner.delegate = self;
+    bombSpawner.zOrder = 10000;
+    [mainSpriteBatch addChild:bombSpawner];
 
     [self scheduleUpdate];
 
@@ -137,7 +149,7 @@
 
 - (void)addEnemy {
 
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
@@ -154,9 +166,32 @@
     [self scheduleNewEnemySpawn];
 }
 
+- (void)addBombAtPosX:(CGFloat)posX {
+
+    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 500) groundY:20];
+    newBomb.delegate = self;
+    [bombs addObject:newBomb];
+    [mainSpriteBatch addChild:newBomb];
+}
+
 - (void)scheduleNewEnemySpawn {
 
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
+}
+
+- (void)makeBombExplosionAtPos:(CGPoint)pos {
+
+    for (EnemySprite *enemy in tapEnemies) {
+        if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+            [killedTapEnemies addObject:enemy];
+        }
+    }
+
+    for (EnemySprite *enemy in swipeEnemies) {
+        if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+            [killedSwipeEnemies addObject:enemy];
+        }
+    }
 }
 
 #pragma mark - CoinSpriteDelegate
@@ -164,6 +199,14 @@
 - (void)coinDidDie:(CoinSprite *)coinSprite {
 
     [killedCoins addObject:coinSprite];
+}
+
+#pragma mark - BombSpriteDelegate
+
+- (void)bombDidDie:(BombSprite *)bombSprite {
+
+    [killedBombs addObject:bombSprite];
+    [self makeBombExplosionAtPos:bombSprite.position];
 }
 
 #pragma EnemySpriteDelegate
@@ -180,17 +223,25 @@
     }
 }
 
+#pragma mark - BombSpawnerDelegate
+
+- (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
+
+    [self addBombAtPosX:bombSpawner.pos.x];
+}
 
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
 
     NSLog(@"LongPress start");
+    [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
 
-        NSLog(@"LongPress end");
+    NSLog(@"LongPress end");    
+    [bombSpawner cancelSpawning];
 }
 
 - (void)swipeStarted:(CGPoint)pos {
@@ -215,11 +266,36 @@
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    [self addCoinAtPos:pos];
-
     NSLog(@"Tap recognized");
     
     [[AudioManager sharedManager] scream];
+
+    EnemySprite *nearestEnemy = nil;
+    float nearestDistance = -1;
+    for (EnemySprite *enemy in tapEnemies) {
+        
+        if (nearestDistance < 0) {
+            
+            nearestDistance = ccpDistanceSQ(enemy.position, pos);
+            nearestEnemy = enemy;
+        }
+        else {
+            
+            float distance = ccpDistanceSQ(enemy.position, pos);
+            
+            if (distance < nearestDistance) {
+                
+                nearestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+    
+    if (nearestEnemy && nearestDistance < 40*40) {
+        
+        [nearestEnemy throwFromWall];
+    }
+    
 }
 
 #pragma mark - Update
@@ -229,11 +305,17 @@
     // Gestures
     [gestureRecognizer update:deltaTime];
 
-    // Coin
+    // Game objects
+    [bombSpawner calc:deltaTime];
+
     for (CoinSprite *coin in coins) {
         [coin calc:deltaTime];
     }
 
+    for (BombSprite *bomb in bombs) {
+        [bomb calc:deltaTime];
+    }
+    
     for (EnemySprite *enemy in tapEnemies) {
         [enemy calc:deltaTime];
     }
@@ -249,6 +331,11 @@
     }
     [killedCoins removeAllObjects];
 
+    for (BombSprite *bomb in killedBombs) {
+        [bombs removeObject:bomb];
+        [bomb removeFromParentAndCleanup:YES];
+    }
+
     for (EnemySprite *killedEnemy in killedTapEnemies) {
 
         [tapEnemies removeObject:killedEnemy];
@@ -259,10 +346,8 @@
     for (EnemySprite *killedEnemy in killedSwipeEnemies) {
 
         [swipeEnemies removeObject:killedEnemy];
-        [killedEnemy removeFromParentAndCleanup:YES];        
-
+        [killedEnemy removeFromParentAndCleanup:YES];
     }
-
     [killedSwipeEnemies removeAllObjects];
 
     enemySpawnTime -= deltaTime;

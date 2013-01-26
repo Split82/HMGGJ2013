@@ -8,7 +8,8 @@
 
 #import "MainMenuViewController.h"
 #import "AboutViewController.h"
-#import "AchievemntNameDefinitions.h"
+#import "AppDelegate.h"
+#import "PlayerModel.h"
 #import "CCDirector.h"
 #import "MainGameScene.h"
 #import <GameKit/GameKit.h>
@@ -110,6 +111,7 @@
 
 - (IBAction)startGameButtonPressed:(id)sender {
     [self startGame];
+    [[AppDelegate player] gameStarted];
 }
 
 - (IBAction)showLeaderboardButtonPressed:(id)sender {

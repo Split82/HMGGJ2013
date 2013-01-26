@@ -17,12 +17,22 @@
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *achievements;
 - (void) addAchievement:(GKAchievement *)achievement;
-- (void) resetAchivements;
+- (void) resetAchievements;
+
+- (void) synchronize;
+
+// achievements
+- (void) gameStarted;
+- (void) filledFloorWithBlood;
+- (void) closeCall;
+- (void) betaTester;
+- (void) callCenter;
+
+- (void) enemyTaps:(NSInteger)taps;
+- (void) enemySwipes:(NSInteger)enemySwipes;
 
 - (void) updateKillCount:(NSInteger)kills;
 - (void) updateDropBombCount:(NSInteger)bombs;
 - (void) updateCoinsCount:(NSInteger)coins;
-
-- (void) synchronize;
 
 @end

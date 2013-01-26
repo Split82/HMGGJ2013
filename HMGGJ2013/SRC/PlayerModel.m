@@ -10,6 +10,8 @@
 
 
 #define kPlayerFirstKill            @"kPlayerFirstKill"
+#define kPlayerBloodBath            @"kPlayerBloodBath"
+#define kPlayerGlobalGameCount      @"kPlayerGlobalGameCount"
 #define kPlayerGlobalKillCount      @"kPlayerGlobalKillCount"
 #define kPlayerGlobalBombDropCount  @"kPlayerGlobalBombDropCount"
 #define kPlayerGlobalCoinsCount     @"kPlayerGlobalCoinsCount"
@@ -19,13 +21,21 @@
 
 @property (nonatomic, strong) NSLock *writeLock;
 
+@property (nonatomic, assign) NSInteger enemyTaps;
+@property (nonatomic, assign) NSInteger enemySwipes;
+
+@property (nonatomic, assign) NSInteger firstBombCounter;
+@property (nonatomic, assign) NSTimeInterval firstBombTime;
+
+@property (nonatomic, strong) NSTimer *lastKillTime;
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation PlayerModel
 {
     NSMutableArray *_scores;
     NSMutableDictionary *_achievements;
-    NSTimer *_timer;
 }
 
 @synthesize scores = _scores;
@@ -37,6 +47,9 @@
     
     if (self) {
         _writeLock = [[NSLock alloc] init];
+        
+        //[[NSFileManager defaultManager] createFileAtPath:[self _scoreFilePath] contents:nil attributes:nil];
+        //[[NSFileManager defaultManager] createFileAtPath:[self _achievementsFilePath] contents:nil attributes:nil];
         
         id unarchivedData = nil;
         unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:[self _scoreFilePath]];
@@ -55,15 +68,39 @@
         } else {
             _achievements = [NSMutableDictionary dictionary];
         }
+    
+        _firstBombTime = 0;
+        _firstBombCounter = 0;
+        
+        NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDate *now = [NSDate date];
+        NSDateComponents *components = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSWeekCalendarUnit | NSWeekdayCalendarUnit ) fromDate:now];
+        
+        if ([components month] == 12) {
+            if ([components day] == 24) {
+                GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntChristmassName];
+                [achivement setPercentComplete:1];
+                [achivement setShowsCompletionBanner:YES];
+                [_achievements setObject:achivement forKey:kAchievemntChristmassName];
+            } else if ([components day] == 31) {
+                GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntPartyBoyName];
+                [achivement setPercentComplete:1];
+                [achivement setShowsCompletionBanner:YES];
+                [_achievements setObject:achivement forKey:kAchievemntPartyBoyName];
+            }
+        }
         _timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
     }
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [_timer invalidate];
     _timer = nil;
+    
+    [_lastKillTime invalidate];
+    _lastKillTime = nil;
 }
 
 #pragma mark Score
@@ -92,7 +129,7 @@
     [self _saveAchievements];
 }
 
-- (void) resetAchivements
+- (void) resetAchievements
 {
     [GKAchievement resetAchievementsWithCompletionHandler:^(NSError *error) {
         if (!error) {
@@ -104,35 +141,156 @@
     }];
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
     [df setBool:NO forKey:kPlayerFirstKill];
+    [df setBool:NO forKey:kPlayerBloodBath];
+    [df setInteger:0 forKey:kPlayerGlobalGameCount];
     [df setInteger:0 forKey:kPlayerGlobalKillCount];
     [df setInteger:0 forKey:kPlayerGlobalBombDropCount];
     [df setInteger:0 forKey:kPlayerGlobalCoinsCount];
     [df synchronize];
+    
+    [_lastKillTime invalidate];
+    _lastKillTime = nil;
+    
+    _firstBombTime = 0;
+    _firstBombCounter = 0;
+    
+    _enemyTaps = 0;
+    _enemySwipes = 0;
+}
+
+- (void) gameStarted
+{
+    NSInteger count = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalGameCount];
+    if (count == 0) {
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntFirstAchivementName];
+        [achivement setPercentComplete:1];
+        [_achievements setObject:achivement forKey:kAchievemntFirstAchivementName];
+    }
+    count++;
+    
+    if (count == 15) {
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntAddictedName];
+        [achivement setPercentComplete:1];
+        [achivement setShowsCompletionBanner:YES];
+        [_achievements setObject:achivement forKey:kAchievemntAddictedName];
+    }
+    [[NSUserDefaults standardUserDefaults] setInteger:count forKey:kPlayerGlobalGameCount];
+}
+
+- (void) filledFloorWithBlood
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntBloodyMaryName];
+    [achivement setPercentComplete:1];
+    [achivement setShowsCompletionBanner:YES];
+    [_achievements setObject:achivement forKey:kAchievemntBloodyMaryName];
+}
+
+- (void) closeCall
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntCloseCallName];
+    [achivement setPercentComplete:1];
+    [achivement setShowsCompletionBanner:YES];
+    [_achievements setObject:achivement forKey:kAchievemntCloseCallName];
+}
+
+- (void) betaTester
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntBetaTesterName];
+    [achivement setPercentComplete:1];
+    [achivement setShowsCompletionBanner:YES];
+    [_achievements setObject:achivement forKey:kAchievemntBetaTesterName];
+    [self synchronize];
+}
+
+- (void) callCenter
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntCallCenterName];
+    [achivement setPercentComplete:1];
+    [achivement setShowsCompletionBanner:YES];
+    [_achievements setObject:achivement forKey:kAchievemntCallCenterName];
+}
+
+- (void) enemyTaps:(NSInteger)taps
+{
+    _enemyTaps += taps;
+    _enemySwipes = 0;
+    
+    if (_enemyTaps >= 10) {
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntTapDencerName];
+        [achivement setPercentComplete:1];
+        [achivement setShowsCompletionBanner:YES];
+        [_achievements setObject:achivement forKey:kAchievemntTapDencerName];
+    }
+}
+
+- (void) enemySwipes:(NSInteger)enemySwipes
+{
+    _enemySwipes += enemySwipes;
+    _enemyTaps = 0;
+    
+    if (_enemySwipes >= 10) {
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntFruitNinjaName];
+        [achivement setPercentComplete:1];
+        [achivement setShowsCompletionBanner:YES];
+        [_achievements setObject:achivement forKey:kAchievemntFruitNinjaName];
+    }
 }
 
 - (void) updateKillCount:(NSInteger)kills
 {
     NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
     allKills += kills;
+    [_lastKillTime invalidate];
+    _lastKillTime = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(_dalaiLamaAchievements) userInfo:nil repeats:NO];
     
     if (allKills > 0 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerFirstKill]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerFirstKill];
-        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntFirstKillName];
         [achivement setPercentComplete:1];
-        [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+        [_achievements setObject:achivement forKey:kAchievemntFirstKillName];
+    }
+    if (kills >= 20 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerBloodBath]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerBloodBath];
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntBloodBathName];
+        [achivement setPercentComplete:1];
+        [achivement setShowsCompletionBanner:YES];
+        [_achievements setObject:achivement forKey:kAchievemntBloodBathName];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:allKills forKey:kPlayerGlobalKillCount];
-    
-    if ([_achievements count]) {
-        [self _submitAchievements];
-    }
+}
+
+- (void) _dalaiLamaAchievements
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntDalaiLamaName];
+    [achivement setPercentComplete:1];
+    [achivement setShowsCompletionBanner:YES];
+    [_achievements setObject:achivement forKey:kAchievemntDalaiLamaName];
 }
 
 - (void) updateDropBombCount:(NSInteger)bombs
 {
+    _enemyTaps = 0;
+    _enemySwipes = 0;
+    
     NSInteger allBombs = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalBombDropCount];
     allBombs += bombs;
     [[NSUserDefaults standardUserDefaults] setInteger:allBombs forKey:kPlayerGlobalBombDropCount];
+
+    if (_firstBombTime == 0)
+        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    if (_firstBombTime + 10 <= [NSDate timeIntervalSinceReferenceDate]) {
+        if (_firstBombCounter + bombs >= 30) {
+            GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntCarpetBomberName];
+            [achivement setPercentComplete:1];
+            [achivement setShowsCompletionBanner:YES];
+            [_achievements setObject:achivement forKey:kAchievemntCarpetBomberName];
+        }
+    } else {
+        _firstBombCounter = 0;
+        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+    }
+    _firstBombCounter += bombs;
 }
 
 - (void) updateCoinsCount:(NSInteger)coins
@@ -165,6 +323,7 @@
     for (NSString *key in keys) {
         achivement = [[GKAchievement alloc] initWithIdentifier:key];
         [achivement setPercentComplete:allBombs >= count ? 1 : allBombs / count];
+        [achivement setShowsCompletionBanner:YES];
         [_achievements setObject:achivement forKey:key];
         count *= 10;
     }

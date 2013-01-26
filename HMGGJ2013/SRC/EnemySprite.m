@@ -9,15 +9,18 @@
 #import "EnemySprite.h"
 #import "GameDataNameDefinitions.h"
 
-#define WALKING_MOVEMENT_OFFSET 1.0f
-#define WALKING_MOVEMENT_DELAY 0.1f
-#define WALKING_ANIM_DELAY 0.2f
+#define WALKING_MOVEMENT_OFFSET 2.0f
+#define WALKING_ANIM_DELAY (1/30.0f)
 #define WALKING_BORDER_OFFSET 5.0f
-#define WALKING_PLANE_Y_POS 10.0f
+#define WALKING_PLANE_Y_POS 30.0f
 
 #define CLIMBING_MOVEMENT_OFFSET 1.0f
-#define CLIMBING_MOVEMENT_DELAY 0.1f
+#define CLIMBING_MOVEMENT_DELAY (1/60.0f)
 #define CLIMBING_ANIM_DELAY 0.2f
+
+#define FALLING_ACCEL -300.0f
+#define FALLING_HORIZ_DECCEL 100.0f
+#define FALLING_ANIM_DELAY 0.2f
 
 #define WALL_HEIGHT 400.0f
 
@@ -28,6 +31,7 @@
     
     NSMutableArray *walkingAnimSpriteFrames;
     NSMutableArray *climbingAnimSpriteFrames;
+    NSMutableArray *fallingAnimSpriteFrames;
     
     int animFrameIndex;
     
@@ -35,6 +39,8 @@
     float moveTime;
     
     float climbXPos;
+    float verticalVel;
+    float horizontalVel;
     
     BOOL killed;
 }
@@ -51,8 +57,9 @@
     if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
-        self.type = type;
+        self.type = _type;
         self.state = kEnemyStateWalking;
+        self.scale = [UIScreen mainScreen].scale * 2;
         
         animFrameIndex = 0;
         animTime = 0;
@@ -75,10 +82,18 @@
         }
         
         NSArray *walkingAnimeSpriteFrameNames = @[
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName
+            @"monsterBigMove1.png",
+            @"monsterBigMove2.png",
+            @"monsterBigMove3.png",
+            @"monsterBigMove4.png",
+            @"monsterBigMove5.png",
+            @"monsterBigMove6.png",
+            @"monsterBigMove7.png",
+            @"monsterBigMove8.png",
+            @"monsterBigMove9.png",
+            @"monsterBigMove10.png",
+            @"monsterBigMove11.png",
+            @"monsterBigMove12.png",
         ];
         
         walkingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[walkingAnimeSpriteFrameNames count]];
@@ -89,10 +104,18 @@
         }
         
         NSArray *climbingAnimeSpriteFrameNames = @[
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName,
-            kPlaceholderTextureFrameName
+        @"monsterBigMove1.png",
+        @"monsterBigMove2.png",
+        @"monsterBigMove3.png",
+        @"monsterBigMove4.png",
+        @"monsterBigMove5.png",
+        @"monsterBigMove6.png",
+        @"monsterBigMove7.png",
+        @"monsterBigMove8.png",
+        @"monsterBigMove9.png",
+        @"monsterBigMove10.png",
+        @"monsterBigMove11.png",
+        @"monsterBigMove12.png",
         ];
         
         climbingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[climbingAnimeSpriteFrameNames count]];
@@ -101,6 +124,29 @@
             
             [climbingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
         }
+        
+        NSArray *fallingAnimeSpriteFrameNames = @[
+        @"monsterBigMove1.png",
+        @"monsterBigMove2.png",
+        @"monsterBigMove3.png",
+        @"monsterBigMove4.png",
+        @"monsterBigMove5.png",
+        @"monsterBigMove6.png",
+        @"monsterBigMove7.png",
+        @"monsterBigMove8.png",
+        @"monsterBigMove9.png",
+        @"monsterBigMove10.png",
+        @"monsterBigMove11.png",
+        @"monsterBigMove12.png",
+        ];
+        
+        fallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[fallingAnimeSpriteFrameNames count]];
+        
+        for (NSString *spriteFrameName in fallingAnimeSpriteFrameNames) {
+            
+            [fallingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
+        }
+        
         
         [self setDisplayFrame:walkingAnimSpriteFrames[0]];
     }
@@ -129,7 +175,9 @@
                 direction = -1;
             }
             
-            if (moveTime > WALKING_MOVEMENT_DELAY) {
+
+            if (animTime > WALKING_ANIM_DELAY) {
+                
                 
                 CGPoint newPos = self.position;
                 newPos.x += (int)(animTime / WALKING_ANIM_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
@@ -138,19 +186,16 @@
                     
                     state = kEnemyStateClimbing;
                     animFrameIndex = 0;
+                    moveTime = 0;
                 }
                 
                 self.position = newPos;
-
-                moveTime = moveTime - (int)(moveTime / WALKING_MOVEMENT_DELAY) * WALKING_MOVEMENT_DELAY;
-            }
-            
-            if (animTime > WALKING_ANIM_DELAY) {
                 
                 animFrameIndex += (int)(animTime / WALKING_ANIM_DELAY);
                 animFrameIndex = animFrameIndex % [walkingAnimSpriteFrames count];
                 
                 animTime = animTime - (int)(animTime / WALKING_ANIM_DELAY) * WALKING_ANIM_DELAY;
+                
             }
             
             [self setDisplayFrame:walkingAnimSpriteFrames[animFrameIndex]];
@@ -167,7 +212,7 @@
             if (moveTime > CLIMBING_MOVEMENT_DELAY) {
                 
                 CGPoint newPos = self.position;
-                newPos.y += (int)(animTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_OFFSET;
+                newPos.y += (int)(moveTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_OFFSET;
                 
                 self.position = newPos;
                 
@@ -188,10 +233,57 @@
         }
         case kEnemyStateFalling: {
             
+            
+            if (position_.y < WALKING_PLANE_Y_POS) {
+                
+                position_.y = WALKING_PLANE_Y_POS;
+                self.position = position_;
+
+                state = kEnemyStateClimbing;
+                animFrameIndex = 0;
+                moveTime = 0;
+                return;
+            }
+            
+            position_.y += verticalVel * time;
+            verticalVel += FALLING_ACCEL * time;
+            
+            position_.x += horizontalVel * time * direction;
+            horizontalVel -= FALLING_HORIZ_DECCEL * time;
+            if (horizontalVel < 0) {
+                
+                horizontalVel = 0;
+            }
+            
+            self.position = position_;
+            
+            if (animTime > FALLING_ANIM_DELAY) {
+                
+                animFrameIndex += (int)(animTime / FALLING_ANIM_DELAY);
+                animFrameIndex = animFrameIndex % [fallingAnimSpriteFrames count];
+                
+                animTime = animTime - (int)(animTime / FALLING_ANIM_DELAY) * FALLING_ANIM_DELAY;
+            }
+            
+            [self setDisplayFrame:fallingAnimSpriteFrames[animFrameIndex]];
             break;
         }
     }
 }
 
+-(void) throwFromWall {
+    
+    if (state != kEnemyStateClimbing) {
+        
+        return;
+    }
+    
+    state = kEnemyStateFalling;
+    animFrameIndex = 0;
+    moveTime = 0;
+    verticalVel = 100;
+    horizontalVel = (float)rand() / RAND_MAX * 50 + 50;
+    
+}
 
 @end
