@@ -97,6 +97,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UIButton *restartButton;
     
     UIView *rageView;
+    UIImageView *rageBackgroundView;
 }
 
 @end
@@ -230,10 +231,29 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
     [healthLabel setTextAlignment:NSTextAlignmentCenter];
     [healthLabel setBackgroundColor:[UIColor clearColor]];
-    [[CCDirector sharedDirector].view addSubview:healthLabel];
+    //[[CCDirector sharedDirector].view addSubview:healthLabel];
     
-    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, contentSize.height - 5.0, 0.0, 5.0)];
-    [rageView setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5]];
+    UIImage *image;
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    image = [UIImage imageNamed:@"progressBarBack"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offset, 288.0, 24.0)];
+    [rageBackgroundView setImage:image];
+    [rageBackgroundView.layer setMagnificationFilter:kCAFilterNearest];
+    [[CCDirector sharedDirector].view addSubview:rageBackgroundView];
+    
+    image = [UIImage imageNamed:@"progressBar"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 272.0, 8.0)];
+    [imageView setImage:image];
+    [imageView.layer setMagnificationFilter:kCAFilterNearest];
+    rageView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 0.0, 8.0)];
+    [rageView setClipsToBounds:YES];
+    [rageView addSubview:imageView];
     [[CCDirector sharedDirector].view addSubview:rageView];
     
     [self updateUI];
@@ -244,7 +264,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coinsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
 
-    [rageView setFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 320 * [AppDelegate player].rage, 5.0)];
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - 22.0, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects

@@ -133,7 +133,7 @@
     else if (newPoints >= 2)
         multiplier += 0.5;
     _points += newPoints;
-    self.rage += (float)newPoints / 16;
+    self.rage += (float)newPoints / 2;
     _rageInterval = 0;
 }
 
