@@ -34,8 +34,8 @@
 
 #define TAP_MIN_DISTANCE2 (60*60)
 #define TAP_THROW_MIN_DISTANCE2 (60*60)
-#define SWIPE_MIN_DISTANCE2 (40*40)
-#define THROW_MULTIPLE_EMEMIES_MIN_DISTANCE2 (40*40)
+#define TAP_PICK_COIN_MIN_DISTANCE2 (50*50)
+#define SWIPE_MIN_DISTANCE2 (30*30)
 
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
@@ -543,16 +543,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
     
+    NSMutableArray *pickedCoins = [[NSMutableArray alloc] initWithCapacity:10];
+    
     for (CoinSprite *coin in coins) {
+        
+        float distance = ccpDistanceSQ(coin.position, pos);
         
         if (nearestDistance < 0) {
             
-            nearestDistance = ccpDistanceSQ(coin.position, pos);
+            nearestDistance = distance;
             nearestCoin = coin;
         }
         else {
-            
-            float distance = ccpDistanceSQ(coin.position, pos);
             
             if (distance < nearestDistance) {
                 
@@ -560,9 +562,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestCoin = coin;
             }
         }
+        
+        if (distance < TAP_PICK_COIN_MIN_DISTANCE2) {
+            
+            [pickedCoins addObject:coin];
+        }
     }
     
+    // only the nearest coin will be picked
+    /*
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
+        
         [coins removeObject:nearestCoin];
 
         CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
@@ -570,6 +580,24 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         [nearestCoin runAction:action];
         [self coinWasAdded];
+        return;
+    }
+    */
+    
+    // multiple coins can be picked
+    if ([pickedCoins count]) {
+        
+        for (CoinSprite * coin in pickedCoins) {
+            
+            [coins removeObject:coin];
+            
+            CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
+                                                            [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
+            
+            [coin runAction:action];
+            [self coinWasAdded];
+        }
+        
         return;
     }
     
@@ -589,6 +617,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestEnemy = enemy;
             }
         }
+        // multiple enemies will be thrown
         /*
         if (distance < TAP_THROW_MIN_DISTANCE2) {
         
@@ -600,18 +629,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [nearestEnemy throwFromWall];
-        
-        /*
-        for (EnemySprite *enemy in tapEnemies) {
-            
-            float distance = ccpDistanceSQ(enemy.position, nearestEnemy.position);
 
-            if (distance < THROW_MULTIPLE_EMEMIES_MIN_DISTANCE2) {
-                
-                [enemy throwFromWall];
-            }
-        }
-        */
     }
 
 }
