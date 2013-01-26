@@ -96,6 +96,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UILabel *gameOverLabel;
     UIButton *restartButton;
     
+    UIImageView *pauseButton;
+    
     UIView *rageView;
     UIImageView *rageBackgroundView;
 }
@@ -203,10 +205,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
-    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 5);
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 15.0);
     [mainSpriteBatch addChild:killSprite];
     
-    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 7.0, labelWidth - 28.0, 21.0)];
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 17.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
@@ -216,10 +218,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
     [mainSpriteBatch addChild:coinsSprite];
     
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 7.0, labelWidth - 30.0, 21.0)];
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
     [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
@@ -256,6 +258,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [rageView addSubview:imageView];
     [[CCDirector sharedDirector].view addSubview:rageView];
     
+    image = [UIImage imageNamed:@"pause"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    pauseButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2, 13.0, 24.0, 28.0)];
+    [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
+    [pauseButton setImage:image];
+    [pauseButton setUserInteractionEnabled:YES];
+    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)]];
+    [[CCDirector sharedDirector].view addSubview:pauseButton];
     [self updateUI];
 }
 
@@ -538,6 +548,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [nearestEnemy throwFromWall];
     }
     
+}
+
+- (void) dismiss {
+    [[CCDirector sharedDirector] dismissViewControllerAnimated:YES completion:^{
+        [[CCDirector sharedDirector] end];
+    }];
 }
 
 #pragma mark -
