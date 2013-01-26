@@ -26,6 +26,7 @@ typedef enum {
 
 -(id) initWithType:(EnemyType)type;
 -(void) update:(ccTime)time;
+-(void) throwFromWall;
 
 @property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;
 @property (nonatomic, assign) EnemyType type;
