@@ -10,7 +10,7 @@
 #import "CDAudioManager.h"
 
 const int SOUND_BRUM = 1;
-const int SOUND_SCREAM = 2;
+const int SOUND_GANDAM = 2;
 const int SOUND_MUHAHA = 3;
 
 const int BUFF_BG = kASC_Left;
@@ -53,15 +53,19 @@ const int BUFF_EFFECTS = kASC_Right;
     NSMutableArray *loadRequests = [[NSMutableArray alloc] init];
     
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BRUM filePath:@"brum.mp3"]];
-    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_SCREAM filePath:@"WilhelmScream.mp3"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_GANDAM filePath:@"8bit-gandam.mp3"]];
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_MUHAHA filePath:@"muhaha.wav"]];
     
     [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
 - (void)scream {
-    [soundEngine playSound:SOUND_BRUM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:1.0f loop:NO];
+    [soundEngine playSound:SOUND_BRUM sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
    // NSLog(@"hello %d", soundEngine.sourceTotal);
+}
+
+- (void)startBackgroundTrack {
+    [soundEngine playSound:SOUND_GANDAM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }
 
 @end
