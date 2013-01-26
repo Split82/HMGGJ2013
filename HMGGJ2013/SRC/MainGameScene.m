@@ -33,7 +33,9 @@
 #define GAME_OBJECTS_Z_ORDER 30
 
 #define TAP_MIN_DISTANCE2 (60*60)
-#define SWIPE_MIN_DISTANCE2 (20*20)
+#define TAP_THROW_MIN_DISTANCE2 (60*60)
+#define SWIPE_MIN_DISTANCE2 (40*40)
+#define THROW_MULTIPLE_EMEMIES_MIN_DISTANCE2 (40*40)
 
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
@@ -573,14 +575,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     for (EnemySprite *enemy in tapEnemies) {
         
+        float distance = ccpDistanceSQ(enemy.position, pos);
         if (nearestDistance < 0) {
             
-            nearestDistance = ccpDistanceSQ(enemy.position, pos);
+            nearestDistance = distance;
             nearestEnemy = enemy;
         }
         else {
-            
-            float distance = ccpDistanceSQ(enemy.position, pos);
             
             if (distance < nearestDistance) {
                 
@@ -588,13 +589,31 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestEnemy = enemy;
             }
         }
+        /*
+        if (distance < TAP_THROW_MIN_DISTANCE2) {
+        
+            [enemy throwFromWall];
+        }
+        */
     }
-    
+
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [nearestEnemy throwFromWall];
+        
+        /*
+        for (EnemySprite *enemy in tapEnemies) {
+            
+            float distance = ccpDistanceSQ(enemy.position, nearestEnemy.position);
+
+            if (distance < THROW_MULTIPLE_EMEMIES_MIN_DISTANCE2) {
+                
+                [enemy throwFromWall];
+            }
+        }
+        */
     }
-    
+
 }
 
 - (void) dismiss {
