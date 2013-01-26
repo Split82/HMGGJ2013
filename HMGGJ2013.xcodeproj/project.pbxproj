@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		388E061516B344B00090B788 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388E061416B344B00090B788 /* AudioManager.m */; };
 		388E061916B34E3B0090B788 /* achievements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 388E061816B34E3B0090B788 /* achievements.txt */; };
+		388E061E16B356450090B788 /* brum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061C16B356450090B788 /* brum.mp3 */; };
+		388E061F16B356450090B788 /* WilhelmScream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061D16B356450090B788 /* WilhelmScream.mp3 */; };
 		553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741AF16B1F72900D860C2 /* QuartzCore.framework */; };
 		553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B116B1F72900D860C2 /* OpenGLES.framework */; };
 		553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B316B1F72900D860C2 /* OpenAL.framework */; };
@@ -156,6 +158,8 @@
 		388E061316B344B00090B788 /* AudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		388E061416B344B00090B788 /* AudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
 		388E061816B34E3B0090B788 /* achievements.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = achievements.txt; sourceTree = "<group>"; };
+		388E061C16B356450090B788 /* brum.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = brum.mp3; sourceTree = "<group>"; };
+		388E061D16B356450090B788 /* WilhelmScream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WilhelmScream.mp3; sourceTree = "<group>"; };
 		553741AB16B1F72900D860C2 /* HMGGJ2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMGGJ2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		553741AF16B1F72900D860C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		553741B116B1F72900D860C2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -469,6 +473,15 @@
 				388E061816B34E3B0090B788 /* achievements.txt */,
 			);
 			name = loremipsum;
+			sourceTree = "<group>";
+		};
+		388E061B16B356450090B788 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				388E061C16B356450090B788 /* brum.mp3 */,
+				388E061D16B356450090B788 /* WilhelmScream.mp3 */,
+			);
+			path = sounds;
 			sourceTree = "<group>";
 		};
 		553741A016B1F72900D860C2 = {
@@ -951,6 +964,7 @@
 		55B862BF16B2160500D5BA8D /* GameData */ = {
 			isa = PBXGroup;
 			children = (
+				388E061B16B356450090B788 /* sounds */,
 				388E061716B34E190090B788 /* loremipsum */,
 				553BA1AB16B32DEE00B4E22B /* ParticleSystems */,
 				55B862C016B2161600D5BA8D /* Textures */,
@@ -1061,6 +1075,8 @@
 				65259BD116B338670012B735 /* Default-568h@2x.png in Resources */,
 				65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */,
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
+				388E061E16B356450090B788 /* brum.mp3 in Resources */,
+				388E061F16B356450090B788 /* WilhelmScream.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
