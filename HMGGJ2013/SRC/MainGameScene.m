@@ -149,7 +149,7 @@
 
 - (void)addEnemy {
 
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
