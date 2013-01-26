@@ -9,14 +9,17 @@
 #import "EnemyBodyDebris.h"
 
 #define GRAVITY -2000.0f
-#define FRICTION 0.92f
-#define BOUNCE_COEF 0.7f
-#define LIFE_TIME 4
+#define FRICTION 0.97f
+#define BOUNCE_COEF 0.8f
+#define LIFE_TIME 3
+
+#define START_BLOOD_EMISSION_RATE 30
 
 @interface EnemyBodyDebris() {
 
     CGPoint velocity;
     CGRect spaceBounds;
+    float elapsedTime;
     float lifeTime;
 }
 
@@ -27,7 +30,7 @@
 
 - (id)init:(EnemyType)enemyType velocity:(CGPoint)initVelocity spaceBounds:(CGRect)initSpaceBounds {
 
-    //if (enemyType == kEnemyTypeTap) {
+    if (enemyType == kEnemyTypeTap) {
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];        
 
@@ -39,10 +42,23 @@
         [spriteFrameCache spriteFrameByName:@"BigExplosion5.png"],
         ];
         self = [self initWithSpriteFrame:spriteFrames[rand() % [spriteFrames count]]];
-    //}
+    }
+    else {
+
+        CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
+
+        NSArray *spriteFrames = @[
+        [spriteFrameCache spriteFrameByName:@"tallExplode1.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode2.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode3.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode4.png"],
+        ];
+        self = [self initWithSpriteFrame:spriteFrames[rand() % [spriteFrames count]]];
+    }
 
     if (self) {
-        
+
+        lifeTime = LIFE_TIME + rand() / (float)RAND_MAX;
         self.anchorPoint = ccp(0.5, 0.5);
         velocity = initVelocity;
         spaceBounds = initSpaceBounds;
@@ -55,32 +71,43 @@
 
     velocity = ccpMult(velocity, FRICTION);
     velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
-    self.position = ccpAdd(self.position, velocity);
 
-    if (self.position.x > CGRectGetMaxX(spaceBounds)) {
+    self.rotation += velocity.x * deltaTime;
+    self.position = ccpAdd(self.position, ccpMult(velocity, deltaTime));
+
+    if (self.position.x > CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5) {
         CGPoint pos = self.position;
-        pos.x = CGRectGetMaxX(spaceBounds);
+        pos.x = CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5;
         self.position = pos;
-        velocity.x -= velocity.x;
+        velocity.x = -velocity.x;
+        velocity = ccpMult(velocity, BOUNCE_COEF);        
     }
 
-    if (self.position.x < CGRectGetMinX(spaceBounds)) {
+    if (self.position.x < CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5) {
         CGPoint pos = self.position;        
-        pos.x = CGRectGetMinX(spaceBounds);
+        pos.x = CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5;
         self.position = pos;        
-        velocity.x -= velocity.x;
+        velocity.x = -velocity.x;
+        velocity = ccpMult(velocity, BOUNCE_COEF);
     }
 
-    if (self.position.y < CGRectGetMinY(spaceBounds)) {
+    if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5) {
         CGPoint pos = self.position;        
-        pos.y = CGRectGetMinY(spaceBounds);
+        pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5;
         self.position = pos;
-        velocity.y -= velocity.y;
+        velocity.y = -velocity.y;
+        velocity = ccpMult(velocity, BOUNCE_COEF);        
     }
 
-    lifeTime += deltaTime;
-    if (lifeTime > LIFE_TIME) {
+    _bloodParticleSystem.position = self.position;
+
+    elapsedTime += deltaTime;
+    if (elapsedTime > lifeTime) {
+        self.bloodParticleSystem.emissionRate = 0;
         [_delegate enemyBodyDebrisDidDie:self];
+    }
+    else {
+        self.bloodParticleSystem.emissionRate = START_BLOOD_EMISSION_RATE * (1 - elapsedTime / lifeTime);
     }
 }
 
