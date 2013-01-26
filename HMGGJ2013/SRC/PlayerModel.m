@@ -175,7 +175,7 @@
     _coins = 10;
     _health = 100;
     _rage = 0;
-    _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 30;
+    _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 15;
 }
 
 #pragma mark Score
