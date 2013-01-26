@@ -174,8 +174,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     masterControlProgram.mainframe = self;
 
     [self scheduleUpdate];
-
-    [[AudioManager sharedManager] startBackgroundMusic];
+    
+    //[[AudioManager sharedManager] startBackgroundTrack];
     
     [self initUI];
 }
@@ -584,6 +584,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedSwipeEnemies removeAllObjects];
 
     [masterControlProgram calc:deltaTime];
+    
+    if ([AppDelegate player].rage >= 1) {
+        [self addBombAtPosX:25.0];
+        [self addBombAtPosX:85.0];
+        [self addBombAtPosX:155.0];
+        [self addBombAtPosX:225.0];
+        [self addBombAtPosX:295.0];
+        [[AppDelegate player] updateDropBombCount:5];
+        [self updateUI];
+        [AppDelegate player].rage = 0;
+    }
 }
 
 - (void)update:(ccTime)deltaTime {
