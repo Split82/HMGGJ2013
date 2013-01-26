@@ -18,7 +18,7 @@
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
 
-#define ENEMY_SPAWN_TIME 2.0f
+#define ENEMY_SPAWN_TIME 3.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
 
 @interface MainGameScene() {
@@ -30,6 +30,8 @@
     CCSpriteBatchNode *mainSpriteBatch;
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
+    NSMutableArray *killedTapEnemies;
+    NSMutableArray *killedSwipeEnemies;
     NSMutableArray *coins;
 
     NSMutableArray *killedCoins;
@@ -38,6 +40,8 @@
 
     // State vars
     BOOL sceneInitWasPerformed;
+    
+    float enemySpawnTime;
 }
 
 @end
@@ -67,6 +71,8 @@
     // Game objects
     tapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
@@ -139,12 +145,15 @@
         [tapEnemies addObject:enemy];
     }
 
+    [mainSpriteBatch addChild:enemy];
+    enemy.delegate = self;
+    
     [self scheduleNewEnemySpawn];
 }
 
 - (void)scheduleNewEnemySpawn {
 
-    [self scheduleOnce:@selector(addEnemy) delay:ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME - ENEMY_SPAWN_DELTA_TIME / 2.0f];
+    enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
 #pragma mark - CoinSpriteDelegate
@@ -233,8 +242,40 @@
         }
         [killedCoins removeAllObjects];
         
+        for (EnemySprite *killedEnemy in killedTapEnemies) {
+            
+            [tapEnemies removeObject:killedEnemy];
+        }
+        
+        [killedTapEnemies removeAllObjects];
+        
+        for (EnemySprite *killedEnemy in killedSwipeEnemies) {
+            
+            [swipeEnemies removeObject:killedEnemy];
+        }
+        
+        [killedSwipeEnemies removeAllObjects];
+        
+        
         calcTime -= FRAME_TIME_INTERVAL;
     }
 }
+
+#pragma EnemySpriteDelegate
+
+- (void)enemyDidClimbWall:(EnemySprite*)enemy {
+
+    if (enemy.type == kEnemyTypeTap) {
+        
+        [killedTapEnemies addObject:enemy];
+    }
+    else {
+        
+        [killedSwipeEnemies addObject:enemy];
+    }
+    
+    [mainSpriteBatch removeChild:enemy cleanup:YES];
+}
+
 
 @end

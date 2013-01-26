@@ -7,7 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GameKit/GameKit.h>
+#import "AchievemntNameDefinitions.h"
 
 @interface PlayerModel : NSObject
 
+@property (nonatomic, strong, readonly) NSArray *scores;
+- (void) storeScore:(NSUInteger)value;
+
+@property (nonatomic, strong, readonly) NSMutableDictionary *achievements;
+- (void) addAchievement:(GKAchievement *)achievement;
+- (void) resetAchivements;
+
+- (void) synchronize;
+                     
 @end
