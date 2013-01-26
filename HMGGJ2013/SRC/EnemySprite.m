@@ -17,6 +17,7 @@
 #define CLIMBING_MOVEMENT_OFFSET 1.0f
 #define CLIMBING_MOVEMENT_DELAY (1/60.0f)
 #define CLIMBING_ANIM_DELAY 0.2f
+#define CLIMBING_BORDER_OFFSET 20.0f
 
 #define FALLING_ACCEL -300.0f
 #define FALLING_HORIZ_DECCEL 100.0f
@@ -65,7 +66,7 @@
         animTime = 0;
         moveTime = 0;
         
-        climbXPos = (float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width;
+        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET;
         
         if (rand() % 2) {
             
@@ -239,7 +240,30 @@
                 position_.y = WALKING_PLANE_Y_POS;
                 self.position = position_;
 
-                state = kEnemyStateClimbing;
+                if (position_.x < CLIMBING_BORDER_OFFSET) {
+                    
+                    state = kEnemyStateWalking;
+                    
+                    direction = 1;
+                    self.flipX = NO;
+                    
+                    climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;                    
+                }
+                else if (position_.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET) {
+                
+                    state = kEnemyStateClimbing;
+                    
+                    climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
+                    
+                    direction = -1;
+                    self.flipX = YES;
+                }
+                else {
+                    
+
+                    state = kEnemyStateClimbing;
+                }
+                
                 animFrameIndex = 0;
                 moveTime = 0;
                 return;
