@@ -13,14 +13,14 @@
 
 @interface CoinSprite : CCSprite
 
-@property (nonatomic, weak) NSObject <CoinSpriteDelegate> *delegate;
+@property (nonatomic, weak) id <CoinSpriteDelegate> delegate;
 
 - (id)initWithStartPos:(CGPoint)startPos;
 - (void)update:(ccTime)deltaTime;
 
 @end
 
-@protocol CoinSpriteDelegate
+@protocol CoinSpriteDelegate <NSObject>
 
 - (void)coinDidDie:(CoinSprite*)coinSprite;
 

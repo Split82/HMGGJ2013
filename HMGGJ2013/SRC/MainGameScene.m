@@ -32,6 +32,8 @@
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
 
+    NSMutableArray *killedCoins;
+
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
@@ -66,6 +68,8 @@
     tapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
+
+    killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -147,8 +151,7 @@
 
 - (void)coinDidDie:(CoinSprite *)coinSprite {
 
-    [coins removeObject:coinSprite];
-    [coinSprite removeFromParentAndCleanup:YES];
+    [killedCoins addObject:coinSprite];
 }
 
 #pragma mark - Gestures
@@ -208,20 +211,27 @@
     while (calcTime >= FRAME_TIME_INTERVAL) {
 
         // Gestures
-        [gestureRecognizer update:calcTime];
+        [gestureRecognizer update:FRAME_TIME_INTERVAL];
 
         // Coin
         for (CoinSprite *coin in coins) {
-            [coin update:calcTime];
+            [coin update:FRAME_TIME_INTERVAL];
         }
 
         for (EnemySprite *enemy in tapEnemies) {
-            [enemy update:calcTime];
+            [enemy update:FRAME_TIME_INTERVAL];
         }
         
         for (EnemySprite *enemy in swipeEnemies) {
-            [enemy update:calcTime];
+            [enemy update:FRAME_TIME_INTERVAL];
         }
+
+        // Killed
+        for (CoinSprite *coin in killedCoins) {
+            [coins removeObject:coin];
+            [coin removeFromParentAndCleanup:YES];
+        }
+        [killedCoins removeAllObjects];
         
         calcTime -= FRAME_TIME_INTERVAL;
     }
