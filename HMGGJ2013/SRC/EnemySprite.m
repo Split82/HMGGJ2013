@@ -66,7 +66,7 @@
         animTime = 0;
         moveTime = 0;
         
-        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET;
+        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET);
         
         if (rand() % 2) {
             
@@ -188,6 +188,8 @@
                     state = kEnemyStateClimbing;
                     animFrameIndex = 0;
                     moveTime = 0;
+                    
+                    return;
                 }
                 
                 self.position = newPos;
