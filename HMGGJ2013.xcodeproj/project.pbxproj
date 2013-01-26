@@ -156,6 +156,7 @@
 		55CDD44116B3670E00704F3B /* BombSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44016B3670E00704F3B /* BombSprite.m */; };
 		55CDD44516B3708100704F3B /* BombSpawner.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44416B3708100704F3B /* BombSpawner.m */; };
 		55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */; };
+		650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 650CCB7916B494AB004F0241 /* MenuCoinSprite.m */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
@@ -476,6 +477,8 @@
 		55CDD44316B3708100704F3B /* BombSpawner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombSpawner.h; sourceTree = "<group>"; };
 		55CDD44416B3708100704F3B /* BombSpawner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSpawner.m; sourceTree = "<group>"; };
 		55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
+		650CCB7816B494AB004F0241 /* MenuCoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCoinSprite.h; sourceTree = "<group>"; };
+		650CCB7916B494AB004F0241 /* MenuCoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCoinSprite.m; sourceTree = "<group>"; };
 		65259BCD16B337690012B735 /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
 		65259BCE16B337690012B735 /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		65259BD016B338670012B735 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -982,6 +985,8 @@
 				55CDD44016B3670E00704F3B /* BombSprite.m */,
 				553BA19716B3214000B4E22B /* CoinSprite.h */,
 				553BA19816B3214000B4E22B /* CoinSprite.m */,
+				650CCB7816B494AB004F0241 /* MenuCoinSprite.h */,
+				650CCB7916B494AB004F0241 /* MenuCoinSprite.m */,
 				E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */,
 				E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */,
 				E619264416B31E4A00904535 /* EnemySprite.h */,
@@ -1330,6 +1335,7 @@
 				554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */,
 				554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */,
 				6529AEDF16B47BBB00E83114 /* MainMenuGameScene.m in Sources */,
+				650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

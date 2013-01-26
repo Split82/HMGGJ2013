@@ -21,6 +21,7 @@
 #import "MasterControlProgram.h"
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
+#import "MenuCoinSprite.h"
 #import <GameKit/GameKit.h>
 
 
@@ -32,7 +33,7 @@
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 25
+#define SLIME_MAX_HEIGHT 135
 
 
 @interface MainMenuGameScene () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
@@ -136,6 +137,11 @@
     floorSprite.scale = [UIScreen mainScreen].scale * 2;
     [self addChild:floorSprite];
     
+    CCLayer *layer = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    layer.contentSize = [[CCDirector sharedDirector] winSize];
+    layer.zOrder = 2000;
+    [self addChild:layer];
+    
     // Update
     [self scheduleUpdate];
     
@@ -161,7 +167,7 @@
 
 - (void)initUI {
     UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
-    [view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]];
+    [view setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:view];
     mainView = view;
     
@@ -210,6 +216,9 @@
     [aboutView setFrame:[self rectWithSize:imageSize originY:450.0]];
     [aboutView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:aboutView];
+    
+    [self addCoinAtPos:CGPointMake(60.0, 400.0)];
+    [self addCoinAtPos:CGPointMake(260.0, 400.0)];
 }
 
 
@@ -225,13 +234,13 @@
 
 - (void)addCoinAtPos:(CGPoint)pos {
     
-    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
-    newCoin.zOrder = GAME_OBJECTS_Z_ORDER;
+    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    newCoin.zOrder = 3000;
     [coins addObject:newCoin];
-    [mainSpriteBatch addChild:newCoin];
+    [self addChild:newCoin];
 }
 
--(void)coinEndedCashingAnimation:(CoinSprite*)coin {
+-(void)coinEndedCashingAnimation:(MenuCoinSprite*)coin {
     
     [coin removeFromParentAndCleanup:YES];
 }
@@ -240,7 +249,7 @@
 
 - (void)calc:(ccTime)deltaTime {
     
-    for (CoinSprite *coin in coins) {
+    for (MenuCoinSprite *coin in coins) {
         [coin calc:deltaTime];
     }
     

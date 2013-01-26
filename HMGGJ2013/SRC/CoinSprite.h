@@ -12,6 +12,15 @@
 
 
 @interface CoinSprite : CCSprite
+{    
+    float lifeTime;
+    float groundY;
+    CGPoint velocity;
+    
+    NSArray *animationFrames;
+    int animationIndexes[14];
+    int animationOffset;
+}
 
 @property (nonatomic, weak) id <CoinSpriteDelegate> delegate;
 
