@@ -91,6 +91,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     BOOL gameOver;
     
     // UI vars
+    UIView *mainView;
     NSString *fontName;
     
     CCSprite *killSprite;
@@ -117,7 +118,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)onEnter {
 
     [super onEnter];
-
+    
     gestureRecognizer = [[GestureRecognizer alloc] init];
     gestureRecognizer.delegate = self;
     [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:gestureRecognizer priority:0 swallowsTouches:YES];
@@ -227,6 +228,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     fontName = @"Visitor TT1 BRK";
     UIFont *font = [UIFont fontWithName:fontName size:20];
     
+    UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
+    [view setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:view];
+    mainView = view;
+    
     CGFloat labelWidth = (320.0 - 10.0) / 2;
     CGSize contentSize = [CCDirector sharedDirector].winSize;
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
@@ -240,7 +246,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
     [killsLabel setFont:font];
-    [[CCDirector sharedDirector].view addSubview:killsLabel];
+    [mainView addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
@@ -254,14 +260,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
     [coinsLabel setFont:font];
-    [[CCDirector sharedDirector].view addSubview:coinsLabel];
+    [mainView addSubview:coinsLabel];
     
     healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
     [healthLabel setTextColor:[UIColor redColor]];
     [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
     [healthLabel setTextAlignment:NSTextAlignmentCenter];
     [healthLabel setBackgroundColor:[UIColor clearColor]];
-    //[[CCDirector sharedDirector].view addSubview:healthLabel];
+    //[mainView addSubview:healthLabel];
     
     UIImage *image;
     CGFloat offset = 0.0;
@@ -274,7 +280,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offset, 288.0, 24.0)];
     [rageBackgroundView setImage:image];
     [rageBackgroundView.layer setMagnificationFilter:kCAFilterNearest];
-    [[CCDirector sharedDirector].view addSubview:rageBackgroundView];
+    [mainView addSubview:rageBackgroundView];
     
     image = [UIImage imageNamed:@"progressBar"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
@@ -284,7 +290,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     rageView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 0.0, 8.0)];
     [rageView setClipsToBounds:YES];
     [rageView addSubview:imageView];
-    [[CCDirector sharedDirector].view addSubview:rageView];
+    [mainView addSubview:rageView];
     
     image = [UIImage imageNamed:@"pause"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
@@ -292,8 +298,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
     [pauseButton setImage:image];
     [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)]];
-    [[CCDirector sharedDirector].view addSubview:pauseButton];
+    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissToMenu)]];
+    [mainView addSubview:pauseButton];
     [self updateUI];
     
     int64_t delayInSeconds = 2.0;
@@ -603,9 +609,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
 }
 
-- (void) dismiss {
-    [[CCDirector sharedDirector] dismissViewControllerAnimated:YES completion:^{
-        [[CCDirector sharedDirector] end];
+- (void) dismissToMenu {
+    [[CCDirector sharedDirector] popScene];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [mainView setAlpha:0];
+    } completion:^(BOOL finished) {
+        [mainView removeFromSuperview];
     }];
 }
 
@@ -636,7 +646,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                                                                                 size.width * scale, size.height * scale)];
     [attachmentView setImage:image];
     [attachmentView setAlpha:0];
-    [[CCDirector sharedDirector].view  addSubview:attachmentView];
+    [mainView  addSubview:attachmentView];
     
     [UIView animateWithDuration:0.5 animations:^{
         [attachmentView setAlpha:1];
@@ -668,20 +678,20 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
     [gameOverLabel setText:@"Game Over, Loser!"];
     [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
-    [[CCDirector sharedDirector].view addSubview:gameOverLabel];
+    [mainView addSubview:gameOverLabel];
 
     restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
     [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
     [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
     [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
-    [[CCDirector sharedDirector].view addSubview:restartButton];
+    [mainView addSubview:restartButton];
 
-    [[CCDirector sharedDirector].view bringSubviewToFront:coinsLabel];
+    [mainView bringSubviewToFront:coinsLabel];
     [coinsSprite setZOrder:10000];
-    [[CCDirector sharedDirector].view bringSubviewToFront:killsLabel];
+    [mainView bringSubviewToFront:killsLabel];
     [killSprite setZOrder:10000];
-    [[CCDirector sharedDirector].view bringSubviewToFront:pauseButton];
+    [mainView bringSubviewToFront:pauseButton];
 }
 
 - (void) restartGame

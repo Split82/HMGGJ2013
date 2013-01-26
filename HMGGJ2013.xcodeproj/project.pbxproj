@@ -135,8 +135,6 @@
 		5537445A16B1FC2200D860C2 /* TGAlib.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440316B1FC2200D860C2 /* TGAlib.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445B16B1FC2200D860C2 /* TransformUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440516B1FC2200D860C2 /* TransformUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5537445C16B1FC2200D860C2 /* ZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537440916B1FC2200D860C2 /* ZipUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA18C16B3103C00B4E22B /* MainMenuViewController.m */; };
-		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
 		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
 		554AD1E416B4277000441632 /* SlimeSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E316B4277000441632 /* SlimeSprite.m */; };
@@ -164,6 +162,17 @@
 		65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD416B33A4F0012B735 /* AboutViewController.xib */; };
 		6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6527936B16B3E28900E4B82F /* visitor1.ttf */; };
 		6529AED716B4741A00E83114 /* killingspree.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529AED616B4741A00E83114 /* killingspree.png */; };
+		6529AEDF16B47BBB00E83114 /* MainMenuGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6529AEDE16B47BBB00E83114 /* MainMenuGameScene.m */; };
+		6529B0CB16B4892600E83114 /* menu-about-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C216B4892600E83114 /* menu-about-h.png */; };
+		6529B0CC16B4892600E83114 /* menu-about.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C316B4892600E83114 /* menu-about.png */; };
+		6529B0CD16B4892600E83114 /* menu-achievements-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C416B4892600E83114 /* menu-achievements-h.png */; };
+		6529B0CE16B4892600E83114 /* menu-achievements.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C516B4892600E83114 /* menu-achievements.png */; };
+		6529B0CF16B4892600E83114 /* menu-hearth.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C616B4892600E83114 /* menu-hearth.png */; };
+		6529B0D016B4892600E83114 /* menu-newgame-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C716B4892600E83114 /* menu-newgame-h.png */; };
+		6529B0D116B4892600E83114 /* menu-newgame.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C816B4892600E83114 /* menu-newgame.png */; };
+		6529B0D216B4892600E83114 /* menu-topscore-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C916B4892600E83114 /* menu-topscore-h.png */; };
+		6529B0D316B4892600E83114 /* menu-topscore.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0CA16B4892600E83114 /* menu-topscore.png */; };
+		6529B0D516B48BDB00E83114 /* menu-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0D416B48BDB00E83114 /* menu-logo.png */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 		659A0A5416B4690B00D3B1A8 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 659A0A5316B4690B00D3B1A8 /* pause.png */; };
@@ -436,9 +445,6 @@
 		5537440716B1FC2200D860C2 /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
 		5537440816B1FC2200D860C2 /* ZipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipUtils.h; sourceTree = "<group>"; };
 		5537440916B1FC2200D860C2 /* ZipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipUtils.m; sourceTree = "<group>"; };
-		553BA18B16B3103C00B4E22B /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuViewController.h; sourceTree = "<group>"; };
-		553BA18C16B3103C00B4E22B /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
-		553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenuViewController.xib; sourceTree = "<group>"; };
 		553BA19716B3214000B4E22B /* CoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinSprite.h; sourceTree = "<group>"; };
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
 		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
@@ -479,6 +485,18 @@
 		65259BD416B33A4F0012B735 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
 		6527936B16B3E28900E4B82F /* visitor1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = visitor1.ttf; path = Resources/visitor1.ttf; sourceTree = "<group>"; };
 		6529AED616B4741A00E83114 /* killingspree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = killingspree.png; sourceTree = "<group>"; };
+		6529AEDD16B47BBB00E83114 /* MainMenuGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuGameScene.h; sourceTree = "<group>"; };
+		6529AEDE16B47BBB00E83114 /* MainMenuGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuGameScene.m; sourceTree = "<group>"; };
+		6529B0C216B4892600E83114 /* menu-about-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-about-h.png"; sourceTree = "<group>"; };
+		6529B0C316B4892600E83114 /* menu-about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-about.png"; sourceTree = "<group>"; };
+		6529B0C416B4892600E83114 /* menu-achievements-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-achievements-h.png"; sourceTree = "<group>"; };
+		6529B0C516B4892600E83114 /* menu-achievements.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-achievements.png"; sourceTree = "<group>"; };
+		6529B0C616B4892600E83114 /* menu-hearth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-hearth.png"; sourceTree = "<group>"; };
+		6529B0C716B4892600E83114 /* menu-newgame-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-newgame-h.png"; sourceTree = "<group>"; };
+		6529B0C816B4892600E83114 /* menu-newgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-newgame.png"; sourceTree = "<group>"; };
+		6529B0C916B4892600E83114 /* menu-topscore-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-topscore-h.png"; sourceTree = "<group>"; };
+		6529B0CA16B4892600E83114 /* menu-topscore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-topscore.png"; sourceTree = "<group>"; };
+		6529B0D416B48BDB00E83114 /* menu-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-logo.png"; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
 		653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievemntNameDefinitions.h; sourceTree = "<group>"; };
@@ -942,9 +960,6 @@
 		553BA19116B3105000B4E22B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				553BA18B16B3103C00B4E22B /* MainMenuViewController.h */,
-				553BA18C16B3103C00B4E22B /* MainMenuViewController.m */,
-				553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */,
 				65259BD216B33A4F0012B735 /* AboutViewController.h */,
 				65259BD316B33A4F0012B735 /* AboutViewController.m */,
 				65259BD416B33A4F0012B735 /* AboutViewController.xib */,
@@ -1031,6 +1046,8 @@
 			children = (
 				55B860AD16B206F800D5BA8D /* MainGameScene.h */,
 				55B860AE16B206F800D5BA8D /* MainGameScene.m */,
+				6529AEDD16B47BBB00E83114 /* MainMenuGameScene.h */,
+				6529AEDE16B47BBB00E83114 /* MainMenuGameScene.m */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -1049,6 +1066,16 @@
 		55B862C016B2161600D5BA8D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				6529B0D416B48BDB00E83114 /* menu-logo.png */,
+				6529B0C216B4892600E83114 /* menu-about-h.png */,
+				6529B0C316B4892600E83114 /* menu-about.png */,
+				6529B0C416B4892600E83114 /* menu-achievements-h.png */,
+				6529B0C516B4892600E83114 /* menu-achievements.png */,
+				6529B0C616B4892600E83114 /* menu-hearth.png */,
+				6529B0C716B4892600E83114 /* menu-newgame-h.png */,
+				6529B0C816B4892600E83114 /* menu-newgame.png */,
+				6529B0C916B4892600E83114 /* menu-topscore-h.png */,
+				6529B0CA16B4892600E83114 /* menu-topscore.png */,
 				6529AED616B4741A00E83114 /* killingspree.png */,
 				659A0A5316B4690B00D3B1A8 /* pause.png */,
 				554AD1EB16B4469900441632 /* progress.png */,
@@ -1149,7 +1176,6 @@
 				5537431916B1F72C00D860C2 /* ChangeLog in Resources */,
 				55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */,
 				55B862C416B2199900D5BA8D /* GameObjects.png in Resources */,
-				553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */,
 				65259BD116B338670012B735 /* Default-568h@2x.png in Resources */,
 				65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */,
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
@@ -1166,6 +1192,16 @@
 				554AD1F816B450AB00441632 /* BloodParticleSystem.plist in Resources */,
 				659A0A5416B4690B00D3B1A8 /* pause.png in Resources */,
 				6529AED716B4741A00E83114 /* killingspree.png in Resources */,
+				6529B0CB16B4892600E83114 /* menu-about-h.png in Resources */,
+				6529B0CC16B4892600E83114 /* menu-about.png in Resources */,
+				6529B0CD16B4892600E83114 /* menu-achievements-h.png in Resources */,
+				6529B0CE16B4892600E83114 /* menu-achievements.png in Resources */,
+				6529B0CF16B4892600E83114 /* menu-hearth.png in Resources */,
+				6529B0D016B4892600E83114 /* menu-newgame-h.png in Resources */,
+				6529B0D116B4892600E83114 /* menu-newgame.png in Resources */,
+				6529B0D216B4892600E83114 /* menu-topscore-h.png in Resources */,
+				6529B0D316B4892600E83114 /* menu-topscore.png in Resources */,
+				6529B0D516B48BDB00E83114 /* menu-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1279,7 +1315,6 @@
 				55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */,
 				55B860AA16B206CD00D5BA8D /* main.m in Sources */,
 				55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */,
-				553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */,
 				653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */,
 				653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */,
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
@@ -1298,6 +1333,7 @@
 				E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */,
 				554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */,
 				554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */,
+				6529AEDF16B47BBB00E83114 /* MainMenuGameScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
