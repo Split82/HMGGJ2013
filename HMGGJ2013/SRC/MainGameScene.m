@@ -11,6 +11,7 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 #import "AppDelegate.h"
+#import "MasterControlProgram.h"
 
 #define TOP_HEIGHT 80
 
@@ -18,8 +19,6 @@
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
 
-#define ENEMY_SPAWN_TIME 1.0f
-#define ENEMY_SPAWN_DELTA_TIME 2.0f
 #define ENEMY_ATTACK_FORCE 5
 
 #define BOMB_COINS_COST 2
@@ -47,13 +46,13 @@
 
     BombSpawner *bombSpawner;
     
+    MasterControlProgram *masterControlProgram;
+    
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
     BOOL sceneInitWasPerformed;
     BOOL gameOver;
-    
-    float enemySpawnTime;
     
     // UI vars
     NSString *fontName;
@@ -138,11 +137,13 @@
     bombSpawner.delegate = self;
     bombSpawner.zOrder = 10000;
     [mainSpriteBatch addChild:bombSpawner];
+    
+    // Master Control Program
+    masterControlProgram = [[MasterControlProgram alloc] init];
+    masterControlProgram.mainframe = self;
 
     [self scheduleUpdate];
-    
-    [self scheduleNewEnemySpawn];
-    
+
     [[AudioManager sharedManager] startBackgroundMusic];
     
     [self initUI];
@@ -221,7 +222,7 @@
     [mainSpriteBatch addChild:enemy];
     enemy.delegate = self;
     
-    [self scheduleNewEnemySpawn];
+    
 }
 
 - (void)addBombAtPosX:(CGFloat)posX {
@@ -230,11 +231,6 @@
     newBomb.delegate = self;
     [bombs addObject:newBomb];
     [mainSpriteBatch addChild:newBomb];
-}
-
-- (void)scheduleNewEnemySpawn {
-
-    enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
 -(void)coinEndedCashingAnimation:(CoinSprite*)coin {
@@ -304,6 +300,18 @@
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
 
     [self addBombAtPosX:bombSpawner.pos.x];
+}
+
+#pragma mark - MainframeDelegate
+
+- (int)countTapEnemies {
+    
+    return [tapEnemies count];
+}
+
+- (int)countSwipeEnemies {
+    
+    return [swipeEnemies count];
 }
 
 #pragma mark - Gestures
@@ -457,11 +465,7 @@
     }
     [killedSwipeEnemies removeAllObjects];
 
-    enemySpawnTime -= deltaTime;
-    if (enemySpawnTime < 0) {
-        
-        [self addEnemy];
-    }
+    [masterControlProgram calc:deltaTime];
 }
 
 - (void)update:(ccTime)deltaTime {

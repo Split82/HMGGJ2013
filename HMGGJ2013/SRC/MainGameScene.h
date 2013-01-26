@@ -11,7 +11,8 @@
 #import "EnemySprite.h"
 #import "BombSprite.h"
 #import "BombSpawner.h"
+#import "MasterControlProgram.h"
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate>
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate>
 
 @end
