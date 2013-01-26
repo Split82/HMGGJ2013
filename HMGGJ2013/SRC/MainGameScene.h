@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Hyperbolic Magnetism. All rights reserved.
 //
 
-@interface MainGameScene : CCScene
+#import "GestureRecognizer.h"
+#import "CoinSprite.h"
+
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate>
 
 @end

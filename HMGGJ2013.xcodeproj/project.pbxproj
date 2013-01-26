@@ -134,6 +134,7 @@
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
 		553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */; };
 		553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */; };
+		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -407,6 +408,8 @@
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
 		553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
+		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
+		553BA1B816B33CA000B4E22B /* GestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureRecognizer.m; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -879,11 +882,21 @@
 			name = ParticleSystems;
 			sourceTree = "<group>";
 		};
+		553BA1B616B33C8400B4E22B /* Gestures */ = {
+			isa = PBXGroup;
+			children = (
+				553BA1B716B33CA000B4E22B /* GestureRecognizer.h */,
+				553BA1B816B33CA000B4E22B /* GestureRecognizer.m */,
+			);
+			name = Gestures;
+			sourceTree = "<group>";
+		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
 				55B862C516B21AA400D5BA8D /* Global */,
 				553BA19216B3148100B4E22B /* GameObjects */,
+				553BA1B616B33C8400B4E22B /* Gestures */,
 				55B860AB16B206DE00D5BA8D /* Scenes */,
 				553BA19116B3105000B4E22B /* Controllers */,
 				653B145816B3131600E2FD0F /* Models */,
@@ -1126,6 +1139,7 @@
 				653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */,
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
 				E619264616B31E4A00904535 /* EnemySprite.m in Sources */,
+				553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1184,6 +1198,7 @@
 				GCC_PREFIX_HEADER = HMGGJ2013/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HMGGJ2013/libs/kazmath/include\"";
 				INFOPLIST_FILE = HMGGJ2013/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1204,6 +1219,7 @@
 				GCC_PREFIX_HEADER = HMGGJ2013/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HMGGJ2013/libs/kazmath/include\"";
 				INFOPLIST_FILE = HMGGJ2013/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",

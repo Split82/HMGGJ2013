@@ -8,7 +8,6 @@
 
 #import "MainGameScene.h"
 #import "GameDataNameDefinitions.h"
-#import "CoinSprite.h"
 #import "EnemySprite.h"
 
 #define PIXEL_ART_SPRITE_SCALE 4
@@ -26,6 +25,8 @@
 
     float calcTime;
 
+    GestureRecognizer *gestureRecognizer;
+
     CCSpriteBatchNode *mainSpriteBatch;
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
@@ -33,6 +34,7 @@
 
     CCParticleBatchNode *particleBatchNode;
 
+    // State vars
     BOOL sceneInitWasPerformed;
 }
 
@@ -44,6 +46,10 @@
 - (void)onEnter {
 
     [super onEnter];
+
+    gestureRecognizer = [[GestureRecognizer alloc] init];
+    gestureRecognizer.delegate = self;
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:gestureRecognizer priority:0 swallowsTouches:YES];
 
     [self initScene];
 }
@@ -96,9 +102,12 @@
 
     [self scheduleUpdate];
 
+    /*
     CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     test.position = ccp(100, 100);
     [particleBatchNode addChild:test];
+     */
+
     //[self scheduleNewEnemySpawn];
 }
 
@@ -108,6 +117,7 @@
 
     CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos];
 
+    newCoin.delegate = self;
     [coins addObject:newCoin];
     [mainSpriteBatch addChild:newCoin];
 }
@@ -133,6 +143,53 @@
     [self scheduleOnce:@selector(addEnemy) delay:ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME - ENEMY_SPAWN_DELTA_TIME / 2.0f];
 }
 
+#pragma mark - CoinSpriteDelegate
+
+- (void)coinDidDie:(CoinSprite *)coinSprite {
+
+    [coins removeObject:coinSprite];
+    [coinSprite removeFromParentAndCleanup:YES];
+}
+
+#pragma mark - Gestures
+
+- (void)longPressStarted:(CGPoint)pos {
+
+    NSLog(@"LongPress start");
+}
+
+- (void)longPressEnded {
+
+        NSLog(@"LongPress end");
+}
+
+- (void)swipeStarted:(CGPoint)pos {
+
+        NSLog(@"Swipe start");
+}
+
+- (void)swipeMoved:(CGPoint)pos {
+
+        NSLog(@"Swipe moved");    
+}
+
+- (void)swipeCancelled {
+
+            NSLog(@"Swipe cancelled"); 
+}
+
+- (void)swipeEnded:(CGPoint)pos {
+
+        NSLog(@"Swipe ended");     
+}
+
+- (void)tapRecognized:(CGPoint)pos {
+
+    [self addCoinAtPos:pos];
+
+        NSLog(@"Tap recognized");
+}
+
 #pragma mark - Update
 
 - (void)update:(ccTime)deltaTime {
@@ -150,6 +207,9 @@
 
     while (calcTime >= FRAME_TIME_INTERVAL) {
 
+        // Gestures
+        [gestureRecognizer update:calcTime];
+
         // Coin
         for (CoinSprite *coin in coins) {
             [coin update:calcTime];
@@ -164,10 +224,6 @@
         }
         
         calcTime -= FRAME_TIME_INTERVAL;
-    }
-
-    if (rand() % 100 == 1) {
-        [self addCoinAtPos:ccp((rand() / (float)RAND_MAX) * 320, 20)];
     }
 }
 
