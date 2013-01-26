@@ -22,6 +22,8 @@
 
 @implementation SlimeSprite
 
+@synthesize maxHeight;
+
 - (id)initWithWidth:(CGFloat)width maxHeight:(CGFloat)initMaxHeight {
 
     self = [self initWithSpriteFrameName:@"tankWater.png"];

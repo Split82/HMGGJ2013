@@ -10,6 +10,8 @@
 
 @interface SlimeSprite : CCSprite
 
+@property (nonatomic, readonly) CGFloat maxHeight;
+
 - (id)initWithWidth:(CGFloat)width maxHeight:(CGFloat)initMaxHeight;
 - (void)calc:(ccTime)deltaTime;
 - (void)setEnergy:(CGFloat)energy; // 0 - 1

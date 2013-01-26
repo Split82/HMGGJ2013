@@ -15,16 +15,17 @@
 #define WALKING_ANIM_DELAY (1/30.0f)
 #define WALKING_BORDER_OFFSET 5.0f
 
-#define CLIMBING_MOVEMENT_OFFSET 1.0f
-#define CLIMBING_MOVEMENT_DELAY (1/60.0f)
-#define CLIMBING_ANIM_DELAY 0.2f
-#define CLIMBING_BORDER_OFFSET 40.0f
+#define CLIMBING_MOVEMENT_OFFSET 4.0f
+#define CLIMBING_ANIM_DELAY ((1/30.0f) * 4)
+#define CLIMBING_BORDER_OFFSET 30.0f
 
 #define FALLING_ACCEL -300.0f
 #define FALLING_HORIZ_DECCEL 100.0f
 #define FALLING_ANIM_DELAY 0.2f
 
-#define WALL_HEIGHT 400.0f
+#define ENEMY_HALF_WIDTH 20.0f
+
+#define WALL_HEIGHT 350.0f
 
 static NSMutableArray *swiperWalkingAnimSpriteFrames = nil;
 static NSMutableArray *swiperClimbingAnimSpriteFrames = nil;
@@ -53,6 +54,8 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
     float horizontalVel;
     
     BOOL killed;
+    
+    CGPoint spritePos;
 }
 
 @end
@@ -60,7 +63,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
 
 @implementation EnemySprite
 
-@synthesize type, state, spriteCenter;
+@synthesize type, state;
 
 -(id) initWithType:(EnemyType)_type {
     
@@ -70,136 +73,73 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
         self.type = _type;
         self.state = kEnemyStateWalking;
         self.scale = [UIScreen mainScreen].scale * 2;
-        
         animFrameIndex = 0;
         animTime = 0;
         moveTime = 0;
         
-        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET);
+        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2);
         
 
         if (!swiperWalkingAnimSpriteFrames) {
             
-            
-            NSArray *tapperWalkingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
-            ];
-            
-            CGPoint tapperWalkingAnimSpriteOffsets[12];
-            tapperWalkingAnimSpriteOffsets[0] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[1] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[2] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[3] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[4] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[5] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[6] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[7] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[8] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[9] = CGPointMake(0, 0);
-            tapperWalkingAnimSpriteOffsets[9] = CGPointMake(0, 0);
-            
-            NSArray *tapperClimbingAnimSpriteFrameNames = @[
-            @"BigClimb1.png",
-            @"BigClimb2.png",
-            @"BigClimb3.png",
-            @"BigClimb4.png",
-            @"BigClimb5.png",
-            @"BigClimb6.png",
-            @"BigClimb7.png",
-            ];
-            
-            NSArray *tapperFallingAnimSpriteFrameNames = @[
-            @"BigClimb1.png",
-            ];
-            
-            NSArray *swiperWalkingAnimSpriteFrameNames = @[
-            @"TallMove1.png",
-            @"TallMove2.png",
-            @"TallMove3.png",
-            @"TallMove4.png",
-            @"TallMove5.png",
-            @"TallMove6.png",
-            @"TallMove7.png",
-            @"TallMove8.png",
-            ];
-            
-            NSArray *swiperClimbingAnimSpriteFrameNames = @[
-            @"TallMove1.png",
-            @"TallMove2.png",
-            @"TallMove3.png",
-            @"TallMove4.png",
-            @"TallMove5.png",
-            @"TallMove6.png",
-            @"TallMove7.png",
-            @"TallMove8.png",
-            ];
-            
-            NSArray *swiperFallingAnimSpriteFrameNames = @[
-            @"TallMove1.png",
-            @"TallMove2.png",
-            @"TallMove3.png",
-            @"TallMove4.png",
-            @"TallMove5.png",
-            @"TallMove6.png",
-            @"TallMove7.png",
-            @"TallMove8.png",
-            ];
-            
             // tapper
-            tapperWalkingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[tapperWalkingAnimSpriteFrameNames count]];
             
-            for (NSString *spriteFrameName in tapperWalkingAnimSpriteFrameNames) {
-                
-                [tapperWalkingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
             
-            tapperClimbingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[tapperClimbingAnimSpriteFrameNames count]];
+            //walk
+            tapperWalkingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
-            for (NSString *spriteFrameName in tapperClimbingAnimSpriteFrameNames) {
-                
-                [tapperClimbingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove1.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove2.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove3.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove4.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove5.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove6.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove7.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove8.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove9.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove10.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove11.png" offset:CGPointMake(0, 0)]];
+            [tapperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"monsterBigMove12.png" offset:CGPointMake(0, 0)]];
             
-            tapperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[tapperFallingAnimSpriteFrameNames count]];
+            // climb
+            tapperClimbingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
-            for (NSString *spriteFrameName in tapperFallingAnimSpriteFrameNames) {
-                
-                [tapperFallingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb1.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb2.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb3.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb4.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb5.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb6.png" offset:CGPointMake(0, 0)]];
+            [tapperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb7.png" offset:CGPointMake(0, 0)]];
             
-            // swiper
-            swiperWalkingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[swiperWalkingAnimSpriteFrameNames count]];
+            // fall
+            tapperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
+
+            [tapperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb1.png" offset:CGPointMake(0, 0)]];
             
-            for (NSString *spriteFrameName in swiperWalkingAnimSpriteFrameNames) {
-                
-                [swiperWalkingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
+            //swiper
             
-            swiperClimbingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[swiperClimbingAnimSpriteFrameNames count]];
+            // walk
+            swiperWalkingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
-            for (NSString *spriteFrameName in swiperClimbingAnimSpriteFrameNames) {
-                
-                [swiperClimbingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove1.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove2.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove3.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove4.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove5.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove6.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove7.png" offset:CGPointMake(0, 0)]];
+            [swiperWalkingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove8.png" offset:CGPointMake(0, 0)]];
             
-            swiperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[swiperFallingAnimSpriteFrameNames count]];
+            // climb
+            swiperClimbingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
-            for (NSString *spriteFrameName in swiperFallingAnimSpriteFrameNames) {
-                
-                [swiperFallingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
-            }
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove1.png" offset:CGPointMake(0, 0)]];
+
+            // fall
+            swiperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
+            [swiperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallMove1.png" offset:CGPointMake(0, 0)]];
         }
         
         
@@ -207,14 +147,14 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             
             direction = 1;
             
-            self.position = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y + 20);
+            spritePos = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
         }
         else {
             
             direction = -1;
             self.flipX = YES;
             
-            self.position = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y + 20);
+            spritePos = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
         }
         
         
@@ -223,6 +163,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             walkingAnimSpriteFrames = swiperWalkingAnimSpriteFrames;
             climbingAnimSpriteFrames = swiperClimbingAnimSpriteFrames;
             fallingAnimSpriteFrames = swiperFallingAnimSpriteFrames;
+            
         }
         else {
             
@@ -231,9 +172,9 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             fallingAnimSpriteFrames = tapperFallingAnimSpriteFrames;
         }
         
+
+        [self updateSpritePos];
         
-        
-        [self setDisplayFrame:walkingAnimSpriteFrames[0]];
     }
     
     return self;
@@ -249,12 +190,12 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             
         case kEnemyStateWalking: {
             
-            if (direction == -1 && position_.x < WALKING_BORDER_OFFSET) {
+            if (direction == -1 && spritePos.x < -WALKING_BORDER_OFFSET) {
                 
                 self.flipX = FALSE;
                 direction = 1;
             }
-            else if (direction == 1 && position_.x > [CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET) {
+            else if (direction == 1 && spritePos.x > [CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2) {
                 
                 self.flipX = TRUE;
                 direction = -1;
@@ -264,82 +205,78 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             if (animTime > WALKING_ANIM_DELAY) {
                 
                 
-                CGPoint newPos = self.position;
-                newPos.x += (int)(animTime / WALKING_ANIM_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
+                CGPoint newSpritePos = spritePos;
+                newSpritePos.x += (int)(animTime / WALKING_ANIM_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
                 
-                if ((newPos.x <= climbXPos && self.position.x > climbXPos) || (newPos.x >= climbXPos && self.position.x < climbXPos)) {
+                if ((newSpritePos.x <= climbXPos && spritePos.x > climbXPos) || (newSpritePos.x >= climbXPos && spritePos.x < climbXPos)) {
                     
                     state = kEnemyStateClimbing;
                     animFrameIndex = 0;
                     moveTime = 0;
                     
+                    [self updateSpritePos];
+                    
                     return;
                 }
                 
-                self.position = newPos;
+                spritePos = newSpritePos;
                 
                 animFrameIndex += (int)(animTime / WALKING_ANIM_DELAY);
                 animFrameIndex = animFrameIndex % [walkingAnimSpriteFrames count];
                 
                 animTime = animTime - (int)(animTime / WALKING_ANIM_DELAY) * WALKING_ANIM_DELAY;
                 
+                [self updateSpritePos];
             }
-            
-            [self setDisplayFrame:walkingAnimSpriteFrames[animFrameIndex]];
             
             break;
         }
         case kEnemyStateClimbing: {
             
-            if (position_.y > WALL_HEIGHT + GROUND_Y) {
+            if (spritePos.y > WALL_HEIGHT + GROUND_Y) {
                 
                 [_delegate enemyDidClimbWall:self];
                 return;
             }
-            if (moveTime > CLIMBING_MOVEMENT_DELAY) {
+            if (moveTime > CLIMBING_ANIM_DELAY) {
                 
-                CGPoint newPos = self.position;
-                newPos.y += (int)(moveTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_OFFSET;
+                CGPoint newSpritePos = spritePos;
+                newSpritePos.y += (int)(animTime / CLIMBING_ANIM_DELAY) * CLIMBING_MOVEMENT_OFFSET;
                 
-                self.position = newPos;
-                
-                moveTime = moveTime - (int)(moveTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_DELAY;
-            }
-            
-            if (animTime > CLIMBING_ANIM_DELAY) {
                 
                 animFrameIndex += (int)(animTime / CLIMBING_ANIM_DELAY);
                 animFrameIndex = animFrameIndex % [climbingAnimSpriteFrames count];
                 
                 animTime = animTime - (int)(animTime / CLIMBING_ANIM_DELAY) * CLIMBING_ANIM_DELAY;
+
+                
+                spritePos = newSpritePos;
+                
+                [self updateSpritePos];
             }
-            
-            [self setDisplayFrame:climbingAnimSpriteFrames[animFrameIndex]];
             
             break;
         }
         case kEnemyStateFalling: {
             
-            
-            if (position_.y < GROUND_Y + 20) {
+            if (spritePos.y < GROUND_Y) {
                 
-                position_.y = GROUND_Y + 20;
-                self.position = position_;
+                spritePos.y = GROUND_Y;
 
-                if (position_.x < CLIMBING_BORDER_OFFSET) {
+                if (spritePos.x < CLIMBING_BORDER_OFFSET) {
                     
                     state = kEnemyStateWalking;
                     
                     direction = 1;
                     self.flipX = NO;
                     
-                    climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;                    
+                    climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
                 }
-                else if (position_.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET) {
+                else if (spritePos.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2) {
                 
                     state = kEnemyStateWalking;
                     
-                    climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
+                    climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2;
                     
                     direction = -1;
                     self.flipX = YES;
@@ -352,20 +289,20 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
                 
                 animFrameIndex = 0;
                 moveTime = 0;
+                
+                [self updateSpritePos];
                 return;
             }
             
-            position_.y += verticalVel * time;
+            spritePos.y += verticalVel * time;
             verticalVel += FALLING_ACCEL * time;
             
-            position_.x += horizontalVel * time * direction;
+            spritePos.x += horizontalVel * time * direction;
             horizontalVel -= FALLING_HORIZ_DECCEL * time;
             if (horizontalVel < 0) {
                 
                 horizontalVel = 0;
             }
-            
-            self.position = position_;
             
             if (animTime > FALLING_ANIM_DELAY) {
                 
@@ -375,7 +312,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
                 animTime = animTime - (int)(animTime / FALLING_ANIM_DELAY) * FALLING_ANIM_DELAY;
             }
             
-            [self setDisplayFrame:fallingAnimSpriteFrames[animFrameIndex]];
+            [self updateSpritePos];
             break;
         }
     }
@@ -393,6 +330,34 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
     moveTime = 0;
     verticalVel = 100;
     horizontalVel = (float)rand() / RAND_MAX * 50 + 50;
+    
+    [self updateSpritePos];
+    
+}
+
+- (void) updateSpritePos {
+    
+
+    NSArray *frames;
+    if (state == kEnemyStateWalking) {
+        
+        frames = walkingAnimSpriteFrames;
+    }
+    if (state == kEnemyStateClimbing) {
+        
+        frames = climbingAnimSpriteFrames;
+    }
+    if (state == kEnemyStateFalling) {
+        
+        frames = fallingAnimSpriteFrames;
+    }
+
+    [self setDisplayFrame:((SpriteTextureFrameInfo*)frames[animFrameIndex]).frame];
+    
+    CGSize spriteSize = ((SpriteTextureFrameInfo*)frames[animFrameIndex]).frame.rectInPixels.size;
+    CGPoint halfSize = CGPointMake(spriteSize.width / 2, spriteSize.height / 2);
+    
+    self.position = ccpAdd(spritePos, ccpMult(ccpAdd(((SpriteTextureFrameInfo*)frames[animFrameIndex]).offset, halfSize), 2));
     
 }
 

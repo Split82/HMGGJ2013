@@ -15,7 +15,7 @@
 
 @interface EnemyBodyDebris : CCSprite
 
-
+@property (nonatomic, weak) CCParticleSystem *bloodParticleSystem;
 @property (nonatomic, weak) id <EnemyBodyDebrisDelegate> delegate;
 
 - (id)init:(EnemyType)enemyType velocity:(CGPoint)initVelocity spaceBounds:(CGRect)initSpaceBounds;
