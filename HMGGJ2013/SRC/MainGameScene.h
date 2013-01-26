@@ -12,7 +12,11 @@
 #import "BombSprite.h"
 #import "BombSpawner.h"
 #import "MasterControlProgram.h"
+#import "EnemyBodyDebris.h"
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate>
+#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
+#define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
+
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate>
 
 @end
