@@ -13,6 +13,9 @@
 #import "BombSpawner.h"
 #import "MasterControlProgram.h"
 
+#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
+#define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
+
 @interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate>
 
 @end

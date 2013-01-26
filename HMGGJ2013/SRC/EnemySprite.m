@@ -8,13 +8,12 @@
 
 #import "EnemySprite.h"
 #import "GameDataNameDefinitions.h"
-
-#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
+#import "MainGameScene.h"
+#import "SpriteTextureFrameInfo.h"
 
 #define WALKING_MOVEMENT_OFFSET 2.0f
 #define WALKING_ANIM_DELAY (1/30.0f)
 #define WALKING_BORDER_OFFSET 5.0f
-#define WALKING_PLANE_Y_POS 30.0f
 
 #define CLIMBING_MOVEMENT_OFFSET 1.0f
 #define CLIMBING_MOVEMENT_DELAY (1/60.0f)
@@ -81,6 +80,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
 
         if (!swiperWalkingAnimSpriteFrames) {
             
+            
             NSArray *tapperWalkingAnimSpriteFrameNames = @[
             @"monsterBigMove1.png",
             @"monsterBigMove2.png",
@@ -95,6 +95,19 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             @"monsterBigMove11.png",
             @"monsterBigMove12.png",
             ];
+            
+            CGPoint tapperWalkingAnimSpriteOffsets[12];
+            tapperWalkingAnimSpriteOffsets[0] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[1] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[2] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[3] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[4] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[5] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[6] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[7] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[8] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[9] = CGPointMake(0, 0);
+            tapperWalkingAnimSpriteOffsets[9] = CGPointMake(0, 0);
             
             NSArray *tapperClimbingAnimSpriteFrameNames = @[
             @"BigClimb1.png",
@@ -194,14 +207,14 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             
             direction = 1;
             
-            self.position = CGPointMake(-WALKING_BORDER_OFFSET, WALKING_PLANE_Y_POS);
+            self.position = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
         }
         else {
             
             direction = -1;
             self.flipX = YES;
             
-            self.position = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, WALKING_PLANE_Y_POS);
+            self.position = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
         }
         
         
@@ -278,7 +291,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
         }
         case kEnemyStateClimbing: {
             
-            if (position_.y > WALL_HEIGHT) {
+            if (position_.y > WALL_HEIGHT + GROUND_Y) {
                 
                 [_delegate enemyDidClimbWall:self];
                 return;
@@ -308,9 +321,9 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
         case kEnemyStateFalling: {
             
             
-            if (position_.y < WALKING_PLANE_Y_POS) {
+            if (position_.y < GROUND_Y) {
                 
-                position_.y = WALKING_PLANE_Y_POS;
+                position_.y = GROUND_Y;
                 self.position = position_;
 
                 if (position_.x < CLIMBING_BORDER_OFFSET) {

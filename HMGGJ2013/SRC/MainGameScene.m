@@ -15,7 +15,6 @@
 #import "MonsterSprite.h"
 #import "MasterControlProgram.h"
 
-#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
 #define TOP_HEIGHT 80
 
@@ -31,7 +30,6 @@
 #define TAP_MIN_DISTANCE2 (60*60)
 #define SWIPE_MIN_DISTANCE2 (20*20)
 
-#define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
