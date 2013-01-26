@@ -14,7 +14,8 @@
 #import "SlimeSprite.h"
 #import "MonsterSprite.h"
 #import "MasterControlProgram.h"
-
+#import "ScreenShaker.h"
+#import "SlimeBubbleSprite.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -28,6 +29,8 @@
 
 #define BOMB_COINS_COST 2
 #define BOMB_KILL_PERIMETER 85
+
+#define GAME_OBJECTS_Z_ORDER 30
 
 #define TAP_MIN_DISTANCE2 (60*60)
 #define SWIPE_MIN_DISTANCE2 (20*20)
@@ -57,6 +60,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     GestureRecognizer *gestureRecognizer;
 
+    ScreenShaker *screenShaker;    
+
     CCSpriteBatchNode *mainSpriteBatch;
     
     NSMutableArray *tapEnemies;
@@ -64,12 +69,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *coins;
     NSMutableArray *bombs;
     NSMutableArray *enemyBodyDebrises;
+    NSMutableArray *bubbles;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
     NSMutableArray *killedEnemyBodyDebrises;
+    NSMutableArray *killedBubbles;    
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -125,18 +132,23 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     sceneInitWasPerformed = YES;
 
+    // Screen shaker
+    screenShaker = [[ScreenShaker alloc] init];
+
     // Game objects
     tapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
     bombs = [[NSMutableArray alloc] initWithCapacity:10];
     enemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
+    bubbles = [[NSMutableArray alloc] initWithCapacity:40];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
     killedEnemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
+    killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];    
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -146,16 +158,19 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     // Sprite batch
     mainSpriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:100];
+    mainSpriteBatch.zOrder = 10;
     [mainSpriteBatch.texture setAliasTexParameters];
     [self addChild:mainSpriteBatch];
 
     // Particle batch
     particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10];
+    particleBatchNode.zOrder = 20;
     [self addChild:particleBatchNode];
 
     // Background
     CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"mainBack.png"];
     backgroundSprite.anchorPoint = ccp(0.5, 0.5);
+    backgroundSprite.zOrder = 1;
     backgroundSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, [CCDirector sharedDirector].winSize.height * 0.5);
     backgroundSprite.scale = [UIScreen mainScreen].scale * 2;    
     [mainSpriteBatch addChild:backgroundSprite];
@@ -163,13 +178,15 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Monster
     monsterSprite = [[MonsterSprite alloc] init];
     monsterSprite.anchorPoint = ccp(0.5, 0);
-    monsterSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y + 1);
+    monsterSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y + 2);
+    monsterSprite.zOrder = 3;
     [mainSpriteBatch addChild:monsterSprite];
 
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
+    slimeSprite.zOrder = 10;
     [mainSpriteBatch addChild:slimeSprite];
 
     // Foreground
@@ -177,6 +194,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     foregroundSprite.anchorPoint = ccp(0.5, 0);
     foregroundSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y - 1);
     foregroundSprite.scale = [UIScreen mainScreen].scale * 2;
+    foregroundSprite.zOrder = 20;
     [mainSpriteBatch addChild:foregroundSprite];
 
     // Bomb spawner
@@ -184,11 +202,20 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bombSpawner.delegate = self;
     bombSpawner.zOrder = 10000;
     [mainSpriteBatch addChild:bombSpawner];
+
+    // Floor
+    CCSprite *floorSprite = [[CCSprite alloc] initWithSpriteFrameName:@"Floor.png"];
+    floorSprite.zOrder = 30;
+    floorSprite.anchorPoint = ccp(0.5, 1);
+    floorSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y - 1);
+    floorSprite.scale = [UIScreen mainScreen].scale * 2;
+    [self addChild:floorSprite];
     
     // Master Control Program
     masterControlProgram = [[MasterControlProgram alloc] init];
     masterControlProgram.mainframe = self;
 
+    // Update
     [self scheduleUpdate];
     
     //[[AudioManager sharedManager] startBackgroundTrack];
@@ -217,6 +244,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
+    coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
     coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
     [mainSpriteBatch addChild:coinsSprite];
@@ -286,10 +314,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 #pragma mark - Objects
 
+- (void)addBubble:(CGPoint)pos {
+
+    SlimeBubbleSprite *newBubble = [[SlimeBubbleSprite alloc] initWithPos:pos];
+    newBubble.zOrder = 7;
+    [mainSpriteBatch addChild:newBubble];
+    [bubbles addObject:newBubble];
+}
+
 - (void)addCoinAtPos:(CGPoint)pos {
 
     CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
-
+    newCoin.zOrder = GAME_OBJECTS_Z_ORDER;
     newCoin.delegate = self;
     [coins addObject:newCoin];
     [mainSpriteBatch addChild:newCoin];
@@ -308,7 +344,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
         [tapEnemies addObject:enemy];
     }
-
+    enemy.zOrder = GAME_OBJECTS_Z_ORDER;
     [mainSpriteBatch addChild:enemy];
     enemy.delegate = self;
     
@@ -318,6 +354,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)addBombAtPosX:(CGFloat)posX {
 
     BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 520 + (rand() / (float)RAND_MAX) * 20) groundY:GROUND_Y];
+    newBomb.zOrder = GAME_OBJECTS_Z_ORDER;
     newBomb.delegate = self;
     [bombs addObject:newBomb];
     [mainSpriteBatch addChild:newBomb];
@@ -328,18 +365,27 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coin removeFromParentAndCleanup:YES];
 }
 
-- (void)createEnemyBodyExplosionAtPos:(CGPoint)pos velocity:(CGPoint)velocity enemyType:(EnemyType)enemyType {
+- (void)createEnemyBodyExplosionAtPos:(CGPoint)pos enemyType:(EnemyType)enemyType {
 
     int numberOfBodyPars = rand() % 3 + 3;
 
     for (int i = 0; i < numberOfBodyPars; i++) {
 
-        CGPoint randVelocity = velocity;
-        randVelocity.x += rand() / (float)RAND_MAX;
-        randVelocity.y += rand() / (float)RAND_MAX;
+        // Particle system
+        CCParticleSystemQuad *bloodParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BloodParticleSystem.plist"];
+        bloodParticleSystem.position = pos;
+        [particleBatchNode addChild:bloodParticleSystem];
+
+        // Debris
+        float angle = M_PI * (rand() / (float)RAND_MAX) - M_PI_2;
+        CGPoint randVelocity;
+        randVelocity.x = sinf(angle) * 1500.0f;
+        randVelocity.y = cosf(angle) * 1500.0f;
         EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:enemyType velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+        enemyBodyDebris.bloodParticleSystem = bloodParticleSystem;
         enemyBodyDebris.position = pos;
         enemyBodyDebris.delegate = self;
+        enemyBodyDebris.zOrder = GAME_OBJECTS_Z_ORDER - 1;
         [enemyBodyDebrises addObject:enemyBodyDebris];
         [mainSpriteBatch addChild:enemyBodyDebris];
     }
@@ -354,8 +400,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
             [killedTapEnemies addObject:enemy];
 
-            CGPoint velocity = ccpSub(enemy.position, pos);
-            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self createEnemyBodyExplosionAtPos:enemy.position enemyType:enemy.type];
             [self enemyDidDie:enemy];
 
             kills++;
@@ -367,8 +412,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
             [killedSwipeEnemies addObject:enemy];
 
-            CGPoint velocity = ccpSub(enemy.position, pos);
-            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self createEnemyBodyExplosionAtPos:enemy.position enemyType:enemy.type];
             [self enemyDidDie:enemy];
             kills++;
         }
@@ -376,7 +420,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [AppDelegate player].points += kills;
     [self updateUI];
 
-    CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
+    CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
     explosionParticleSystem.position = pos;
     [particleBatchNode addChild:explosionParticleSystem];
@@ -395,9 +439,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     [killedBombs addObject:bombSprite];
     [self makeBombExplosionAtPos:bombSprite.position];
+    [screenShaker shake];
 }
 
-#pragma EnemySpriteDelegate
+#pragma mark - EnemySpriteDelegate
 
 - (void)enemyDidClimbWall:(EnemySprite*)enemy {
 
@@ -432,6 +477,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - EnemyBodyDebrisDelegate
 
 - (void)enemyBodyDebrisDidDie:(EnemyBodyDebris *)enemyBodyDebris {
+
+    [enemyBodyDebris.bloodParticleSystem removeFromParentAndCleanup:YES];
 
     [killedEnemyBodyDebrises addObject:enemyBodyDebris];
 }
@@ -683,6 +730,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [enemyBodyDebris calc:deltaTime];
     }
 
+    for (SlimeBubbleSprite *bubble in bubbles) {
+        [bubble calc:deltaTime];
+        if (bubble.position.y > CGRectGetMaxY(slimeSprite.boundingBox) - bubble.boundingBox.size.height) {
+            [killedBubbles addObject:bubble];
+        }
+    }
+
     // Killed
     for (CoinSprite *coin in killedCoins) {
         [coins removeObject:coin];
@@ -716,6 +770,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [killedEnemyBodyDebrises removeAllObjects];
 
+    for (SlimeBubbleSprite *bubble in killedBubbles) {
+        [bubbles removeObject:bubble];
+        [bubble removeFromParentAndCleanup:YES];
+    }
+    [killedBubbles removeAllObjects];
+
     [masterControlProgram calc:deltaTime];
     
     if ([AppDelegate player].rage >= 1) {
@@ -734,6 +794,15 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [slimeSprite calc:deltaTime];
 
     [monsterSprite calc:deltaTime];
+
+    // Shake
+    [screenShaker calc:deltaTime];
+    self.position = screenShaker.offset;
+
+    // Add bubbles
+    if (rand() % 100 == 0) {
+        [self addBubble:ccp(slimeSprite.boundingBox.origin.x + (slimeSprite.boundingBox.size.width - 40) * rand() / RAND_MAX + 20, GROUND_Y + 5 + rand() % 7)];
+    }
 }
 
 - (void)update:(ccTime)deltaTime {
