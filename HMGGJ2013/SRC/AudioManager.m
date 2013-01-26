@@ -51,7 +51,7 @@ const int BUFF_EFFECTS = kASC_Right;
 
 - (void)playEffect:(int)soundId {
     
-    [soundEngine playSound:soundId sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:YES];
+    [soundEngine playSound:soundId sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
 }
 
 - (void)preloadSounds {
