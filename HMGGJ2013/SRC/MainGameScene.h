@@ -10,7 +10,8 @@
 #import "CoinSprite.h"
 #import "EnemySprite.h"
 #import "BombSprite.h"
+#import "BombSpawner.h"
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate>
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate>
 
 @end

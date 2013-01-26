@@ -11,6 +11,7 @@
 
 @interface GestureRecognizer : NSObject <CCTargetedTouchDelegate>
 
+@property (nonatomic, readonly) CGPoint lastPos;
 @property (nonatomic, weak) id <GestureRecognizerDelegate> delegate;
 
 - (void)update:(ccTime)deltaTime;

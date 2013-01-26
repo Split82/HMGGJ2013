@@ -8,6 +8,17 @@
 
 #import "BombSpawner.h"
 
+#define SPEED 1.7f
+
+@interface BombSpawner() {
+
+    float progress;
+    BOOL spawning;
+}
+
+@end
+
+
 @implementation BombSpawner
 
 - (id)init {
@@ -21,16 +32,28 @@
     return self;
 }
 
-- (void)startSpawning {
+- (void)startSpawningAtPos:(CGPoint)pos {
 
+    _pos = pos;
+    spawning = YES;
+    progress = 0;
 }
 
-- (void)endSpawning {
-    
+- (void)cancelSpawning {
+
+    spawning = NO;
 }
 
 - (void)calc:(ccTime)deltaTime {
-    
+
+    if (spawning) {
+        progress += deltaTime * SPEED;
+
+        if (progress >= 1) {
+            spawning = NO;
+            [_delegate bombSpawnerWantsBombToSpawn:self];
+        }
+    }
 }
 
 @end

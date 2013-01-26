@@ -22,6 +22,8 @@
 #define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
 
+#define BOMB_KILL_PERIMETER 60
+
 @interface MainGameScene() {
 
     float calcTime;
@@ -39,6 +41,8 @@
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
+
+    BombSpawner *bombSpawner;
     
     CCParticleBatchNode *particleBatchNode;
 
@@ -116,6 +120,12 @@
     foregroundSprite.scale = PIXEL_ART_SPRITE_SCALE;
     [mainSpriteBatch addChild:foregroundSprite];
 
+    // Bomb spawner
+    bombSpawner = [[BombSpawner alloc] init];
+    bombSpawner.delegate = self;
+    bombSpawner.zOrder = 10000;
+    [mainSpriteBatch addChild:bombSpawner];
+
     [self scheduleUpdate];
 
     /*
@@ -169,6 +179,21 @@
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
+- (void)makeBombExplosionAtPos:(CGPoint)pos {
+
+    for (EnemySprite *enemy in tapEnemies) {
+        if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+            [killedTapEnemies addObject:enemy];
+        }
+    }
+
+    for (EnemySprite *enemy in swipeEnemies) {
+        if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+            [killedSwipeEnemies addObject:enemy];
+        }
+    }
+}
+
 #pragma mark - CoinSpriteDelegate
 
 - (void)coinDidDie:(CoinSprite *)coinSprite {
@@ -181,6 +206,7 @@
 - (void)bombDidDie:(BombSprite *)bombSprite {
 
     [killedBombs addObject:bombSprite];
+    [self makeBombExplosionAtPos:bombSprite.position];
 }
 
 #pragma EnemySpriteDelegate
@@ -197,17 +223,25 @@
     }
 }
 
+#pragma mark - BombSpawnerDelegate
+
+- (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
+
+    [self addBombAtPosX:bombSpawner.pos.x];
+}
 
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
 
     NSLog(@"LongPress start");
+    [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
 
-    [self addBombAtPosX:100];
+    NSLog(@"LongPress end");    
+    [bombSpawner cancelSpawning];
 }
 
 - (void)swipeStarted:(CGPoint)pos {
@@ -231,8 +265,6 @@
 }
 
 - (void)tapRecognized:(CGPoint)pos {
-
-    //[self addCoinAtPos:pos];
 
     NSLog(@"Tap recognized");
     
@@ -273,7 +305,9 @@
     // Gestures
     [gestureRecognizer update:deltaTime];
 
-    // Calcs
+    // Game objects
+    [bombSpawner calc:deltaTime];
+
     for (CoinSprite *coin in coins) {
         [coin calc:deltaTime];
     }
