@@ -60,7 +60,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
 
 @implementation EnemySprite
 
-@synthesize type, state;
+@synthesize type, state, spriteCenter;
 
 -(id) initWithType:(EnemyType)_type {
     
@@ -207,14 +207,14 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             
             direction = 1;
             
-            self.position = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
+            self.position = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y + 20);
         }
         else {
             
             direction = -1;
             self.flipX = YES;
             
-            self.position = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
+            self.position = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y + 20);
         }
         
         
@@ -321,9 +321,9 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
         case kEnemyStateFalling: {
             
             
-            if (position_.y < GROUND_Y) {
+            if (position_.y < GROUND_Y + 20) {
                 
-                position_.y = GROUND_Y;
+                position_.y = GROUND_Y + 20;
                 self.position = position_;
 
                 if (position_.x < CLIMBING_BORDER_OFFSET) {
