@@ -1090,6 +1090,7 @@
 				386BAE7E16B36684002C4EF5 /* muhaha.wav in Resources */,
 				55CDD44C16B3852600704F3B /* ExplosionParticleSystem.plist in Resources */,
 				55CDD44E16B385D900704F3B /* SimpleParticleTexture.png in Resources */,
+				38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
