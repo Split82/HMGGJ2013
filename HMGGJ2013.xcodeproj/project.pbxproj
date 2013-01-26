@@ -139,6 +139,8 @@
 		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
 		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
+		554AD1E416B4277000441632 /* SlimeSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E316B4277000441632 /* SlimeSprite.m */; };
+		554AD1E716B42AE600441632 /* MonsterSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1E616B42AE600441632 /* MonsterSprite.m */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
@@ -430,6 +432,10 @@
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
 		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
 		553BA1B816B33CA000B4E22B /* GestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureRecognizer.m; sourceTree = "<group>"; };
+		554AD1E216B4277000441632 /* SlimeSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlimeSprite.h; sourceTree = "<group>"; };
+		554AD1E316B4277000441632 /* SlimeSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlimeSprite.m; sourceTree = "<group>"; };
+		554AD1E516B42AE600441632 /* MonsterSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonsterSprite.h; sourceTree = "<group>"; };
+		554AD1E616B42AE600441632 /* MonsterSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonsterSprite.m; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -923,6 +929,10 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				554AD1E516B42AE600441632 /* MonsterSprite.h */,
+				554AD1E616B42AE600441632 /* MonsterSprite.m */,
+				554AD1E216B4277000441632 /* SlimeSprite.h */,
+				554AD1E316B4277000441632 /* SlimeSprite.m */,
 				55CDD44316B3708100704F3B /* BombSpawner.h */,
 				55CDD44416B3708100704F3B /* BombSpawner.m */,
 				55CDD43F16B3670E00704F3B /* BombSprite.h */,
@@ -1226,6 +1236,8 @@
 				55CDD44116B3670E00704F3B /* BombSprite.m in Sources */,
 				55CDD44516B3708100704F3B /* BombSpawner.m in Sources */,
 				3891715A16B4206C00EFAB71 /* MasterControlProgram.m in Sources */,
+				554AD1E416B4277000441632 /* SlimeSprite.m in Sources */,
+				554AD1E716B42AE600441632 /* MonsterSprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
