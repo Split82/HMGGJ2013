@@ -9,6 +9,12 @@
 #import "PlayerModel.h"
 
 
+#define kPlayerFirstKill            @"kPlayerFirstKill"
+#define kPlayerGlobalKillCount      @"kPlayerGlobalKillCount"
+#define kPlayerGlobalBombDropCount  @"kPlayerGlobalBombDropCount"
+#define kPlayerGlobalCoinCount      @"kPlayerGlobalCoinCount"
+
+
 @interface PlayerModel ()
 
 @property (nonatomic, strong) NSLock *writeLock;
@@ -19,6 +25,7 @@
 {
     NSMutableArray *_scores;
     NSMutableDictionary *_achievements;
+    NSTimer *_timer;
 }
 
 @synthesize scores = _scores;
@@ -48,8 +55,15 @@
         } else {
             _achievements = [NSMutableDictionary dictionary];
         }
+        _timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_timer invalidate];
+    _timer = nil;
 }
 
 #pragma mark Score
@@ -90,8 +104,52 @@
      }];
 }
 
+- (void) updateKillCount:(NSInteger)kills
+{
+    NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
+    allKills += kills;
+    
+    GKAchievement *achivement;
+    
+    if (allKills > 0 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerFirstKill]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerFirstKill];
+        achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+        [achivement setPercentComplete:1];
+        [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    }
+    [[NSUserDefaults standardUserDefaults] setInteger:allKills forKey:kPlayerGlobalKillCount];
+    
+    if ([_achievements count]) {
+        [self _submitAchievements];
+    }
+}
+
 - (void) synchronize
 {
+    NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
+    
+    // kills achievements
+    GKAchievement *achivement;
+    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+    [achivement setPercentComplete:allKills >= 100 ? 1 : allKills / 100];
+    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    
+    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+    [achivement setPercentComplete:allKills >= 1000 ? 1 : allKills / 1000];
+    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    
+    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+    [achivement setPercentComplete:allKills >= 10000 ? 1 : allKills / 10000];
+    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    
+    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+    [achivement setPercentComplete:allKills >= 100000 ? 1 : allKills / 100000];
+    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    
+    achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+    [achivement setPercentComplete:allKills >= 1000000 ? 1 : allKills / 1000000];
+    [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+    
     [self _submitScores];
     [self _saveScore];
     
