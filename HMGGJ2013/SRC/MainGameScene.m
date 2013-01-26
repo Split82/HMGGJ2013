@@ -54,6 +54,7 @@
     float enemySpawnTime;
     
     UILabel *killsLabel;
+    CCSprite *coinsSprite;
     UILabel *coinsLabel;
 }
 
@@ -114,8 +115,8 @@
     backgroundSprite.anchorPoint = ccp(0, 0);
     backgroundSprite.position = ccp(0, 0);
     size = backgroundSprite.contentSize;
-    backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / backgroundSprite.contentSize.width;
-    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / backgroundSprite.contentSize.height;
+    backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / size.width;
+    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / size.height;
     [mainSpriteBatch addChild:backgroundSprite];
 
     // Foreground
@@ -143,18 +144,29 @@
 - (void) initUI {
     CGFloat labelWidth = (320.0 - 10.0) / 2;
     killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 5.0,labelWidth, 21.0)];
-    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
     [killsLabel setTextAlignment:UITextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:killsLabel];
     
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0 + labelWidth, 5.0, labelWidth, 21.0)];
-    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
+    coinsSprite.anchorPoint = ccp(0, 0);
+    coinsSprite.scale = [UIScreen mainScreen].scale * 2;
+    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width, [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    [mainSpriteBatch addChild:coinsSprite];
+    
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(25.0 + labelWidth, 5.0, labelWidth, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
-    [coinsLabel setTextAlignment:UITextAlignmentRight];
+    [coinsLabel setTextAlignment:UITextAlignmentLeft];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:coinsLabel];
+    
+    [self updateUI];
+}
+
+- (void) updateUI {
+    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
+    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
 }
 
 #pragma mark - Objects
@@ -446,14 +458,14 @@
 - (void) kill:(EnemySprite *)enemy
 {
     [AppDelegate player].kills++;
-    [killsLabel setText:[NSString stringWithFormat:@"kills: %i", [AppDelegate player].kills]];
     [self addCoinAtPos:enemy.position];
+    [self updateUI];
 }
 
 - (void) addCoin
 {
     [AppDelegate player].coins++;
-    [coinsLabel setText:[NSString stringWithFormat:@"coins: %i", [AppDelegate player].coins]];
+    [self updateUI];
 }
 
 - (void) dropBombAtPos:(CGPoint)pos
@@ -463,7 +475,7 @@
         [[AppDelegate player] updateDropBombCount:1];
         
         [AppDelegate player].coins -= BOMB_COINS_COST;
-        [coinsLabel setText:[NSString stringWithFormat:@"coins: %i", [AppDelegate player].coins]];
+        [self updateUI];
     }
 }
 
