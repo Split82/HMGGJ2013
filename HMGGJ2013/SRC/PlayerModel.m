@@ -72,7 +72,7 @@
         } else {
             _achievements = [NSMutableDictionary dictionary];
         }
-    
+        
         _firstBombTimeinteval = 0;
         _firstBombCounter = 0;
         
@@ -123,7 +123,7 @@
 - (void) setPoints:(NSInteger)points
 {
     int newPoints = points - _points;
-    float multiplier = 1;
+    float multiplier = 2;
     if (newPoints >= 10)
         multiplier += 3;
     else if (newPoints >= 7)
@@ -133,7 +133,7 @@
     else if (newPoints >= 2)
         multiplier += 0.5;
     _points += newPoints;
-    self.rage += (float)newPoints / 8;
+    self.rage += (float)newPoints / 16;
     _rageInterval = 0;
 }
 

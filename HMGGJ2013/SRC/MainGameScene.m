@@ -83,7 +83,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     // UI vars
     NSString *fontName;
+    
+    CCSprite *killSprite;
     UILabel *killsLabel;
+    
     CCSprite *coinsSprite;
     UILabel *coinsLabel;
     UILabel *healthLabel;
@@ -191,7 +194,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UIFont *font = [UIFont fontWithName:fontName size:20];
     
     CGFloat labelWidth = (320.0 - 10.0) / 2;
-    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 7.0, labelWidth, 21.0)];
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
+    killSprite.anchorPoint = ccp(0, 0);
+    killSprite.scale = [UIScreen mainScreen].scale * 2;
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 5);
+    [mainSpriteBatch addChild:killSprite];
+    
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 7.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
@@ -201,11 +211,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width,
-                               [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
     [mainSpriteBatch addChild:coinsSprite];
     
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth, 7.0, labelWidth, 21.0)];
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 7.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
     [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
@@ -219,7 +228,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [healthLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:healthLabel];
     
-    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 0.0, 5.0)];
+    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, contentSize.height - 5.0, 0.0, 5.0)];
     [rageView setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5]];
     [[CCDirector sharedDirector].view addSubview:rageView];
     
@@ -227,13 +236,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) updateUI {
-    [killsLabel setText:[NSString stringWithFormat:@"points %i", [AppDelegate player].points]];
-    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    [killsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].points]];
+    [coinsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
-    
-    CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
-    coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
-    
+
     [rageView setFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 320 * [AppDelegate player].rage, 5.0)];
 }
 
