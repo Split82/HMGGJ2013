@@ -141,7 +141,7 @@
     
     [self scheduleNewEnemySpawn];
     
-    [[AudioManager sharedManager] startBackgroundTrack];
+    [[AudioManager sharedManager] startBackgroundMusic];
     
     [self initUI];
 }
@@ -341,6 +341,7 @@
 - (void)tapRecognized:(CGPoint)pos {
 
     [[AudioManager sharedManager] scream];
+    [[AudioManager sharedManager] stopBackgroundMusic];
 
     EnemySprite *nearestEnemy = nil;
     CoinSprite *nearestCoin = nil;

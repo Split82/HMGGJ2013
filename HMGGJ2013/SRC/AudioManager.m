@@ -18,6 +18,8 @@ const int BUFF_EFFECTS = kASC_Right;
 
 @implementation AudioManager {
     CDSoundEngine* soundEngine;
+    
+    ALuint backgroundSound;
 }
 
 + (id)sharedManager {
@@ -47,6 +49,11 @@ const int BUFF_EFFECTS = kASC_Right;
     return self;
 }
 
+- (void)playEffect:(int)soundId {
+    
+    [soundEngine playSound:soundId sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
+}
+
 - (void)preloadSounds {
     
     //Load sound buffers asynchrounously
@@ -60,8 +67,8 @@ const int BUFF_EFFECTS = kASC_Right;
 }
 
 - (void)scream {
-    [soundEngine playSound:SOUND_BRUM sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
-   // NSLog(@"hello %d", soundEngine.sourceTotal);
+    
+    [self playEffect:SOUND_BRUM];
 }
 
 - (void)startBackgroundTrack {
