@@ -46,7 +46,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 #define SLIME_WIDTH 280
-#define SLIME_GROUND_Y 46
+#define SLIME_GROUND_Y (GROUND_Y + 1)
 #define SLIME_MAX_HEIGHT 300
 
 @interface MainGameScene() {
@@ -70,9 +70,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
     MonsterSprite *monsterSprite;
-
-    CCSprite *slimeFillSprite;
-    CCSprite *slimeTopSprite;
     
     MasterControlProgram *masterControlProgram;
     
@@ -271,12 +268,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)addBombAtPosX:(CGFloat)posX {
 
-    [[AppDelegate player] updateDropBombCount:1];
-
-    [AppDelegate player].coins -= BOMB_COINS_COST;
-    [self updateUI];
-
-    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 500) groundY:GROUND_Y];
+    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 520 + (rand() / (float)RAND_MAX) * 20) groundY:GROUND_Y];
     newBomb.delegate = self;
     [bombs addObject:newBomb];
     [mainSpriteBatch addChild:newBomb];
@@ -354,6 +346,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
 
     [self addBombAtPosX:bombSpawner.pos.x];
+
+    [[AppDelegate player] updateDropBombCount:1];
+
+    [AppDelegate player].coins -= BOMB_COINS_COST;
+    [self updateUI];
 }
 
 #pragma mark - MainframeDelegate
