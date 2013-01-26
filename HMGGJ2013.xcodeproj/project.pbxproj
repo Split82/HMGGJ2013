@@ -1265,6 +1265,7 @@
 				554AD1E416B4277000441632 /* SlimeSprite.m in Sources */,
 				554AD1E716B42AE600441632 /* MonsterSprite.m in Sources */,
 				554AD1EA16B43AF700441632 /* EnemyBodyDebris.m in Sources */,
+				E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
