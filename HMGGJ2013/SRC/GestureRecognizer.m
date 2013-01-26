@@ -41,6 +41,8 @@ typedef enum {
 
 @implementation GestureRecognizer
 
+@synthesize lastPos;
+
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
 
     fingerIsDown = YES;
