@@ -10,14 +10,17 @@
 #import "GameDataNameDefinitions.h"
 
 #define WALKING_MOVEMENT_OFFSET 1.0f
-#define WALKING_MOVEMENT_DELAY 0.1f
+#define WALKING_MOVEMENT_DELAY (1/60.0f)
 #define WALKING_ANIM_DELAY 0.2f
 #define WALKING_BORDER_OFFSET 5.0f
 #define WALKING_PLANE_Y_POS 10.0f
 
 #define CLIMBING_MOVEMENT_OFFSET 1.0f
-#define CLIMBING_MOVEMENT_DELAY 0.1f
+#define CLIMBING_MOVEMENT_DELAY (1/60.0f)
 #define CLIMBING_ANIM_DELAY 0.2f
+
+#define FALLING_ACCEL 100.0f
+#define FALLING_ANIM_DELAY 0.2f
 
 #define WALL_HEIGHT 400.0f
 
@@ -28,6 +31,7 @@
     
     NSMutableArray *walkingAnimSpriteFrames;
     NSMutableArray *climbingAnimSpriteFrames;
+    NSMutableArray *fallingAnimSpriteFrames;
     
     int animFrameIndex;
     
@@ -35,6 +39,7 @@
     float moveTime;
     
     float climbXPos;
+    float fallingVel;
     
     BOOL killed;
 }
@@ -51,7 +56,7 @@
     if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
-        self.type = type;
+        self.type = _type;
         self.state = kEnemyStateWalking;
         
         animFrameIndex = 0;
@@ -102,6 +107,21 @@
             [climbingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
         }
         
+        NSArray *fallingAnimeSpriteFrameNames = @[
+        kPlaceholderTextureFrameName,
+        kPlaceholderTextureFrameName,
+        kPlaceholderTextureFrameName,
+        kPlaceholderTextureFrameName
+        ];
+        
+        fallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:[fallingAnimeSpriteFrameNames count]];
+        
+        for (NSString *spriteFrameName in fallingAnimeSpriteFrameNames) {
+            
+            [fallingAnimSpriteFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName]];
+        }
+        
+        
         [self setDisplayFrame:walkingAnimSpriteFrames[0]];
     }
     
@@ -132,12 +152,14 @@
             if (moveTime > WALKING_MOVEMENT_DELAY) {
                 
                 CGPoint newPos = self.position;
-                newPos.x += (int)(animTime / WALKING_ANIM_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
+                newPos.x += (int)(moveTime / WALKING_MOVEMENT_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
                 
                 if ((newPos.x <= climbXPos && self.position.x > climbXPos) || (newPos.x >= climbXPos && self.position.x < climbXPos)) {
                     
                     state = kEnemyStateClimbing;
                     animFrameIndex = 0;
+                    moveTime = 0;
+                    
                 }
                 
                 self.position = newPos;
@@ -167,7 +189,7 @@
             if (moveTime > CLIMBING_MOVEMENT_DELAY) {
                 
                 CGPoint newPos = self.position;
-                newPos.y += (int)(animTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_OFFSET;
+                newPos.y += (int)(moveTime / CLIMBING_MOVEMENT_DELAY) * CLIMBING_MOVEMENT_OFFSET;
                 
                 self.position = newPos;
                 
@@ -188,10 +210,48 @@
         }
         case kEnemyStateFalling: {
             
+            
+            if (position_.y < WALKING_PLANE_Y_POS) {
+                
+                position_.y = WALKING_PLANE_Y_POS;
+                self.position = position_;
+
+                state = kEnemyStateClimbing;
+                animFrameIndex = 0;
+                moveTime = 0;
+                return;
+            }
+            
+            position_.y -= fallingVel * time;
+            fallingVel += FALLING_ACCEL * time;
+            self.position = position_;
+            
+            if (animTime > FALLING_ANIM_DELAY) {
+                
+                animFrameIndex += (int)(animTime / FALLING_ANIM_DELAY);
+                animFrameIndex = animFrameIndex % [fallingAnimSpriteFrames count];
+                
+                animTime = animTime - (int)(animTime / FALLING_ANIM_DELAY) * FALLING_ANIM_DELAY;
+            }
+            
+            [self setDisplayFrame:fallingAnimSpriteFrames[animFrameIndex]];
             break;
         }
     }
 }
 
+-(void) throwFromWall {
+    
+    if (state != kEnemyStateClimbing) {
+        
+        return;
+    }
+    
+    state = kEnemyStateFalling;
+    animFrameIndex = 0;
+    moveTime = 0;
+    fallingVel = 0;
+    
+}
 
 @end

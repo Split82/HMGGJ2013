@@ -34,6 +34,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    [[AudioManager sharedManager] preloadSounds];
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,7 +45,6 @@
 }
 
 - (void)startGame {
-    [[AudioManager sharedManager] scream];
     
     // Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
     CCGLView *glView = [CCGLView viewWithFrame:self.view.window.bounds
