@@ -27,10 +27,10 @@
 @property (nonatomic, assign) NSInteger firstBombCounter;
 @property (nonatomic, assign) NSTimeInterval firstBombTimeinteval;
 
-@property (nonatomic, strong) NSTimer *lastKillTime;
-@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) NSTimeInterval lastKillTime;
+@property (nonatomic, assign) NSTimeInterval timer;
 
-@property (nonatomic, strong) NSTimer *rageInterval;
+@property (nonatomic, assign) NSTimeInterval rageInterval;
 @property (nonatomic, assign) NSTimeInterval disabledRageTimeinteval;
 
 @end
@@ -93,18 +93,29 @@
                 [_achievements setObject:achivement forKey:kAchievemntPartyBoyName];
             }
         }
-        _timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
+        _timer = [NSDate timeIntervalSinceReferenceDate] + 30;
     }
     return self;
 }
 
-- (void) dealloc
+- (void) calc:(ccTime)deltaTime
 {
-    [_timer invalidate];
-    _timer = nil;
+    NSTimeInterval interval = [NSDate timeIntervalSinceReferenceDate];
     
-    [_lastKillTime invalidate];
-    _lastKillTime = nil;
+    if (_rage > 0 && _rageInterval < interval) {
+        if (_rageInterval != 0)
+            [self _rageReduction];
+        _rageInterval = interval + 3;
+    }
+    
+    if (_timer < interval) {
+        [self synchronize];
+        _timer = interval + 30;
+    }
+    
+    if (_lastKillTime + 60 < interval) {
+        [self _dalaiLamaAchievements];
+    }
 }
 
 #pragma mark -
@@ -122,10 +133,8 @@
     else if (newPoints > 5)
         multiplier += 0.2;
     _points += newPoints;
-    self.rage += (float)newPoints / 4;
-    
-    [_rageInterval invalidate];
-    _rageInterval = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_rageReduction) userInfo:nil repeats:YES];
+    self.rage += (float)newPoints / 8;
+    _rageInterval = 0;
 }
 
 - (void) _rageReduction
@@ -133,8 +142,7 @@
     _rage -= 0.1;
     if (_rage <= 0) {
         _rage = 0;
-        [_rageInterval invalidate];
-        _rageInterval = nil;
+        _rageInterval = 0;
     }
 }
 
@@ -158,7 +166,7 @@
 
 - (void) setRage:(float)rage
 {
-    if (rage == 0 && _rageInterval) {
+    if (rage == 0) {
         _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 30;
     } else if (_disabledRageTimeinteval && [NSDate timeIntervalSinceReferenceDate] < _disabledRageTimeinteval) {
         return;
@@ -176,6 +184,7 @@
     _health = 100;
     _rage = 0;
     _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 15;
+    _rageInterval = 0;
 }
 
 #pragma mark Score
@@ -223,8 +232,7 @@
     [df setInteger:0 forKey:kPlayerGlobalCoinsCount];
     [df synchronize];
     
-    [_lastKillTime invalidate];
-    _lastKillTime = nil;
+    _lastKillTime = 0;
     
     _firstBombTimeinteval = 0;
     _firstBombCounter = 0;
@@ -315,8 +323,7 @@
 {
     NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
     allKills += kills;
-    [_lastKillTime invalidate];
-    _lastKillTime = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(_dalaiLamaAchievements) userInfo:nil repeats:NO];
+    _lastKillTime = [NSDate timeIntervalSinceReferenceDate];
     
     if (allKills > 0 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerFirstKill]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerFirstKill];

@@ -12,6 +12,8 @@
 
 @interface PlayerModel : NSObject
 
+- (void) calc:(ccTime)deltaTime;
+
 @property (nonatomic, assign) NSInteger points;
 @property (nonatomic, assign) NSInteger kills;
 @property (nonatomic, assign) NSInteger coins;

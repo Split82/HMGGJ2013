@@ -32,7 +32,6 @@
 #define TAP_MIN_DISTANCE2 (60*60)
 #define SWIPE_MIN_DISTANCE2 (20*20)
 
-#define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
@@ -646,6 +645,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self updateUI];
         [AppDelegate player].rage = 0;
     }
+    [[AppDelegate player] calc:deltaTime];
 
     [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
     [slimeSprite calc:deltaTime];
