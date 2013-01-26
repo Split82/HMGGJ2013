@@ -65,7 +65,7 @@ const int BUFF_EFFECTS = kASC_Right;
 }
 
 - (void)startBackgroundTrack {
-    [soundEngine playSound:SOUND_GANDAM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
+    //[soundEngine playSound:SOUND_GANDAM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }
 
 @end
