@@ -11,8 +11,6 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 
-#define PIXEL_ART_SPRITE_SCALE 4
-
 #define TOP_HEIGHT 80
 
 #define MAX_DELTA_TIME 0.1f
@@ -105,19 +103,19 @@
     CGSize size;
 
     // Background
-    CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
-    backgroundSprite.anchorPoint = ccp(0, 1);
-    backgroundSprite.position = ccp(0, [CCDirector sharedDirector].winSize.height);
+    CCSprite *backgroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"BG.png"];
+    backgroundSprite.anchorPoint = ccp(0, 0);
+    backgroundSprite.position = ccp(0, 0);
     size = backgroundSprite.contentSize;
     backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / backgroundSprite.contentSize.width;
-    backgroundSprite.scaleY = TOP_HEIGHT / backgroundSprite.contentSize.height;
+    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / backgroundSprite.contentSize.height;
     [mainSpriteBatch addChild:backgroundSprite];
 
     // Foreground
-    CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:kPlaceholderTextureFrameName];
+    CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"FG.png"];
     foregroundSprite.anchorPoint = ccp(0, 0);
     foregroundSprite.position = ccp(0, 0);
-    foregroundSprite.scale = PIXEL_ART_SPRITE_SCALE;
+    foregroundSprite.scale = [UIScreen mainScreen].scale * 2;
     [mainSpriteBatch addChild:foregroundSprite];
 
     // Bomb spawner
