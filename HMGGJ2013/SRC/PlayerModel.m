@@ -124,14 +124,14 @@
 {
     int newPoints = points - _points;
     float multiplier = 1;
-    if (newPoints > 50)
-        multiplier += 2;
-    else if (newPoints > 25)
-        multiplier += 0.7;
-    else if (newPoints > 10)
-        multiplier += 0.4;
-    else if (newPoints > 5)
-        multiplier += 0.2;
+    if (newPoints >= 10)
+        multiplier += 3;
+    else if (newPoints >= 7)
+        multiplier += 1.4;
+    else if (newPoints >= 4)
+        multiplier += 1.0;
+    else if (newPoints >= 2)
+        multiplier += 0.5;
     _points += newPoints;
     self.rage += (float)newPoints / 8;
     _rageInterval = 0;
