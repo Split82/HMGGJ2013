@@ -29,12 +29,12 @@ NSString * const kAchievemntBloodyMaryName; // fill the floor with blood $
 NSString * const kAchievemntDalaiLamaName; // don't kill any imp in one minute $
 NSString * const kAchievemntChristmassName; // play the game on Christmass $
 NSString * const kAchievemntPartyBoyName; // play the game on new years $
-NSString * const kAchievemntCollect100Name; // collect 100 coins
-NSString * const kAchievemntCollect1000Name; // collect 1.000 coins
-NSString * const kAchievemntCollect10000Name; // collect 10.000 coins
-NSString * const kAchievemntCollect100000Name; // collect 100.000 coins
-NSString * const kAchievemntCollect1000000Name; // collect 1.000.000 coins
-NSString * const kAchievemntCloseCallName; // save the game in last second
-NSString * const kAchievemntBetaTesterName; // game crash
-NSString * const kAchievemntCallCenterName; // call during the game
-NSString * const kAchievemntAddictedName; // addicted to the game (more then 10)?
+NSString * const kAchievemntCollect100Name; // collect 100 coins $
+NSString * const kAchievemntCollect1000Name; // collect 1.000 coins $
+NSString * const kAchievemntCollect10000Name; // collect 10.000 coins $
+NSString * const kAchievemntCollect100000Name; // collect 100.000 coins $
+NSString * const kAchievemntCollect1000000Name; // collect 1.000.000 coins $
+NSString * const kAchievemntCloseCallName; // save the game in last second $
+NSString * const kAchievemntBetaTesterName; // game crash $
+NSString * const kAchievemntCallCenterName; // call during the game $
+NSString * const kAchievemntAddictedName; // addicted to the game (more then 10)? $
