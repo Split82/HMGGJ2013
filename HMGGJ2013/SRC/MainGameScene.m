@@ -11,6 +11,8 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 #import "AppDelegate.h"
+#import "SlimeSprite.h"
+#import "MonsterSprite.h"
 
 #define TOP_HEIGHT 80
 
@@ -52,10 +54,9 @@
     NSMutableArray *killedBombs;
 
     BombSpawner *bombSpawner;
+    SlimeSprite *slimeSprite;
+    MonsterSprite *monsterSprite;
 
-    CCSprite *slimeFillSprite;
-    CCSprite *slimeTopSprite;
-    
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
@@ -131,14 +132,17 @@
     backgroundSprite.scale = [UIScreen mainScreen].scale * 2;    
     [mainSpriteBatch addChild:backgroundSprite];
 
+    // Monster
+    monsterSprite = [[MonsterSprite alloc] init];
+    monsterSprite.anchorPoint = ccp(0.5, 0);
+    monsterSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y + 1);
+    [mainSpriteBatch addChild:monsterSprite];
+
     // Slime
-    slimeFillSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankWater.png"];
-    slimeFillSprite.scaleX = SLIME_WIDTH / slimeFillSprite.contentSize.width;
-    slimeFillSprite.scaleY = SLIME_MAX_HEIGHT / slimeFillSprite.contentSize.height;
-    slimeFillSprite.anchorPoint = ccp(0.5, 0);
-    slimeFillSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
-    [mainSpriteBatch addChild:slimeFillSprite];
-    
+    slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    slimeSprite.anchorPoint = ccp(0.5, 0);
+    slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
+    [mainSpriteBatch addChild:slimeSprite];
 
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
@@ -544,6 +548,11 @@
         
         [self addEnemy];
     }
+
+    [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
+    [slimeSprite calc:deltaTime];
+
+    [monsterSprite calc:deltaTime];
 }
 
 - (void)update:(ccTime)deltaTime {
