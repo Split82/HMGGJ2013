@@ -176,6 +176,11 @@
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
+-(void)coinEndedCashingAnimation:(CoinSprite*)coin {
+    
+    [coin removeFromParentAndCleanup:YES];
+}
+
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
 
     for (EnemySprite *enemy in tapEnemies) {
@@ -271,12 +276,43 @@
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    NSLog(@"Tap recognized");
-    
     [[AudioManager sharedManager] scream];
 
     EnemySprite *nearestEnemy = nil;
+    CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
+    
+    for (CoinSprite *coin in coins) {
+        
+        if (nearestDistance < 0) {
+            
+            nearestDistance = ccpDistanceSQ(coin.position, pos);
+            nearestCoin = coin;
+        }
+        else {
+            
+            float distance = ccpDistanceSQ(coin.position, pos);
+            
+            if (distance < nearestDistance) {
+                
+                nearestDistance = distance;
+                nearestCoin = coin;
+            }
+        }
+    }
+    
+    if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
+        
+        [coins removeObject:nearestCoin];
+
+        CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:CGPointMake(315, 470)], [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
+        
+        [nearestCoin runAction:action];
+        return;
+    }
+    
+    
+    
     for (EnemySprite *enemy in tapEnemies) {
         
         if (nearestDistance < 0) {
