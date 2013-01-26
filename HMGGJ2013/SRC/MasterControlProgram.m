@@ -12,29 +12,32 @@
 #import "MainGameScene.h"
 
 // init values
-const float INIT_ENEMIES_PER_WAVE = 4.0f;
+const float INIT_ENEMIES_PER_WAVE = 1.0f;
 const float INIT_WAVE_PERIOD = 15.0f; // seconds
+const float INIT_SWIPE_TAP_ENEMIES_RATIO = 0.12;
 
-const float INIT_SWIPE_TAP_ENEMIES_RATIO = 0.2;
-
-const float ENEMIES_GROWTH_PER_WAVE = 0.9;
-const float SWIPE_TAP_RATIO_GROWTH_PER_WAVE = 0.05;
+const float ENEMIES_GROWTH_PER_WAVE = 1.0;
+const float SWIPE_TAP_RATIO_GROWTH_PER_WAVE = 0.02;
 const float WAVE_LENGHT_DECREASE = 0.75; // second
 
 const float MIN_WAVE_LENGTH = 5.0f; // seconds
 const float MAX_ENEMIES_PER_WAVE = 30.0f;
-const float MAX_TAP_RATION_PER_WAVE = 0.6;
+const float MAX_TAP_RATION_PER_WAVE = 0.65;
 
-const float ENEMY_SPAWN_TIME = 2.0f;
-const float ENEMY_SPAWN_DELTA_TIME = 4.0f;
+const float ENEMY_SPAWN_TIME = 7.0f;
+const float ENEMY_SPAWN_DELTA_TIME = 3.0f;
 
 const float WAVE_ENEMY_SPAWN_TIME = 0.5f;
-const float WAVE_ENEMY_SPAWN_DELTA_TIME = 0.5f;
+const float WAVE_ENEMY_SPAWN_DELTA_TIME = 1.0f;
+const float WAVE_WAIT_FOR_USER = 5.0f; // how many seconds to wait for player to kill all the enemies
 
 const float INCREASE_SPAWN_SPEED_FACTOR = 1.25f;
 
 const float RANDOM_COIN_SPAWN_TIME = 3.0f;
 const float RANDOM_COIN_SPAWN_DELTA_TIME = 5.0f;
+
+const int LEVEL2_BORDER = 10; // begin to decrease wave period and don't wait for player to kill the previous
+const float LEVEL2_GROWTH_PENALTY = 2.0f; // the speed of growth of the enemies and swipe/tap ratio will be decreased
 
 float increase(float value, float inc, float MAX) {
     if (value < MAX) {
@@ -72,6 +75,9 @@ float frand() {
     
     float enemySpawnTime;
     float enemySpawnTimeDelta;
+    
+    // wave
+    int waveNumber;
     
     // per wave
     int enemiesToGenerate;
@@ -130,23 +136,41 @@ float frand() {
 
 
 - (void)startWave {
-    // previous wave is not finished
+    
+    if (waveNumber < LEVEL2_BORDER) {
+        
+        // wait for player to kill the previous wave
+        if ([self.mainframe countTapEnemies] + [self.mainframe countSwipeEnemies] > 2) {
+            
+            NSLog(@"User still fighting, wating");
+            nextWaveTime = WAVE_WAIT_FOR_USER;
+            return;
+        }
+        
+        enemiesPerWave = increase(enemiesPerWave, ENEMIES_GROWTH_PER_WAVE, MAX_ENEMIES_PER_WAVE);
+        swipeTapRatio = increase(swipeTapRatio, SWIPE_TAP_RATIO_GROWTH_PER_WAVE, MAX_TAP_RATION_PER_WAVE);
+        
+    } else {
+        enemiesPerWave = increase(enemiesPerWave, ENEMIES_GROWTH_PER_WAVE / LEVEL2_GROWTH_PENALTY, MAX_ENEMIES_PER_WAVE);
+        swipeTapRatio = increase(swipeTapRatio, SWIPE_TAP_RATIO_GROWTH_PER_WAVE / LEVEL2_GROWTH_PENALTY, MAX_TAP_RATION_PER_WAVE);
+        wavePeriod = decrease(wavePeriod, WAVE_LENGHT_DECREASE, MIN_WAVE_LENGTH);
+    }
+    
+    // hardcore level
     if (enemiesToGenerate > 0) {
         waveSpawnSpeedFactor = waveSpawnSpeedFactor * INCREASE_SPAWN_SPEED_FACTOR;
     }
     
-    enemiesPerWave = increase(enemiesPerWave, ENEMIES_GROWTH_PER_WAVE, MAX_ENEMIES_PER_WAVE);
-    swipeTapRatio = increase(swipeTapRatio, SWIPE_TAP_RATIO_GROWTH_PER_WAVE, MAX_TAP_RATION_PER_WAVE);
-    wavePeriod = decrease(wavePeriod, WAVE_LENGHT_DECREASE, MIN_WAVE_LENGTH);
-    
     enemiesToGenerate = (int)round(enemiesPerWave);
-    NSLog(@"Starting wave, spawning %d enemies", enemiesToGenerate);
+    NSLog(@"Starting wave[waveNum: %d, enemies: %d, swipeTapRation: %f, wavePeriod: %f]", waveNumber, enemiesToGenerate, swipeTapRatio, wavePeriod);
     
     enemySpawnTime = WAVE_ENEMY_SPAWN_TIME / waveSpawnSpeedFactor;
     enemySpawnTimeDelta = WAVE_ENEMY_SPAWN_DELTA_TIME / waveSpawnSpeedFactor;
     
     nextWaveTime = wavePeriod;
     nextEnemySpawnTime = 0;
+
+    waveNumber += 1;
 }
 
 - (void)spawnEnemy {
@@ -179,7 +203,7 @@ float frand() {
 - (void)spawnCoin {
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     
-    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), winSize.height * frand() + GROUND_Y)];
+    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
     [self sheduleNewCoinSpawn];
 }
 

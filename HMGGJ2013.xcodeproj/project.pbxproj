@@ -161,7 +161,6 @@
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
 		65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD416B33A4F0012B735 /* AboutViewController.xib */; };
 		6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6527936B16B3E28900E4B82F /* visitor1.ttf */; };
-		6529AED716B4741A00E83114 /* killingspree.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529AED616B4741A00E83114 /* killingspree.png */; };
 		6529AEDF16B47BBB00E83114 /* MainMenuGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6529AEDE16B47BBB00E83114 /* MainMenuGameScene.m */; };
 		6529B0CB16B4892600E83114 /* menu-about-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C216B4892600E83114 /* menu-about-h.png */; };
 		6529B0CC16B4892600E83114 /* menu-about.png in Resources */ = {isa = PBXBuildFile; fileRef = 6529B0C316B4892600E83114 /* menu-about.png */; };
@@ -484,7 +483,6 @@
 		65259BD316B33A4F0012B735 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		65259BD416B33A4F0012B735 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
 		6527936B16B3E28900E4B82F /* visitor1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = visitor1.ttf; path = Resources/visitor1.ttf; sourceTree = "<group>"; };
-		6529AED616B4741A00E83114 /* killingspree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = killingspree.png; sourceTree = "<group>"; };
 		6529AEDD16B47BBB00E83114 /* MainMenuGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuGameScene.h; sourceTree = "<group>"; };
 		6529AEDE16B47BBB00E83114 /* MainMenuGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuGameScene.m; sourceTree = "<group>"; };
 		6529B0C216B4892600E83114 /* menu-about-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-about-h.png"; sourceTree = "<group>"; };
@@ -1076,7 +1074,6 @@
 				6529B0C816B4892600E83114 /* menu-newgame.png */,
 				6529B0C916B4892600E83114 /* menu-topscore-h.png */,
 				6529B0CA16B4892600E83114 /* menu-topscore.png */,
-				6529AED616B4741A00E83114 /* killingspree.png */,
 				659A0A5316B4690B00D3B1A8 /* pause.png */,
 				554AD1EB16B4469900441632 /* progress.png */,
 				554AD1EC16B4469900441632 /* progressBack.png */,
@@ -1191,7 +1188,6 @@
 				554AD1F216B4469A00441632 /* progressBarBack.png in Resources */,
 				554AD1F816B450AB00441632 /* BloodParticleSystem.plist in Resources */,
 				659A0A5416B4690B00D3B1A8 /* pause.png in Resources */,
-				6529AED716B4741A00E83114 /* killingspree.png in Resources */,
 				6529B0CB16B4892600E83114 /* menu-about-h.png in Resources */,
 				6529B0CC16B4892600E83114 /* menu-about.png in Resources */,
 				6529B0CD16B4892600E83114 /* menu-achievements-h.png in Resources */,
