@@ -148,6 +148,7 @@
 		554AD1F216B4469A00441632 /* progressBarBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1EE16B4469A00441632 /* progressBarBack.png */; };
 		554AD1F816B450AB00441632 /* BloodParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 554AD1F716B450AB00441632 /* BloodParticleSystem.plist */; };
 		554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FC16B45D1800441632 /* ScreenShaker.m */; };
+		554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
@@ -453,6 +454,8 @@
 		554AD1F716B450AB00441632 /* BloodParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BloodParticleSystem.plist; sourceTree = "<group>"; };
 		554AD1FB16B45D1800441632 /* ScreenShaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenShaker.h; sourceTree = "<group>"; };
 		554AD1FC16B45D1800441632 /* ScreenShaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenShaker.m; sourceTree = "<group>"; };
+		554AD1FE16B462C900441632 /* SlimeBubbleSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlimeBubbleSprite.h; sourceTree = "<group>"; };
+		554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlimeBubbleSprite.m; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -948,6 +951,8 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				554AD1FE16B462C900441632 /* SlimeBubbleSprite.h */,
+				554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */,
 				554AD1E816B43AF600441632 /* EnemyBodyDebris.h */,
 				554AD1E916B43AF600441632 /* EnemyBodyDebris.m */,
 				554AD1E516B42AE600441632 /* MonsterSprite.h */,
@@ -1284,6 +1289,7 @@
 				554AD1EA16B43AF700441632 /* EnemyBodyDebris.m in Sources */,
 				E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */,
 				554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */,
+				554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

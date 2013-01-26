@@ -30,7 +30,7 @@
 
 - (id)init:(EnemyType)enemyType velocity:(CGPoint)initVelocity spaceBounds:(CGRect)initSpaceBounds {
 
-    //if (enemyType == kEnemyTypeTap) {
+    if (enemyType == kEnemyTypeTap) {
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];        
 
@@ -42,7 +42,19 @@
         [spriteFrameCache spriteFrameByName:@"BigExplosion5.png"],
         ];
         self = [self initWithSpriteFrame:spriteFrames[rand() % [spriteFrames count]]];
-    //}
+    }
+    else {
+
+        CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
+
+        NSArray *spriteFrames = @[
+        [spriteFrameCache spriteFrameByName:@"tallExplode1.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode2.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode3.png"],
+        [spriteFrameCache spriteFrameByName:@"tallExplode4.png"],
+        ];
+        self = [self initWithSpriteFrame:spriteFrames[rand() % [spriteFrames count]]];
+    }
 
     if (self) {
 
