@@ -20,7 +20,7 @@
 #define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
 
-#define BOMB_KILL_PERIMETER 60
+#define BOMB_KILL_PERIMETER 80
 
 #define TAP_MIN_DISTANCE2 (60*60)
 
@@ -127,11 +127,6 @@
     [mainSpriteBatch addChild:bombSpawner];
 
     [self scheduleUpdate];
-
-    /*
-    CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
-    test.position = ccp(100, 100);
-    [particleBatchNode addChild:test];*/
     
     [self scheduleNewEnemySpawn];
     
@@ -194,6 +189,12 @@
             [killedSwipeEnemies addObject:enemy];
         }
     }
+
+
+    CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
+    explosionParticleSystem.autoRemoveOnFinish = YES;
+    explosionParticleSystem.position = pos;
+    [particleBatchNode addChild:explosionParticleSystem];
 }
 
 #pragma mark - CoinSpriteDelegate

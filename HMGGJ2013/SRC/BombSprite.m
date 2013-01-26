@@ -8,8 +8,8 @@
 
 #import "BombSprite.h"
 
-#define START_BLINKING_TIME 3.0f
-#define LIFE_TIME 4.0f
+#define START_BLINKING_TIME 2.0f
+#define LIFE_TIME 3.0f
 #define FRICTION 0.99f
 #define GRAVITY -1000.0f
 #define BLINKING_SPEED 0.12f
