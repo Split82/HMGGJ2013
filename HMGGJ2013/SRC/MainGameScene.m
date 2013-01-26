@@ -80,6 +80,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
+    CCSprite *slimeTop;
     MonsterSprite *monsterSprite;
     
     MasterControlProgram *masterControlProgram;
@@ -189,6 +190,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
     [mainSpriteBatch addChild:slimeSprite];
+
+    slimeTop = [[CCSprite alloc] initWithSpriteFrameName:@"tankWaterLevel.png"];
+    slimeTop.scale = [UIScreen mainScreen].scale * 2;    
+    slimeTop.anchorPoint = ccp(0.5, 0);
+    slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));
+    slimeTop.zOrder = 11;
+    [mainSpriteBatch addChild:slimeTop];
 
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
@@ -818,8 +826,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [[AppDelegate player] calc:deltaTime];
 
+    // Slime
     [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
     [slimeSprite calc:deltaTime];
+
+    slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));    
 
     [monsterSprite calc:deltaTime];
 
