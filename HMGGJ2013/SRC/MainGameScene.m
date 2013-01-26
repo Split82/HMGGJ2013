@@ -22,6 +22,8 @@
 
 #define BOMB_KILL_PERIMETER 80
 
+#define TAP_MIN_DISTANCE2 (60*60)
+
 @interface MainGameScene() {
 
     float calcTime;
@@ -127,6 +129,8 @@
     [self scheduleUpdate];
     
     [self scheduleNewEnemySpawn];
+    
+    [[AudioManager sharedManager] startBackgroundTrack];
 }
 
 #pragma mark - Objects
@@ -290,7 +294,7 @@
         }
     }
     
-    if (nearestEnemy && nearestDistance < 40*40) {
+    if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [nearestEnemy throwFromWall];
     }
