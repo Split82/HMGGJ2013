@@ -10,18 +10,24 @@
 
 @implementation SpriteTextureFrameInfo
 
-@synthesize frameName, offset;
+@synthesize frame, offset;
 
 - (id) initWithFrameName:(NSString*)_frameName offset:(CGPoint)_offset {
     
     if ([super init]) {
         
-        self.frameName = frameName;
+        self.frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_frameName];
         self.offset = _offset;
     }
     
     return self;
 }
+
++ (id) createWithFrameName:(NSString*)_frameName offset:(CGPoint)_offset {
+    
+    return [[SpriteTextureFrameInfo alloc] initWithFrameName:_frameName offset:_offset];
+}
+
 
 
 @end
