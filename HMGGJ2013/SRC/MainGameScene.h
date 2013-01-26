@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Hyperbolic Magnetism. All rights reserved.
 //
 
-@interface MainGameScene : CCScene
+#import "EnemySprite.h"
+
+@interface MainGameScene : CCScene<EnemySpriteDelegate>
 
 @end
