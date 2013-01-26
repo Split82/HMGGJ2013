@@ -12,9 +12,11 @@
 
 @interface PlayerModel : NSObject
 
+@property (nonatomic, assign) NSInteger points;
 @property (nonatomic, assign) NSInteger kills;
 @property (nonatomic, assign) NSInteger coins;
 @property (nonatomic, assign) NSInteger health;
+@property (nonatomic, assign) float rage;
 - (void) newGame;
 
 @property (nonatomic, strong, readonly) NSArray *scores;

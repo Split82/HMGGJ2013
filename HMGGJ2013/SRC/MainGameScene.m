@@ -64,6 +64,8 @@
     
     UILabel *gameOverLabel;
     UIButton *restartButton;
+    
+    UIView *rageView;
 }
 
 @end
@@ -143,7 +145,7 @@
     
     [self scheduleNewEnemySpawn];
     
-    [[AudioManager sharedManager] startBackgroundTrack];
+    //[[AudioManager sharedManager] startBackgroundTrack];
     
     [self initUI];
 }
@@ -181,16 +183,22 @@
     [healthLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:healthLabel];
     
+    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 0.0, 5.0)];
+    [rageView setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5]];
+    [[CCDirector sharedDirector].view addSubview:rageView];
+    
     [self updateUI];
 }
 
 - (void) updateUI {
-    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
+    [killsLabel setText:[NSString stringWithFormat:@"points %i", [AppDelegate player].points]];
     [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
     
     CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
     coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
+    
+    [rageView setFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 320 * [AppDelegate player].rage, 5.0)];
 }
 
 #pragma mark - Objects
@@ -243,11 +251,13 @@
 }
 
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
-
+    NSInteger kills = 0;
+    
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedTapEnemies addObject:enemy];
             [self kill:enemy];
+            kills++;
         }
     }
 
@@ -255,8 +265,11 @@
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedSwipeEnemies addObject:enemy];
             [self kill:enemy];
+            kills++;
         }
     }
+    [AppDelegate player].points += kills;
+    [self updateUI];
 
     CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
@@ -460,6 +473,17 @@
     if (enemySpawnTime < 0) {
         
         [self addEnemy];
+    }
+    
+    if ([AppDelegate player].rage >= 1) {
+        [self addBombAtPosX:25.0];
+        [self addBombAtPosX:85.0];
+        [self addBombAtPosX:155.0];
+        [self addBombAtPosX:225.0];
+        [self addBombAtPosX:295.0];
+        [[AppDelegate player] updateDropBombCount:5];
+        [self updateUI];
+        [AppDelegate player].rage = 0;
     }
 }
 
