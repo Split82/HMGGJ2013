@@ -47,8 +47,7 @@
     
     if (self) {
         // player defaults
-        _kills = 0;
-        _coins = 10;
+        [self newGame];
         
         // achievements & score
         _writeLock = [[NSLock alloc] init];
@@ -117,6 +116,19 @@
 {
     _coins = coins;
     [self updateCoinsCount:coins];
+}
+
+- (void) setHealth:(NSInteger)health
+{
+    if (health < 0) health = 0;
+    _health = health;
+}
+
+- (void) newGame
+{
+    _kills = 0;
+    _coins = 10;
+    _health = 100;
 }
 
 #pragma mark Score

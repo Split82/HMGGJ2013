@@ -20,6 +20,7 @@
 
 #define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
+#define ENEMY_ATTACK_FORCE 5
 
 #define BOMB_COINS_COST 2
 #define BOMB_KILL_PERIMETER 85
@@ -50,12 +51,18 @@
 
     // State vars
     BOOL sceneInitWasPerformed;
+    BOOL gameOver;
     
+    // UI vars
     float enemySpawnTime;
     
     UILabel *killsLabel;
     CCSprite *coinsSprite;
     UILabel *coinsLabel;
+    UILabel *healthLabel;
+    
+    UILabel *gameOverLabel;
+    UIButton *restartButton;
 }
 
 @end
@@ -144,7 +151,7 @@
 - (void) initUI {
     CGFloat labelWidth = (320.0 - 10.0) / 2;
     killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 5.0,labelWidth, 21.0)];
-    [killsLabel setTextAlignment:UITextAlignmentLeft];
+    [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:killsLabel];
@@ -157,9 +164,16 @@
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(25.0 + labelWidth, 5.0, labelWidth, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
-    [coinsLabel setTextAlignment:UITextAlignmentLeft];
+    [coinsLabel setTextAlignment:NSTextAlignmentLeft];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:coinsLabel];
+    
+    healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
+    [healthLabel setTextColor:[UIColor redColor]];
+    [healthLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    [healthLabel setTextAlignment:NSTextAlignmentCenter];
+    [healthLabel setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:healthLabel];
     
     [self updateUI];
 }
@@ -167,6 +181,7 @@
 - (void) updateUI {
     [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
     [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
 }
 
 #pragma mark - Objects
@@ -181,7 +196,8 @@
 }
 
 - (void)addEnemy {
-
+    if (gameOver)
+        return;
     EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
 
     if (enemy.type == kEnemyTypeSwipe) {
@@ -266,6 +282,12 @@
 
         [killedSwipeEnemies addObject:enemy];
     }
+    [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
+    
+    if ([AppDelegate player].health == 0) {
+        [self gameOver];
+    }
+    [self updateUI];
 }
 
 #pragma mark - BombSpawnerDelegate
@@ -477,6 +499,44 @@
         [AppDelegate player].coins -= BOMB_COINS_COST;
         [self updateUI];
     }
+}
+
+- (void) gameOver
+{
+    if (gameOver)
+        return;
+    gameOver = YES;
+    CGSize screen = [CCDirector sharedDirector].winSize;
+    gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
+    [gameOverLabel setTextColor:[UIColor whiteColor]];
+    [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
+    [gameOverLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    [gameOverLabel setText:@"Game Over, Loser!"];
+    [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+    [[CCDirector sharedDirector].view addSubview:gameOverLabel];
+    
+    restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
+    [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartButton addTarget:self action:@selector(restart) forControlEvents:UIControlEventTouchUpInside];
+    [[CCDirector sharedDirector].view addSubview:restartButton];
+}
+
+- (void) restart
+{
+    [gameOverLabel removeFromSuperview];
+    gameOverLabel = nil;
+    [restartButton removeFromSuperview];
+    restartButton = nil;
+    
+    [killedBombs addObjectsFromArray:bombs];
+    [killedCoins addObjectsFromArray:coins];
+    [killedTapEnemies addObjectsFromArray:tapEnemies];
+    [killedSwipeEnemies addObjectsFromArray:swipeEnemies];
+    
+    [[AppDelegate player] newGame];
+    [self updateUI];
+    gameOver = NO;
 }
 
 @end
