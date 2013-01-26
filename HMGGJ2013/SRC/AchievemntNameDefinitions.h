@@ -10,8 +10,8 @@ NSString * const kTopScoreName;
 
 NSString * const kAchievemntFirstAchivementName; // start the game $
 NSString * const kAchievemntFirstKillName; // first kill $
-NSString * const kAchievemntTapDencerName; // tap 10 imps in a row
-NSString * const kAchievemntFruitNinjaName; // swipe 10 ninja imps in a row
+NSString * const kAchievemntTapDencerName; // tap 10 imps in a row $
+NSString * const kAchievemntFruitNinjaName; // swipe 10 ninja imps in a row $
 NSString * const kAchievemntCarpetBomberName; // drop 30 bombs in 10 seconds $
 NSString * const kAchievemntKill100Name; // kill 100 imps $
 NSString * const kAchievemntKill1000Name; // kill 1.000 imps $
@@ -25,10 +25,10 @@ NSString * const kAchievemntDrop10000Name; // Tu-95 - drop 10.000 bombs $
 NSString * const kAchievemntDrop100000Name; // B-52 - drop 100.000 bombs $
 NSString * const kAchievemntDrop1000000Name; // B-2 - drop 1.000.000 bombs $
 NSString * const kAchievemntBloodBathName; // kill 20 imps with one bomb $
-NSString * const kAchievemntBloodyMaryName; // fill the floor with blood
+NSString * const kAchievemntBloodyMaryName; // fill the floor with blood $
 NSString * const kAchievemntDalaiLamaName; // don't kill any imp in one minute $
-NSString * const kAchievemntChristmassName; // play the game on Christmass
-NSString * const kAchievemntPartyBoyName; // play the game on new years
+NSString * const kAchievemntChristmassName; // play the game on Christmass $
+NSString * const kAchievemntPartyBoyName; // play the game on new years $
 NSString * const kAchievemntCollect100Name; // collect 100 coins
 NSString * const kAchievemntCollect1000Name; // collect 1.000 coins
 NSString * const kAchievemntCollect10000Name; // collect 10.000 coins

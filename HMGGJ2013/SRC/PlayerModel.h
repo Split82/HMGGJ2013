@@ -20,6 +20,10 @@
 - (void) resetAchievements;
 
 - (void) gameStarted;
+- (void) filledFloorWithBlood;
+- (void) enemyTaps:(NSInteger)taps;
+- (void) enemySwipes:(NSInteger)enemySwipes;
+
 - (void) updateKillCount:(NSInteger)kills;
 - (void) updateDropBombCount:(NSInteger)bombs;
 - (void) updateCoinsCount:(NSInteger)coins;
