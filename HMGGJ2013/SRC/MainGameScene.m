@@ -10,6 +10,7 @@
 #import "GameDataNameDefinitions.h"
 #import "EnemySprite.h"
 #import "AudioManager.h"
+#import "AppDelegate.h"
 
 #define TOP_HEIGHT 80
 
@@ -20,7 +21,8 @@
 #define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
 
-#define BOMB_KILL_PERIMETER 80
+#define BOMB_COINS_COST 2
+#define BOMB_KILL_PERIMETER 85
 
 #define TAP_MIN_DISTANCE2 (60*60)
 
@@ -50,6 +52,9 @@
     BOOL sceneInitWasPerformed;
     
     float enemySpawnTime;
+    
+    UILabel *killsLabel;
+    UILabel *coinsLabel;
 }
 
 @end
@@ -131,6 +136,25 @@
     [self scheduleNewEnemySpawn];
     
     [[AudioManager sharedManager] startBackgroundTrack];
+    
+    [self initUI];
+}
+
+- (void) initUI {
+    CGFloat labelWidth = (320.0 - 10.0) / 2;
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 5.0,labelWidth, 21.0)];
+    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
+    [killsLabel setTextAlignment:UITextAlignmentLeft];
+    [killsLabel setTextColor:[UIColor whiteColor]];
+    [killsLabel setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:killsLabel];
+    
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0 + labelWidth, 5.0, labelWidth, 21.0)];
+    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    [coinsLabel setTextColor:[UIColor whiteColor]];
+    [coinsLabel setTextAlignment:UITextAlignmentRight];
+    [coinsLabel setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:coinsLabel];
 }
 
 #pragma mark - Objects
@@ -186,17 +210,16 @@
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedTapEnemies addObject:enemy];
-            [self addCoinAtPos:enemy.position];
+            [self kill:enemy];
         }
     }
 
     for (EnemySprite *enemy in swipeEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedSwipeEnemies addObject:enemy];
-            [self addCoinAtPos:enemy.position];
+            [self kill:enemy];
         }
     }
-
 
     CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
@@ -245,7 +268,7 @@
 - (void)longPressStarted:(CGPoint)pos {
 
     NSLog(@"LongPress start");
-    [bombSpawner startSpawningAtPos:pos];
+    [self dropBombAtPos:pos];
 }
 
 - (void)longPressEnded {
@@ -256,22 +279,22 @@
 
 - (void)swipeStarted:(CGPoint)pos {
 
-        NSLog(@"Swipe start");
+    NSLog(@"Swipe start");
 }
 
 - (void)swipeMoved:(CGPoint)pos {
 
-        NSLog(@"Swipe moved");    
+    NSLog(@"Swipe moved");    
 }
 
 - (void)swipeCancelled {
 
-            NSLog(@"Swipe cancelled"); 
+    NSLog(@"Swipe cancelled"); 
 }
 
 - (void)swipeEnded:(CGPoint)pos {
 
-        NSLog(@"Swipe ended");     
+    NSLog(@"Swipe ended");     
 }
 
 - (void)tapRecognized:(CGPoint)pos {
@@ -302,12 +325,12 @@
     }
     
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
-        
         [coins removeObject:nearestCoin];
 
         CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:CGPointMake(315, 470)], [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
         
         [nearestCoin runAction:action];
+        [self addCoin];
         return;
     }
     
@@ -415,6 +438,32 @@
 
         [self calc:FRAME_TIME_INTERVAL];
         calcTime -= FRAME_TIME_INTERVAL;
+    }
+}
+
+#pragma mark -
+
+- (void) kill:(EnemySprite *)enemy
+{
+    [AppDelegate player].kills++;
+    [killsLabel setText:[NSString stringWithFormat:@"kills: %i", [AppDelegate player].kills]];
+    [self addCoinAtPos:enemy.position];
+}
+
+- (void) addCoin
+{
+    [AppDelegate player].coins++;
+    [coinsLabel setText:[NSString stringWithFormat:@"coins: %i", [AppDelegate player].coins]];
+}
+
+- (void) dropBombAtPos:(CGPoint)pos
+{
+    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
+        [bombSpawner startSpawningAtPos:pos];
+        [[AppDelegate player] updateDropBombCount:1];
+        
+        [AppDelegate player].coins -= BOMB_COINS_COST;
+        [coinsLabel setText:[NSString stringWithFormat:@"coins: %i", [AppDelegate player].coins]];
     }
 }
 

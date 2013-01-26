@@ -46,10 +46,12 @@
     self = [super init];
     
     if (self) {
-        _writeLock = [[NSLock alloc] init];
+        // player defaults
+        _kills = 0;
+        _coins = 10;
         
-        //[[NSFileManager defaultManager] createFileAtPath:[self _scoreFilePath] contents:nil attributes:nil];
-        //[[NSFileManager defaultManager] createFileAtPath:[self _achievementsFilePath] contents:nil attributes:nil];
+        // achievements & score
+        _writeLock = [[NSLock alloc] init];
         
         id unarchivedData = nil;
         unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:[self _scoreFilePath]];
@@ -101,6 +103,20 @@
     
     [_lastKillTime invalidate];
     _lastKillTime = nil;
+}
+
+#pragma mark -
+
+- (void) setKills:(NSInteger)kills
+{
+    _kills = kills;
+    [self updateKillCount:kills];
+}
+
+- (void) setCoins:(NSInteger)coins
+{
+    _coins = coins;
+    [self updateCoinsCount:coins];
 }
 
 #pragma mark Score

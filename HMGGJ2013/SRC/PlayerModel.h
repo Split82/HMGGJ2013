@@ -12,6 +12,9 @@
 
 @interface PlayerModel : NSObject
 
+@property (nonatomic, assign) NSInteger kills;
+@property (nonatomic, assign) NSInteger coins;
+
 @property (nonatomic, strong, readonly) NSArray *scores;
 - (void) storeScore:(NSUInteger)value;
 
