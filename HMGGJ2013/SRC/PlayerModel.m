@@ -10,6 +10,7 @@
 
 
 #define kPlayerFirstKill            @"kPlayerFirstKill"
+#define kPlayerBloodBath            @"kPlayerBloodBath"
 #define kPlayerGlobalKillCount      @"kPlayerGlobalKillCount"
 #define kPlayerGlobalBombDropCount  @"kPlayerGlobalBombDropCount"
 #define kPlayerGlobalCoinsCount     @"kPlayerGlobalCoinsCount"
@@ -19,13 +20,18 @@
 
 @property (nonatomic, strong) NSLock *writeLock;
 
+@property (nonatomic, assign) NSInteger firstBombCounter;
+@property (nonatomic, assign) NSTimeInterval firstBombTime;
+
+@property (nonatomic, strong) NSTimer *lastKillTime;
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation PlayerModel
 {
     NSMutableArray *_scores;
     NSMutableDictionary *_achievements;
-    NSTimer *_timer;
 }
 
 @synthesize scores = _scores;
@@ -56,14 +62,20 @@
             _achievements = [NSMutableDictionary dictionary];
         }
         _timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(synchronize) userInfo:nil repeats:YES];
+        
+        _firstBombTime = 0;
+        _firstBombCounter = 0;
     }
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [_timer invalidate];
     _timer = nil;
+    
+    [_lastKillTime invalidate];
+    _lastKillTime = nil;
 }
 
 #pragma mark Score
@@ -92,7 +104,7 @@
     [self _saveAchievements];
 }
 
-- (void) resetAchivements
+- (void) resetAchievements
 {
     [GKAchievement resetAchievementsWithCompletionHandler:^(NSError *error) {
         if (!error) {
@@ -104,28 +116,53 @@
     }];
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
     [df setBool:NO forKey:kPlayerFirstKill];
+    [df setBool:NO forKey:kPlayerBloodBath];
     [df setInteger:0 forKey:kPlayerGlobalKillCount];
     [df setInteger:0 forKey:kPlayerGlobalBombDropCount];
     [df setInteger:0 forKey:kPlayerGlobalCoinsCount];
     [df synchronize];
+    
+    [_lastKillTime invalidate];
+    _lastKillTime = nil;
+    
+    _firstBombTime = 0;
+    _firstBombCounter = 0;
+}
+
+- (void) gameStarted
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntFirstAchivementName];
+    [achivement setPercentComplete:1];
+    [_achievements setObject:achivement forKey:kAchievemntFirstAchivementName];
 }
 
 - (void) updateKillCount:(NSInteger)kills
 {
     NSInteger allKills = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalKillCount];
     allKills += kills;
+    [_lastKillTime invalidate];
+    _lastKillTime = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(_dalaiLamaAchievements) userInfo:nil repeats:NO];
     
     if (allKills > 0 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerFirstKill]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerFirstKill];
-        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntKill100Name];
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntFirstKillName];
         [achivement setPercentComplete:1];
-        [_achievements setObject:achivement forKey:kAchievemntKill100Name];
+        [_achievements setObject:achivement forKey:kAchievemntFirstKillName];
+    }
+    if (kills >= 20 && ![[NSUserDefaults standardUserDefaults] boolForKey:kPlayerBloodBath]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPlayerBloodBath];
+        GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntBloodBathName];
+        [achivement setPercentComplete:1];
+        [_achievements setObject:achivement forKey:kAchievemntBloodBathName];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:allKills forKey:kPlayerGlobalKillCount];
-    
-    if ([_achievements count]) {
-        [self _submitAchievements];
-    }
+}
+
+- (void) _dalaiLamaAchievements
+{
+    GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntDalaiLamaName];
+    [achivement setPercentComplete:1];
+    [_achievements setObject:achivement forKey:kAchievemntDalaiLamaName];
 }
 
 - (void) updateDropBombCount:(NSInteger)bombs
@@ -133,6 +170,21 @@
     NSInteger allBombs = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerGlobalBombDropCount];
     allBombs += bombs;
     [[NSUserDefaults standardUserDefaults] setInteger:allBombs forKey:kPlayerGlobalBombDropCount];
+
+    if (_firstBombTime == 0)
+        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    if (_firstBombTime + 10 <= [NSDate timeIntervalSinceReferenceDate]) {
+        if (_firstBombCounter + bombs >= 30) {
+            GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntCarpetBomberName];
+            [achivement setPercentComplete:1];
+            [_achievements setObject:achivement forKey:kAchievemntCarpetBomberName];
+        }
+    } else {
+        _firstBombCounter = 0;
+        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+    }
+    _firstBombCounter += bombs;
 }
 
 - (void) updateCoinsCount:(NSInteger)coins
@@ -165,6 +217,7 @@
     for (NSString *key in keys) {
         achivement = [[GKAchievement alloc] initWithIdentifier:key];
         [achivement setPercentComplete:allBombs >= count ? 1 : allBombs / count];
+        [achivement setShowsCompletionBanner:YES];
         [_achievements setObject:achivement forKey:key];
         count *= 10;
     }

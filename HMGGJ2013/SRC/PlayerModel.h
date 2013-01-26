@@ -17,8 +17,9 @@
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *achievements;
 - (void) addAchievement:(GKAchievement *)achievement;
-- (void) resetAchivements;
+- (void) resetAchievements;
 
+- (void) gameStarted;
 - (void) updateKillCount:(NSInteger)kills;
 - (void) updateDropBombCount:(NSInteger)bombs;
 - (void) updateCoinsCount:(NSInteger)coins;
