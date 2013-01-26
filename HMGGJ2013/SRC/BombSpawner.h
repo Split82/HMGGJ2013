@@ -8,8 +8,21 @@
 
 #import "CCSprite.h"
 
+@protocol BombSpawnerDelegate;
+
+
 @interface BombSpawner : CCSprite
 
-- (id)initWithPos:(CGPoint)pos;
+- (id)init;
+- (void)startSpawning;
+- (void)endSpawning;
+- (void)calc:(ccTime)deltaTime;
+
+@end
+
+
+@protocol BombSpawnerDelegate <NSObject>
+
+- (void)bombSpawnerWantsBombToSpawn:(BombSpawner*)bombSpawner;
 
 @end

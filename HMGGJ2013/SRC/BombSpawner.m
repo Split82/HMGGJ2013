@@ -10,15 +10,27 @@
 
 @implementation BombSpawner
 
-- (id)initWithPos:(CGPoint)pos {
+- (id)init {
 
     self = [self initWithSpriteFrameName:@"coin1.png"];
     if (self) {
         self.anchorPoint = ccp(0.5, 0.5);
-        self.position = pos;
         self.scale = [UIScreen mainScreen].scale * 2;
+        self.visible = NO;
     }
     return self;
+}
+
+- (void)startSpawning {
+
+}
+
+- (void)endSpawning {
+    
+}
+
+- (void)calc:(ccTime)deltaTime {
+    
 }
 
 @end
