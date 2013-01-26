@@ -17,5 +17,6 @@
 - (IBAction)startGameButtonPressed:(id)sender;
 - (IBAction)showLeaderboardButtonPressed:(id)sender;
 - (IBAction)showAchievementsButtonPressed:(id)sender;
+- (IBAction)showAboutButtonPressed:(id)sender;
 
 @end

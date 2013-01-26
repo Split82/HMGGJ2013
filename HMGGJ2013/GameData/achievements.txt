@@ -1,0 +1,53 @@
+[Achievements]
+
+ * First achievemnt - start the game
+
+ * He's dead Jim - first kill
+ 
+ * Tap dancer - tap 10 imps in a row
+ 
+ * Fruit ninja - swipe 10 ninja imps in a row
+ 
+ * Carpet bomber - drop 30 bombs in 10 seconds
+ 
+ * Killer - kill 100 imps
+ 
+ * Mega Killer - kill 1.000 imps
+ 
+ * Giga Brutal Killer - kill 10.000 imps
+ 
+ * Legendary Killer - kill 100.000 imps
+ 
+ * Anubis - kill 1.000.000 imps
+ 
+ * One in a tousand - you are the chosen one
+ 
+ * MQ-1 Predator - drop 100 bombs
+ 
+ * F/A-18 Hornet - drop 1.000 bombs
+ 
+ * Tu-95 - drop 10.000 bombs
+ 
+ * B-52 - drop 100.000 bombs
+ 
+ * B-2 - drop 1.000.000 bombs
+ 
+ * Blood bath - kill 20 imps with one bomb
+ 
+ * Bloody mary - fill the floor with blood
+ 
+ * Dalai Lama - don't kill any imp in one minute
+ 
+ * Christmass - play the game on Christmass
+ 
+ * First paycheck - collect 100 coins
+ 
+ * Hard worker - collect 1.000 coins
+ 
+ * You can buy a car - collect 10.000 coins
+ 
+ * Lottery ticker winner - collect 100.000 coins
+ 
+ * Millionair - collect 1.000.000 coins
+ 
+ * Close call - save the game in last second
