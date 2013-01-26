@@ -13,9 +13,12 @@
 
 @interface BombSpawner : CCSprite
 
+@property (nonatomic, readonly) CGPoint pos;
+@property (nonatomic, weak) id <BombSpawnerDelegate> delegate;
+
 - (id)init;
-- (void)startSpawning;
-- (void)endSpawning;
+- (void)startSpawningAtPos:(CGPoint)pos;
+- (void)cancelSpawning;
 - (void)calc:(ccTime)deltaTime;
 
 @end
