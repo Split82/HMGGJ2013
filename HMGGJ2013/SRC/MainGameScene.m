@@ -16,6 +16,8 @@
 #import "MasterControlProgram.h"
 
 
+#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
+
 #define TOP_HEIGHT 80
 
 #define MAX_DELTA_TIME 0.1f
@@ -61,11 +63,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
     NSMutableArray *bombs;
+    NSMutableArray *enemyBodyDebrises;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
+    NSMutableArray *killedEnemyBodyDebrises;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -81,7 +85,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     // UI vars
     NSString *fontName;
+    
+    CCSprite *killSprite;
     UILabel *killsLabel;
+    
     CCSprite *coinsSprite;
     UILabel *coinsLabel;
     UILabel *healthLabel;
@@ -90,6 +97,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UIButton *restartButton;
     
     UIView *rageView;
+    UIImageView *rageBackgroundView;
 }
 
 @end
@@ -120,11 +128,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
     bombs = [[NSMutableArray alloc] initWithCapacity:10];
+    enemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
+    killedEnemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -189,7 +199,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UIFont *font = [UIFont fontWithName:fontName size:20];
     
     CGFloat labelWidth = (320.0 - 10.0) / 2;
-    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 7.0, labelWidth, 21.0)];
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
+    killSprite.anchorPoint = ccp(0, 0);
+    killSprite.scale = [UIScreen mainScreen].scale * 2;
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 5);
+    [mainSpriteBatch addChild:killSprite];
+    
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 7.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
@@ -199,11 +216,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width,
-                               [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
     [mainSpriteBatch addChild:coinsSprite];
     
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth, 7.0, labelWidth, 21.0)];
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 7.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
     [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
@@ -215,24 +231,41 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
     [healthLabel setTextAlignment:NSTextAlignmentCenter];
     [healthLabel setBackgroundColor:[UIColor clearColor]];
-    [[CCDirector sharedDirector].view addSubview:healthLabel];
+    //[[CCDirector sharedDirector].view addSubview:healthLabel];
     
-    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 0.0, 5.0)];
-    [rageView setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5]];
+    UIImage *image;
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    image = [UIImage imageNamed:@"progressBarBack"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offset, 288.0, 24.0)];
+    [rageBackgroundView setImage:image];
+    [rageBackgroundView.layer setMagnificationFilter:kCAFilterNearest];
+    [[CCDirector sharedDirector].view addSubview:rageBackgroundView];
+    
+    image = [UIImage imageNamed:@"progressBar"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 272.0, 8.0)];
+    [imageView setImage:image];
+    [imageView.layer setMagnificationFilter:kCAFilterNearest];
+    rageView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 0.0, 8.0)];
+    [rageView setClipsToBounds:YES];
+    [rageView addSubview:imageView];
     [[CCDirector sharedDirector].view addSubview:rageView];
     
     [self updateUI];
 }
 
 - (void) updateUI {
-    [killsLabel setText:[NSString stringWithFormat:@"points %i", [AppDelegate player].points]];
-    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    [killsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].points]];
+    [coinsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
-    
-    CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
-    coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
-    
-    [rageView setFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 320 * [AppDelegate player].rage, 5.0)];
+
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - 22.0, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
@@ -246,10 +279,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainSpriteBatch addChild:newCoin];
 }
 
-- (void)addEnemy {
+- (void)addEnemy:(EnemyType)type {
     if (gameOver)
         return;
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:type];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
@@ -279,21 +312,48 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coin removeFromParentAndCleanup:YES];
 }
 
+- (void)createEnemyBodyExplosionAtPos:(CGPoint)pos velocity:(CGPoint)velocity enemyType:(EnemyType)enemyType {
+
+    int numberOfBodyPars = rand() % 3 + 3;
+
+    for (int i = 0; i < numberOfBodyPars; i++) {
+
+        CGPoint randVelocity = velocity;
+        randVelocity.x += rand() / (float)RAND_MAX;
+        randVelocity.y += rand() / (float)RAND_MAX;
+        EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:enemyType velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+        enemyBodyDebris.position = pos;
+        enemyBodyDebris.delegate = self;
+        [enemyBodyDebrises addObject:enemyBodyDebris];
+        [mainSpriteBatch addChild:enemyBodyDebris];
+    }
+}
+
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
+    
     NSInteger kills = 0;
     
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+
             [killedTapEnemies addObject:enemy];
-            [self kill:enemy];
+
+            CGPoint velocity = ccpSub(enemy.position, pos);
+            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self enemyDidDie:enemy];
+
             kills++;
         }
     }
 
     for (EnemySprite *enemy in swipeEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
+
             [killedSwipeEnemies addObject:enemy];
-            [self kill:enemy];
+
+            CGPoint velocity = ccpSub(enemy.position, pos);
+            [self createEnemyBodyExplosionAtPos:enemy.position velocity:velocity enemyType:enemy.type];
+            [self enemyDidDie:enemy];
             kills++;
         }
     }
@@ -336,7 +396,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
     
     if ([AppDelegate player].health == 0) {
-        [self gameOver];
+        [self showGameOver];
     }
     [self updateUI];
 }
@@ -351,6 +411,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     [AppDelegate player].coins -= BOMB_COINS_COST;
     [self updateUI];
+}
+
+#pragma mark - EnemyBodyDebrisDelegate
+
+- (void)enemyBodyDebrisDidDie:(EnemyBodyDebris *)enemyBodyDebris {
+
+    [killedEnemyBodyDebrises addObject:enemyBodyDebris];
 }
 
 #pragma mark - MainframeDelegate
@@ -443,7 +510,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                                                         [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
         
         [nearestCoin runAction:action];
-        [self addCoin];
+        [self coinWasAdded];
         return;
     }
     
@@ -475,20 +542,20 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 #pragma mark -
 
-- (void) kill:(EnemySprite *)enemy
+- (void) enemyDidDie:(EnemySprite *)enemy
 {
     [AppDelegate player].kills++;
     [self addCoinAtPos:enemy.position];
     [self updateUI];
 }
 
-- (void) addCoin
+- (void) coinWasAdded
 {
     [AppDelegate player].coins++;
     [self updateUI];
 }
 
-- (void) gameOver
+- (void) showGameOver
 {
     if (gameOver) {
         return;
@@ -512,7 +579,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[CCDirector sharedDirector].view addSubview:restartButton];
 }
 
-- (void) restart
+- (void) restartGame
 {
     [gameOverLabel removeFromSuperview];
     gameOverLabel = nil;
@@ -556,6 +623,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [enemy calc:deltaTime];
     }
 
+    for (EnemyBodyDebris *enemyBodyDebris in enemyBodyDebrises) {
+        [enemyBodyDebris calc:deltaTime];
+    }
+
     // Killed
     for (CoinSprite *coin in killedCoins) {
         [coins removeObject:coin];
@@ -581,6 +652,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [killedEnemy removeFromParentAndCleanup:YES];
     }
     [killedSwipeEnemies removeAllObjects];
+
+    for (EnemyBodyDebris *enemyBodyDebris in killedEnemyBodyDebrises) {
+
+        [enemyBodyDebrises removeObject:enemyBodyDebris];
+        [enemyBodyDebris removeFromParentAndCleanup:YES];
+    }
+    [killedEnemyBodyDebrises removeAllObjects];
 
     [masterControlProgram calc:deltaTime];
     
