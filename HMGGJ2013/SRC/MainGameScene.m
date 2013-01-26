@@ -181,12 +181,14 @@
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedTapEnemies addObject:enemy];
+            [self addCoinAtPos:enemy.position];
         }
     }
 
     for (EnemySprite *enemy in swipeEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedSwipeEnemies addObject:enemy];
+            [self addCoinAtPos:enemy.position];
         }
     }
 
