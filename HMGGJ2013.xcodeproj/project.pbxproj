@@ -1161,6 +1161,7 @@
 				554AD1F116B4469A00441632 /* progressBar.png in Resources */,
 				554AD1F216B4469A00441632 /* progressBarBack.png in Resources */,
 				554AD1F816B450AB00441632 /* BloodParticleSystem.plist in Resources */,
+				659A0A5416B4690B00D3B1A8 /* pause.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
