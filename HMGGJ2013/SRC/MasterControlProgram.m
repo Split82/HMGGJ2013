@@ -10,4 +10,8 @@
 
 @implementation MasterControlProgram
 
+- (void)calc {
+    
+}
+
 @end
