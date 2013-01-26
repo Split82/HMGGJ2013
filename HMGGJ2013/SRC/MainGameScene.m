@@ -803,6 +803,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (rand() % 100 == 0) {
         [self addBubble:ccp(slimeSprite.boundingBox.origin.x + (slimeSprite.boundingBox.size.width - 40) * rand() / RAND_MAX + 20, GROUND_Y + 5 + rand() % 7)];
     }
+    [self updateUI];
 }
 
 - (void)update:(ccTime)deltaTime {
