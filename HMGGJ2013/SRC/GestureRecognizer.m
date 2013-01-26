@@ -10,7 +10,7 @@
 
 #define LONG_PRESS_START_DELAY 0.3
 #define MAX_TAP_TIME 0.5
-#define MIN_SWIPE_DISTANCE 20
+#define MIN_SWIPE_DISTANCE 30
 
 typedef enum {
 

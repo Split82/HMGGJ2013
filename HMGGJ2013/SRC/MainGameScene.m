@@ -243,10 +243,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[CCDirector sharedDirector].view addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
-    coinsSprite.anchorPoint = ccp(0, 0);
+    coinsSprite.anchorPoint = ccp(0.5, 0);
     coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 30.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
     [mainSpriteBatch addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
@@ -500,18 +500,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressEnded {
 
-    NSLog(@"LongPress end");    
+    //NSLog(@"LongPress end");
     [bombSpawner cancelSpawning];
 }
 
 - (void)swipeStarted:(CGPoint)pos {
 
-    NSLog(@"Swipe start");
+    //NSLog(@"Swipe start");
 }
 
 - (void)swipeMoved:(CGPoint)pos {
 
-    NSLog(@"Swipe moved");
+    //NSLog(@"Swipe moved");
     
     for (EnemySprite *enemy in swipeEnemies) {
         
@@ -524,12 +524,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)swipeCancelled {
 
-    NSLog(@"Swipe cancelled"); 
+    //NSLog(@"Swipe cancelled");
 }
 
 - (void)swipeEnded:(CGPoint)pos {
 
-    NSLog(@"Swipe ended");     
+    //NSLog(@"Swipe ended");
 }
 
 - (void)tapRecognized:(CGPoint)pos {
@@ -766,7 +766,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     self.position = screenShaker.offset;
 
     // Add bubbles
-    if (rand() % 100 == 0) {
+    if (slimeSprite.boundingBox.size.height > 10 && rand() % 100 == 0) {
         [self addBubble:ccp(slimeSprite.boundingBox.origin.x + (slimeSprite.boundingBox.size.width - 40) * rand() / RAND_MAX + 20, GROUND_Y + 5 + rand() % 7)];
     }
 }
