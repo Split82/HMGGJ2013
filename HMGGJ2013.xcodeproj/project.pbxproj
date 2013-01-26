@@ -151,6 +151,7 @@
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
 		65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD416B33A4F0012B735 /* AboutViewController.xib */; };
+		6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6527936B16B3E28900E4B82F /* visitor1.ttf */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
@@ -445,6 +446,7 @@
 		65259BD216B33A4F0012B735 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		65259BD316B33A4F0012B735 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		65259BD416B33A4F0012B735 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
+		6527936B16B3E28900E4B82F /* visitor1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = visitor1.ttf; path = Resources/visitor1.ttf; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
 		653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievemntNameDefinitions.h; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 		553741C216B1F72900D860C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6527936B16B3E28900E4B82F /* visitor1.ttf */,
 				65259BD016B338670012B735 /* Default-568h@2x.png */,
 				553741C316B1F72900D860C2 /* Default.png */,
 				553741C516B1F72900D860C2 /* Default-Landscape~ipad.png */,
@@ -1091,6 +1094,7 @@
 				38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */,
 				55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */,
 				55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */,
+				6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

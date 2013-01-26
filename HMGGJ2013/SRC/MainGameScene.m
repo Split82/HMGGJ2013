@@ -56,6 +56,7 @@
     // UI vars
     float enemySpawnTime;
     
+    NSString *fontName;
     UILabel *killsLabel;
     CCSprite *coinsSprite;
     UILabel *coinsLabel;
@@ -86,7 +87,6 @@
     if (sceneInitWasPerformed) {
         return;
     }
-
     sceneInitWasPerformed = YES;
 
     // Game objects
@@ -149,28 +149,34 @@
 }
 
 - (void) initUI {
+    fontName = @"Visitor TT1 BRK";
+    UIFont *font = [UIFont fontWithName:fontName size:20];
+    
     CGFloat labelWidth = (320.0 - 10.0) / 2;
-    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 5.0,labelWidth, 21.0)];
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 7.0, labelWidth, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
+    [killsLabel setFont:font];
     [[CCDirector sharedDirector].view addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0, 0);
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width, [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width,
+                               [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
     [mainSpriteBatch addChild:coinsSprite];
     
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(25.0 + labelWidth, 5.0, labelWidth, 21.0)];
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth, 7.0, labelWidth, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
-    [coinsLabel setTextAlignment:NSTextAlignmentLeft];
+    [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
+    [coinsLabel setFont:font];
     [[CCDirector sharedDirector].view addSubview:coinsLabel];
     
     healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
     [healthLabel setTextColor:[UIColor redColor]];
-    [healthLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
     [healthLabel setTextAlignment:NSTextAlignmentCenter];
     [healthLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:healthLabel];
@@ -182,6 +188,9 @@
     [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
     [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
+    
+    CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
+    coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
 }
 
 #pragma mark - Objects
@@ -361,14 +370,13 @@
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
         [coins removeObject:nearestCoin];
 
-        CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:CGPointMake(315, 470)], [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
+        CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
+                                                        [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
         
         [nearestCoin runAction:action];
         [self addCoin];
         return;
     }
-    
-    
     
     for (EnemySprite *enemy in tapEnemies) {
         
@@ -510,7 +518,7 @@
     gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
     [gameOverLabel setTextColor:[UIColor whiteColor]];
     [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
-    [gameOverLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
     [gameOverLabel setText:@"Game Over, Loser!"];
     [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
     [[CCDirector sharedDirector].view addSubview:gameOverLabel];
@@ -518,6 +526,7 @@
     restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
     [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
     [restartButton addTarget:self action:@selector(restart) forControlEvents:UIControlEventTouchUpInside];
     [[CCDirector sharedDirector].view addSubview:restartButton];
 }
