@@ -165,6 +165,7 @@
 		6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6527936B16B3E28900E4B82F /* visitor1.ttf */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
+		659A0A5416B4690B00D3B1A8 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 659A0A5316B4690B00D3B1A8 /* pause.png */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
@@ -480,6 +481,7 @@
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
 		653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievemntNameDefinitions.h; sourceTree = "<group>"; };
 		653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievemntNameDefinitions.m; sourceTree = "<group>"; };
+		659A0A5316B4690B00D3B1A8 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
 		E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteTextureFrameInfo.h; sourceTree = "<group>"; };
@@ -1045,6 +1047,7 @@
 		55B862C016B2161600D5BA8D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				659A0A5316B4690B00D3B1A8 /* pause.png */,
 				554AD1EB16B4469900441632 /* progress.png */,
 				554AD1EC16B4469900441632 /* progressBack.png */,
 				554AD1ED16B4469A00441632 /* progressBar.png */,

@@ -31,7 +31,6 @@ typedef enum {
 @property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;
 @property (nonatomic, assign) EnemyType type;
 @property (nonatomic, assign) EnemyState state;
-@property (nonatomic, assign, readonly) CGPoint spriteCenter;
 
 @end
 

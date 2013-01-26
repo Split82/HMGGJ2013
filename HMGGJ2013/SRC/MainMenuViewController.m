@@ -56,6 +56,7 @@
                                numberOfSamples:0];
 
     CCDirector *director = (CCDirectorIOS*)[CCDirector sharedDirector];
+    [director setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
 
     director.wantsFullScreenLayout = YES;
 
