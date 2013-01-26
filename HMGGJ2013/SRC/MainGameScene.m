@@ -120,6 +120,8 @@
     [particleBatchNode addChild:test];*/
     
     [self scheduleNewEnemySpawn];
+    
+    [[AudioManager sharedManager] startBackgroundTrack];
 }
 
 #pragma mark - Objects
