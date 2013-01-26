@@ -144,6 +144,53 @@
     [self scheduleNewEnemySpawn];
     
     [[AudioManager sharedManager] startBackgroundMusic];
+    
+    [self initUI];
+}
+
+- (void) initUI {
+    fontName = @"Visitor TT1 BRK";
+    UIFont *font = [UIFont fontWithName:fontName size:20];
+    
+    CGFloat labelWidth = (320.0 - 10.0) / 2;
+    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 7.0, labelWidth, 21.0)];
+    [killsLabel setTextAlignment:NSTextAlignmentLeft];
+    [killsLabel setTextColor:[UIColor whiteColor]];
+    [killsLabel setBackgroundColor:[UIColor clearColor]];
+    [killsLabel setFont:font];
+    [[CCDirector sharedDirector].view addSubview:killsLabel];
+    
+    coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
+    coinsSprite.anchorPoint = ccp(0, 0);
+    coinsSprite.scale = [UIScreen mainScreen].scale * 2;
+    coinsSprite.position = ccp(labelWidth - coinsSprite.contentSize.width,
+                               [CCDirector sharedDirector].winSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 5);
+    [mainSpriteBatch addChild:coinsSprite];
+    
+    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth, 7.0, labelWidth, 21.0)];
+    [coinsLabel setTextColor:[UIColor whiteColor]];
+    [coinsLabel setTextAlignment:NSTextAlignmentRight];
+    [coinsLabel setBackgroundColor:[UIColor clearColor]];
+    [coinsLabel setFont:font];
+    [[CCDirector sharedDirector].view addSubview:coinsLabel];
+    
+    healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
+    [healthLabel setTextColor:[UIColor redColor]];
+    [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
+    [healthLabel setTextAlignment:NSTextAlignmentCenter];
+    [healthLabel setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:healthLabel];
+    
+    [self updateUI];
+}
+
+- (void) updateUI {
+    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
+    [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
+    [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
+    
+    CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
+    coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
 }
 
 #pragma mark - Objects
