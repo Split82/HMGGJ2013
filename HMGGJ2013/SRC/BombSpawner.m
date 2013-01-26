@@ -50,11 +50,16 @@
     _pos = pos;
     spawning = YES;
     progress = 0;
+    self.position = pos;
+
+    self.visible = YES;
 }
 
 - (void)cancelSpawning {
 
     spawning = NO;
+
+    self.visible = NO;
 }
 
 - (void)calc:(ccTime)deltaTime {
@@ -65,6 +70,7 @@
         if (progress >= 1) {
             spawning = NO;
             progress = 1;
+            self.visible = NO;
             [_delegate bombSpawnerWantsBombToSpawn:self];
         }
 

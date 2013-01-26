@@ -122,7 +122,7 @@
     else if (newPoints > 5)
         multiplier += 0.2;
     _points += newPoints;
-    self.rage += (float)newPoints / 8;
+    self.rage += (float)newPoints / 4;
     
     [_rageInterval invalidate];
     _rageInterval = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_rageReduction) userInfo:nil repeats:YES];

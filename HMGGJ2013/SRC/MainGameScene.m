@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "SlimeSprite.h"
 #import "MonsterSprite.h"
+#import "MasterControlProgram.h"
 
 #define TOP_HEIGHT 80
 
@@ -70,6 +71,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     SlimeSprite *slimeSprite;
     MonsterSprite *monsterSprite;
 
+    CCSprite *slimeFillSprite;
+    CCSprite *slimeTopSprite;
+    
+    MasterControlProgram *masterControlProgram;
+    
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
@@ -265,6 +271,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)addBombAtPosX:(CGFloat)posX {
 
+    [[AppDelegate player] updateDropBombCount:1];
+
+    [AppDelegate player].coins -= BOMB_COINS_COST;
+    [self updateUI];
+
     BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 500) groundY:GROUND_Y];
     newBomb.delegate = self;
     [bombs addObject:newBomb];
@@ -361,8 +372,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
-    NSLog(@"LongPress start");
-    [self dropBombAtPos:pos];
+    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
+        [bombSpawner startSpawningAtPos:pos];
+    }
 }
 
 - (void)longPressEnded {
@@ -477,17 +489,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 {
     [AppDelegate player].coins++;
     [self updateUI];
-}
-
-- (void) dropBombAtPos:(CGPoint)pos
-{
-    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
-        [bombSpawner startSpawningAtPos:pos];
-        [[AppDelegate player] updateDropBombCount:1];
-
-        [AppDelegate player].coins -= BOMB_COINS_COST;
-        [self updateUI];
-    }
 }
 
 - (void) gameOver
