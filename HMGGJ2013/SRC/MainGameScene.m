@@ -242,10 +242,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainSpriteBatch addChild:newCoin];
 }
 
-- (void)addEnemy {
+- (void)addEnemy:(EnemyType)type {
     if (gameOver)
         return;
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:type];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
