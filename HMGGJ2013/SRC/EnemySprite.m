@@ -251,7 +251,7 @@
                 }
                 else if (position_.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET) {
                 
-                    state = kEnemyStateClimbing;
+                    state = kEnemyStateWalking;
                     
                     climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
                     
