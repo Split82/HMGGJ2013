@@ -85,6 +85,8 @@
     [self setGameCenterAuthenticationComplete:NO];
     [(MainMenuViewController *)[window rootViewController] setDisplayGameCenter:NO];
     
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     [[CCDirector sharedDirector] stopAnimation];
 }
 

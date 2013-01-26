@@ -9,6 +9,7 @@
 #import "MainGameScene.h"
 #import "GameDataNameDefinitions.h"
 #import "EnemySprite.h"
+#import "AudioManager.h"
 
 #define PIXEL_ART_SPRITE_SCALE 4
 
@@ -214,7 +215,9 @@
 
     //[self addCoinAtPos:pos];
 
-        NSLog(@"Tap recognized");
+    NSLog(@"Tap recognized");
+    
+    [[AudioManager sharedManager] scream];
 
     EnemySprite *nearestEnemy = nil;
     float nearestDistance = -1;

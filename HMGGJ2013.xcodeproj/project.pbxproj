@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		386BAE7E16B36684002C4EF5 /* muhaha.wav in Resources */ = {isa = PBXBuildFile; fileRef = 386BAE7D16B36684002C4EF5 /* muhaha.wav */; };
 		388E061516B344B00090B788 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388E061416B344B00090B788 /* AudioManager.m */; };
 		388E061916B34E3B0090B788 /* achievements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 388E061816B34E3B0090B788 /* achievements.txt */; };
 		388E061E16B356450090B788 /* brum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061C16B356450090B788 /* brum.mp3 */; };
@@ -155,6 +156,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		386BAE7D16B36684002C4EF5 /* muhaha.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = muhaha.wav; sourceTree = "<group>"; };
 		388E061316B344B00090B788 /* AudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		388E061416B344B00090B788 /* AudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
 		388E061816B34E3B0090B788 /* achievements.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = achievements.txt; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 		388E061B16B356450090B788 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				386BAE7D16B36684002C4EF5 /* muhaha.wav */,
 				388E061C16B356450090B788 /* brum.mp3 */,
 				388E061D16B356450090B788 /* WilhelmScream.mp3 */,
 			);
@@ -1077,6 +1080,7 @@
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
 				388E061E16B356450090B788 /* brum.mp3 in Resources */,
 				388E061F16B356450090B788 /* WilhelmScream.mp3 in Resources */,
+				386BAE7E16B36684002C4EF5 /* muhaha.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
