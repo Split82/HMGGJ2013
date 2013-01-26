@@ -591,8 +591,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
     [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
     [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
-    [restartButton addTarget:self action:@selector(restart) forControlEvents:UIControlEventTouchUpInside];
+    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
     [[CCDirector sharedDirector].view addSubview:restartButton];
+
+    [[CCDirector sharedDirector].view bringSubviewToFront:coinsLabel];
+    [coinsSprite setZOrder:10000];
+    [[CCDirector sharedDirector].view bringSubviewToFront:killsLabel];
+    [killSprite setZOrder:10000];
+    [[CCDirector sharedDirector].view bringSubviewToFront:pauseButton];
 }
 
 - (void) restartGame
