@@ -212,9 +212,36 @@
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    [self addCoinAtPos:pos];
+    //[self addCoinAtPos:pos];
 
         NSLog(@"Tap recognized");
+
+    EnemySprite *nearestEnemy = nil;
+    float nearestDistance = -1;
+    for (EnemySprite *enemy in tapEnemies) {
+        
+        if (nearestDistance < 0) {
+            
+            nearestDistance = ccpDistanceSQ(enemy.position, pos);
+            nearestEnemy = enemy;
+        }
+        else {
+            
+            float distance = ccpDistanceSQ(enemy.position, pos);
+            
+            if (distance < nearestDistance) {
+                
+                nearestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+    
+    if (nearestEnemy && nearestDistance < 40*40) {
+        
+        [nearestEnemy throwFromWall];
+    }
+    
 }
 
 #pragma mark - Update
