@@ -13,6 +13,8 @@
 #import "MainGameScene.h"
 #import <GameKit/GameKit.h>
 
+#import "AudioManager.h"
+
 @interface MainMenuViewController () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
 
 @end
@@ -40,7 +42,8 @@
 }
 
 - (void)startGame {
-
+    [[AudioManager sharedManager] scream];
+    
     // Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
     CCGLView *glView = [CCGLView viewWithFrame:self.view.window.bounds
                                    pixelFormat:kEAGLColorFormatRGBA8	//kEAGLColorFormatRGBA8
