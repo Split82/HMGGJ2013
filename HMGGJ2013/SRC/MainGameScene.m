@@ -239,7 +239,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
     killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 15.0);
-    [mainSpriteBatch addChild:killSprite];
+    killSprite.zOrder = 5000;
+    [self addChild:killSprite];
     
     killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 17.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
@@ -250,10 +251,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0.5, 0);
-    coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
+    coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
     coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
-    [mainSpriteBatch addChild:coinsSprite];
+    [self addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
@@ -672,6 +673,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
+    CCLayer *layer = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    layer.contentSize = [[CCDirector sharedDirector] winSize];
+    layer.zOrder = 2000;
+    [self addChild:layer];
+    
     gameOver = YES;
     CGSize screen = [CCDirector sharedDirector].winSize;
     gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
@@ -679,7 +685,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
     [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
     [gameOverLabel setText:@"Game Over, Loser!"];
-    [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+    [gameOverLabel setBackgroundColor:[UIColor clearColor]];
     [mainView addSubview:gameOverLabel];
 
     restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -690,10 +696,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView addSubview:restartButton];
 
     [mainView bringSubviewToFront:coinsLabel];
-    [coinsSprite setZOrder:10000];
     [mainView bringSubviewToFront:killsLabel];
-    [killSprite setZOrder:10000];
     [mainView bringSubviewToFront:pauseButton];
+    [rageView setAlpha:0];
+    [rageBackgroundView setAlpha:0];
 }
 
 - (void) restartGame
@@ -716,6 +722,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[AppDelegate player] newGame];
     [self updateUI];
     gameOver = NO;
+
+    [rageView setAlpha:1];
+    [rageBackgroundView setAlpha:1];
 }
 
 

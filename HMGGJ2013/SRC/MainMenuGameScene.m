@@ -157,7 +157,7 @@
 }
 
 - (CGRect)rectWithSize:(CGSize)size originY:(CGFloat)originY {
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = 2;
     size.width *= scale;
     size.height *= scale;
     CGSize contentSize = [CCDirector sharedDirector].winSize;
@@ -172,16 +172,19 @@
     mainView = view;
     
     CGSize imageSize;
-    
+    CGFloat offset = 0.0;
+    if (!IS_WIDESCREEN) {
+        offset = 44.0;   
+    }
     imageSize = CGSizeMake(38, 29);
     UIImageView *heartView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-hearth"]];
-    [heartView setFrame:[self rectWithSize:imageSize originY:78.0]];
+    [heartView setFrame:[self rectWithSize:imageSize originY:78.0 - offset]];
     [heartView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:heartView];
 
     imageSize = CGSizeMake(80, 29);
     UIImageView *nameView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-logo"]];
-    [nameView setFrame:[self rectWithSize:imageSize originY:128.0]];
+    [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:nameView];
     
@@ -189,7 +192,7 @@
     UIImageView *newGame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
     [newGame setUserInteractionEnabled:YES];
     [newGame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
-    [newGame setFrame:[self rectWithSize:imageSize originY:270.0]];
+    [newGame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
     [newGame.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:newGame];
     
@@ -197,7 +200,7 @@
     UIImageView *leaderboard = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-topscore"]];
     [leaderboard setUserInteractionEnabled:YES];
     [leaderboard addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLeaderboardButtonPressed:)]];
-    [leaderboard setFrame:[self rectWithSize:imageSize originY:330.0]];
+    [leaderboard setFrame:[self rectWithSize:imageSize originY:330.0 - offset]];
     [leaderboard.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:leaderboard];
     
@@ -205,7 +208,7 @@
     UIImageView *achievements = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-achievements"]];
     [achievements setUserInteractionEnabled:YES];
     [achievements addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAchievementsButtonPressed:)]];
-    [achievements setFrame:[self rectWithSize:imageSize originY:390.0]];
+    [achievements setFrame:[self rectWithSize:imageSize originY:390.0 - offset]];
     [achievements.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:achievements];
     
@@ -213,12 +216,12 @@
     UIImageView *aboutView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-about"]];
     [aboutView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAboutButtonPressed:)]];
     [aboutView setUserInteractionEnabled:YES];
-    [aboutView setFrame:[self rectWithSize:imageSize originY:450.0]];
+    [aboutView setFrame:[self rectWithSize:imageSize originY:450.0 - offset]];
     [aboutView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:aboutView];
     
-    [self addCoinAtPos:CGPointMake(60.0, 400.0)];
-    [self addCoinAtPos:CGPointMake(260.0, 400.0)];
+    [self addCoinAtPos:CGPointMake(60.0, 400.0 - offset)];
+    [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
 }
 
 
