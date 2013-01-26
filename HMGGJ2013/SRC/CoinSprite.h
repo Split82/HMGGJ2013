@@ -16,7 +16,7 @@
 @property (nonatomic, weak) id <CoinSpriteDelegate> delegate;
 
 - (id)initWithStartPos:(CGPoint)startPos;
-- (void)update:(ccTime)deltaTime;
+- (void)calc:(ccTime)deltaTime;
 
 @end
 

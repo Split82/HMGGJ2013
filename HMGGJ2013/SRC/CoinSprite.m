@@ -72,7 +72,7 @@
     return self;
 }
 
-- (void)update:(ccTime)deltaTime {
+- (void)calc:(ccTime)deltaTime {
 
     velocity = ccpMult(velocity, FRICTION);
     velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));

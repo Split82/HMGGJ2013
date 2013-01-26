@@ -28,13 +28,14 @@
     GestureRecognizer *gestureRecognizer;
 
     CCSpriteBatchNode *mainSpriteBatch;
+    
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
-    NSMutableArray *killedTapEnemies;
-    NSMutableArray *killedSwipeEnemies;
     NSMutableArray *coins;
 
     NSMutableArray *killedCoins;
+    NSMutableArray *killedTapEnemies;
+    NSMutableArray *killedSwipeEnemies;
 
     CCParticleBatchNode *particleBatchNode;
 
@@ -115,10 +116,9 @@
     /*
     CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     test.position = ccp(100, 100);
-    [particleBatchNode addChild:test];
-     */
-
-    //[self scheduleNewEnemySpawn];
+    [particleBatchNode addChild:test];*/
+    
+    [self scheduleNewEnemySpawn];
 }
 
 #pragma mark - Objects
@@ -163,6 +163,21 @@
     [killedCoins addObject:coinSprite];
 }
 
+#pragma EnemySpriteDelegate
+
+- (void)enemyDidClimbWall:(EnemySprite*)enemy {
+
+    if (enemy.type == kEnemyTypeTap) {
+
+        [killedTapEnemies addObject:enemy];
+    }
+    else {
+
+        [killedSwipeEnemies addObject:enemy];
+    }
+}
+
+
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
@@ -204,6 +219,54 @@
 
 #pragma mark - Update
 
+- (void)calc:(ccTime)deltaTime {
+
+    // Gestures
+    [gestureRecognizer update:deltaTime];
+
+    // Coin
+    for (CoinSprite *coin in coins) {
+        [coin calc:deltaTime];
+    }
+
+    for (EnemySprite *enemy in tapEnemies) {
+        [enemy calc:deltaTime];
+    }
+
+    for (EnemySprite *enemy in swipeEnemies) {
+        [enemy calc:deltaTime];
+    }
+
+    // Killed
+    for (CoinSprite *coin in killedCoins) {
+        [coins removeObject:coin];
+        [coin removeFromParentAndCleanup:YES];
+    }
+    [killedCoins removeAllObjects];
+
+    for (EnemySprite *killedEnemy in killedTapEnemies) {
+
+        [tapEnemies removeObject:killedEnemy];
+        [killedEnemy removeFromParentAndCleanup:YES];
+    }
+    [killedTapEnemies removeAllObjects];
+
+    for (EnemySprite *killedEnemy in killedSwipeEnemies) {
+
+        [swipeEnemies removeObject:killedEnemy];
+        [killedEnemy removeFromParentAndCleanup:YES];        
+
+    }
+
+    [killedSwipeEnemies removeAllObjects];
+
+    enemySpawnTime -= deltaTime;
+    if (enemySpawnTime < 0) {
+        
+        [self addEnemy];
+    }
+}
+
 - (void)update:(ccTime)deltaTime {
 
     if (deltaTime > MAX_DELTA_TIME) {
@@ -219,63 +282,9 @@
 
     while (calcTime >= FRAME_TIME_INTERVAL) {
 
-        // Gestures
-        [gestureRecognizer update:FRAME_TIME_INTERVAL];
-
-        // Coin
-        for (CoinSprite *coin in coins) {
-            [coin update:FRAME_TIME_INTERVAL];
-        }
-
-        for (EnemySprite *enemy in tapEnemies) {
-            [enemy update:FRAME_TIME_INTERVAL];
-        }
-        
-        for (EnemySprite *enemy in swipeEnemies) {
-            [enemy update:FRAME_TIME_INTERVAL];
-        }
-
-        // Killed
-        for (CoinSprite *coin in killedCoins) {
-            [coins removeObject:coin];
-            [coin removeFromParentAndCleanup:YES];
-        }
-        [killedCoins removeAllObjects];
-        
-        for (EnemySprite *killedEnemy in killedTapEnemies) {
-            
-            [tapEnemies removeObject:killedEnemy];
-        }
-        
-        [killedTapEnemies removeAllObjects];
-        
-        for (EnemySprite *killedEnemy in killedSwipeEnemies) {
-            
-            [swipeEnemies removeObject:killedEnemy];
-        }
-        
-        [killedSwipeEnemies removeAllObjects];
-        
-        
+        [self calc:FRAME_TIME_INTERVAL];
         calcTime -= FRAME_TIME_INTERVAL;
     }
 }
-
-#pragma EnemySpriteDelegate
-
-- (void)enemyDidClimbWall:(EnemySprite*)enemy {
-
-    if (enemy.type == kEnemyTypeTap) {
-        
-        [killedTapEnemies addObject:enemy];
-    }
-    else {
-        
-        [killedSwipeEnemies addObject:enemy];
-    }
-    
-    [mainSpriteBatch removeChild:enemy cleanup:YES];
-}
-
 
 @end

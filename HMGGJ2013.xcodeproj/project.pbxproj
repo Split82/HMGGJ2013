@@ -1180,6 +1180,10 @@
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
 				E619264616B31E4A00904535 /* EnemySprite.m in Sources */,
 				553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */,
+				65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */,
+				E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */,
+				65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */,
+				388E061516B344B00090B788 /* AudioManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
