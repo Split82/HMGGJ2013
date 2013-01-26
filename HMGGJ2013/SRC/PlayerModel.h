@@ -19,6 +19,10 @@
 - (void) addAchievement:(GKAchievement *)achievement;
 - (void) resetAchivements;
 
+- (void) updateKillCount:(NSInteger)kills;
+- (void) updateDropBombCount:(NSInteger)bombs;
+- (void) updateCoinsCount:(NSInteger)coins;
+
 - (void) synchronize;
-                     
+
 @end
