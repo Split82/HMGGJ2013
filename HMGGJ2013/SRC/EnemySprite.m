@@ -17,11 +17,13 @@
 
 #define CLIMBING_MOVEMENT_OFFSET 4.0f
 #define CLIMBING_ANIM_DELAY ((1/30.0f) * 4)
-#define CLIMBING_BORDER_OFFSET 40.0f
+#define CLIMBING_BORDER_OFFSET 30.0f
 
 #define FALLING_ACCEL -300.0f
 #define FALLING_HORIZ_DECCEL 100.0f
 #define FALLING_ANIM_DELAY 0.2f
+
+#define ENEMY_HALF_WIDTH 20.0f
 
 #define WALL_HEIGHT 350.0f
 
@@ -75,7 +77,7 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
         animTime = 0;
         moveTime = 0;
         
-        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET);
+        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2);
         
 
         if (!swiperWalkingAnimSpriteFrames) {
@@ -188,12 +190,12 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             
         case kEnemyStateWalking: {
             
-            if (direction == -1 && position_.x < WALKING_BORDER_OFFSET) {
+            if (direction == -1 && spritePos.x < -WALKING_BORDER_OFFSET) {
                 
                 self.flipX = FALSE;
                 direction = 1;
             }
-            else if (direction == 1 && position_.x > [CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET) {
+            else if (direction == 1 && spritePos.x > [CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2) {
                 
                 self.flipX = TRUE;
                 direction = -1;
@@ -268,13 +270,13 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
                     direction = 1;
                     self.flipX = NO;
                     
-                    climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;                    
+                    climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
                 }
-                else if (spritePos.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET) {
+                else if (spritePos.x > [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2) {
                 
                     state = kEnemyStateWalking;
                     
-                    climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET;
+                    climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - (float)rand() / RAND_MAX * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2;
                     
                     direction = -1;
                     self.flipX = YES;
