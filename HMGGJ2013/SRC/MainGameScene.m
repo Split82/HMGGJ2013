@@ -20,16 +20,29 @@
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
 
-#define ENEMY_SPAWN_TIME 1.0f
-#define ENEMY_SPAWN_DELTA_TIME 2.0f
 #define ENEMY_ATTACK_FORCE 5
 
 #define BOMB_COINS_COST 2
 #define BOMB_KILL_PERIMETER 85
 
 #define TAP_MIN_DISTANCE2 (60*60)
+#define SWIPE_MIN_DISTANCE2 (20*20)
 
 #define GROUND_Y 45
+
+float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
+    // Return minimum distance between line segment vw and point p
+    const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
+    if (l2 == 0.0) return ccpDistanceSQ(p, v);   // v == w case
+    // Consider the line extending the segment, parameterized as v + t (w - v).
+    // We find projection of point p onto the line.
+    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+    const float t = ccpDot(ccpSub(p, v), ccpSub(w, v)) / l2;
+    if (t < 0.0) return ccpDistanceSQ(p, v);       // Beyond the 'v' end of the segment
+    else if (t > 1.0) return ccpDistanceSQ(p, w);  // Beyond the 'w' end of the segment
+    const CGPoint projection = ccpAdd(v, ccpMult(ccpSub(w, v), t));  // Projection falls on the segment
+    return ccpDistanceSQ(p, projection);
+}
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y 46
@@ -63,8 +76,6 @@
     BOOL sceneInitWasPerformed;
     BOOL gameOver;
     
-    float enemySpawnTime;
-    
     // UI vars
     NSString *fontName;
     UILabel *killsLabel;
@@ -74,6 +85,8 @@
     
     UILabel *gameOverLabel;
     UIButton *restartButton;
+    
+    UIView *rageView;
 }
 
 @end
@@ -156,12 +169,14 @@
     bombSpawner.delegate = self;
     bombSpawner.zOrder = 10000;
     [mainSpriteBatch addChild:bombSpawner];
+    
+    // Master Control Program
+    masterControlProgram = [[MasterControlProgram alloc] init];
+    masterControlProgram.mainframe = self;
 
     [self scheduleUpdate];
     
-    [self scheduleNewEnemySpawn];
-    
-    [[AudioManager sharedManager] startBackgroundMusic];
+    //[[AudioManager sharedManager] startBackgroundTrack];
     
     [self initUI];
 }
@@ -199,16 +214,22 @@
     [healthLabel setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:healthLabel];
     
+    rageView = [[UIView alloc] initWithFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 0.0, 5.0)];
+    [rageView setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5]];
+    [[CCDirector sharedDirector].view addSubview:rageView];
+    
     [self updateUI];
 }
 
 - (void) updateUI {
-    [killsLabel setText:[NSString stringWithFormat:@"kills %i", [AppDelegate player].kills]];
+    [killsLabel setText:[NSString stringWithFormat:@"points %i", [AppDelegate player].points]];
     [coinsLabel setText:[NSString stringWithFormat:@"coins %i", [AppDelegate player].coins]];
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
     
     CGSize size = [coinsLabel.text sizeWithFont:coinsLabel.font forWidth:coinsLabel.frame.size.width lineBreakMode:coinsLabel.lineBreakMode];
     coinsSprite.position = ccp([CCDirector sharedDirector].winSize.width - size.width - 43.0, coinsSprite.position.y);
+    
+    [rageView setFrame:CGRectMake(0.0, [CCDirector sharedDirector].winSize.height - 5.0, 320 * [AppDelegate player].rage, 5.0)];
 }
 
 #pragma mark - Objects
@@ -225,7 +246,7 @@
 - (void)addEnemy {
     if (gameOver)
         return;
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
@@ -239,7 +260,7 @@
     [mainSpriteBatch addChild:enemy];
     enemy.delegate = self;
     
-    [self scheduleNewEnemySpawn];
+    
 }
 
 - (void)addBombAtPosX:(CGFloat)posX {
@@ -250,22 +271,19 @@
     [mainSpriteBatch addChild:newBomb];
 }
 
-- (void)scheduleNewEnemySpawn {
-
-    enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
-}
-
 -(void)coinEndedCashingAnimation:(CoinSprite*)coin {
     
     [coin removeFromParentAndCleanup:YES];
 }
 
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
-
+    NSInteger kills = 0;
+    
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedTapEnemies addObject:enemy];
             [self kill:enemy];
+            kills++;
         }
     }
 
@@ -273,8 +291,11 @@
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedSwipeEnemies addObject:enemy];
             [self kill:enemy];
+            kills++;
         }
     }
+    [AppDelegate player].points += kills;
+    [self updateUI];
 
     CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
@@ -324,6 +345,18 @@
     [self addBombAtPosX:bombSpawner.pos.x];
 }
 
+#pragma mark - MainframeDelegate
+
+- (int)countTapEnemies {
+    
+    return [tapEnemies count];
+}
+
+- (int)countSwipeEnemies {
+    
+    return [swipeEnemies count];
+}
+
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
@@ -345,7 +378,15 @@
 
 - (void)swipeMoved:(CGPoint)pos {
 
-    NSLog(@"Swipe moved");    
+    NSLog(@"Swipe moved");
+    
+    for (EnemySprite *enemy in swipeEnemies) {
+        
+        if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
+            
+            [enemy throwFromWall];
+        }
+    }
 }
 
 - (void)swipeCancelled {
@@ -543,10 +584,17 @@
     }
     [killedSwipeEnemies removeAllObjects];
 
-    enemySpawnTime -= deltaTime;
-    if (enemySpawnTime < 0) {
-        
-        [self addEnemy];
+    [masterControlProgram calc:deltaTime];
+    
+    if ([AppDelegate player].rage >= 1) {
+        [self addBombAtPosX:25.0];
+        [self addBombAtPosX:85.0];
+        [self addBombAtPosX:155.0];
+        [self addBombAtPosX:225.0];
+        [self addBombAtPosX:295.0];
+        [[AppDelegate player] updateDropBombCount:5];
+        [self updateUI];
+        [AppDelegate player].rage = 0;
     }
 
     [slimeSprite setEnergy:[AppDelegate player].health * 0.01];

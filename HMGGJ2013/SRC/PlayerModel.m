@@ -25,10 +25,13 @@
 @property (nonatomic, assign) NSInteger enemySwipes;
 
 @property (nonatomic, assign) NSInteger firstBombCounter;
-@property (nonatomic, assign) NSTimeInterval firstBombTime;
+@property (nonatomic, assign) NSTimeInterval firstBombTimeinteval;
 
 @property (nonatomic, strong) NSTimer *lastKillTime;
 @property (nonatomic, strong) NSTimer *timer;
+
+@property (nonatomic, strong) NSTimer *rageInterval;
+@property (nonatomic, assign) NSTimeInterval disabledRageTimeinteval;
 
 @end
 
@@ -70,7 +73,7 @@
             _achievements = [NSMutableDictionary dictionary];
         }
     
-        _firstBombTime = 0;
+        _firstBombTimeinteval = 0;
         _firstBombCounter = 0;
         
         NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -106,6 +109,35 @@
 
 #pragma mark -
 
+- (void) setPoints:(NSInteger)points
+{
+    int newPoints = points - _points;
+    float multiplier = 1;
+    if (newPoints > 50)
+        multiplier += 2;
+    else if (newPoints > 25)
+        multiplier += 0.7;
+    else if (newPoints > 10)
+        multiplier += 0.4;
+    else if (newPoints > 5)
+        multiplier += 0.2;
+    _points += newPoints;
+    self.rage += (float)newPoints / 8;
+    
+    [_rageInterval invalidate];
+    _rageInterval = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_rageReduction) userInfo:nil repeats:YES];
+}
+
+- (void) _rageReduction
+{
+    _rage -= 0.1;
+    if (_rage <= 0) {
+        _rage = 0;
+        [_rageInterval invalidate];
+        _rageInterval = nil;
+    }
+}
+
 - (void) setKills:(NSInteger)kills
 {
     _kills = kills;
@@ -124,11 +156,26 @@
     _health = health;
 }
 
+- (void) setRage:(float)rage
+{
+    if (rage == 0 && _rageInterval) {
+        _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 30;
+    } else if (_disabledRageTimeinteval && [NSDate timeIntervalSinceReferenceDate] < _disabledRageTimeinteval) {
+        return;
+    } else {
+        _disabledRageTimeinteval = 0;
+    }
+    _rage = rage;
+}
+
 - (void) newGame
 {
+    _points = 0;
     _kills = 0;
     _coins = 10;
     _health = 100;
+    _rage = 0;
+    _disabledRageTimeinteval = [NSDate timeIntervalSinceReferenceDate] + 15;
 }
 
 #pragma mark Score
@@ -179,7 +226,7 @@
     [_lastKillTime invalidate];
     _lastKillTime = nil;
     
-    _firstBombTime = 0;
+    _firstBombTimeinteval = 0;
     _firstBombCounter = 0;
     
     _enemyTaps = 0;
@@ -304,10 +351,10 @@
     allBombs += bombs;
     [[NSUserDefaults standardUserDefaults] setInteger:allBombs forKey:kPlayerGlobalBombDropCount];
 
-    if (_firstBombTime == 0)
-        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+    if (_firstBombTimeinteval == 0)
+        _firstBombTimeinteval = [NSDate timeIntervalSinceReferenceDate];
     
-    if (_firstBombTime + 10 <= [NSDate timeIntervalSinceReferenceDate]) {
+    if (_firstBombTimeinteval + 10 <= [NSDate timeIntervalSinceReferenceDate]) {
         if (_firstBombCounter + bombs >= 30) {
             GKAchievement *achivement = [[GKAchievement alloc] initWithIdentifier:kAchievemntCarpetBomberName];
             [achivement setPercentComplete:1];
@@ -316,7 +363,7 @@
         }
     } else {
         _firstBombCounter = 0;
-        _firstBombTime = [NSDate timeIntervalSinceReferenceDate];
+        _firstBombTimeinteval = [NSDate timeIntervalSinceReferenceDate];
     }
     _firstBombCounter += bombs;
 }
