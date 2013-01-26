@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		388E061516B344B00090B788 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 388E061416B344B00090B788 /* AudioManager.m */; };
 		388E061916B34E3B0090B788 /* achievements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 388E061816B34E3B0090B788 /* achievements.txt */; };
+		388E061E16B356450090B788 /* brum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061C16B356450090B788 /* brum.mp3 */; };
+		388E061F16B356450090B788 /* WilhelmScream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061D16B356450090B788 /* WilhelmScream.mp3 */; };
 		553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741AF16B1F72900D860C2 /* QuartzCore.framework */; };
 		553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B116B1F72900D860C2 /* OpenGLES.framework */; };
 		553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B316B1F72900D860C2 /* OpenAL.framework */; };
@@ -136,6 +138,7 @@
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
 		553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */; };
 		553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */; };
+		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -155,6 +158,8 @@
 		388E061316B344B00090B788 /* AudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		388E061416B344B00090B788 /* AudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
 		388E061816B34E3B0090B788 /* achievements.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = achievements.txt; sourceTree = "<group>"; };
+		388E061C16B356450090B788 /* brum.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = brum.mp3; sourceTree = "<group>"; };
+		388E061D16B356450090B788 /* WilhelmScream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WilhelmScream.mp3; sourceTree = "<group>"; };
 		553741AB16B1F72900D860C2 /* HMGGJ2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMGGJ2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		553741AF16B1F72900D860C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		553741B116B1F72900D860C2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -417,6 +422,8 @@
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
 		553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
+		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
+		553BA1B816B33CA000B4E22B /* GestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureRecognizer.m; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -466,6 +473,15 @@
 				388E061816B34E3B0090B788 /* achievements.txt */,
 			);
 			name = loremipsum;
+			sourceTree = "<group>";
+		};
+		388E061B16B356450090B788 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				388E061C16B356450090B788 /* brum.mp3 */,
+				388E061D16B356450090B788 /* WilhelmScream.mp3 */,
+			);
+			path = sounds;
 			sourceTree = "<group>";
 		};
 		553741A016B1F72900D860C2 = {
@@ -911,11 +927,21 @@
 			name = ParticleSystems;
 			sourceTree = "<group>";
 		};
+		553BA1B616B33C8400B4E22B /* Gestures */ = {
+			isa = PBXGroup;
+			children = (
+				553BA1B716B33CA000B4E22B /* GestureRecognizer.h */,
+				553BA1B816B33CA000B4E22B /* GestureRecognizer.m */,
+			);
+			name = Gestures;
+			sourceTree = "<group>";
+		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
 				55B862C516B21AA400D5BA8D /* Global */,
 				553BA19216B3148100B4E22B /* GameObjects */,
+				553BA1B616B33C8400B4E22B /* Gestures */,
 				55B860AB16B206DE00D5BA8D /* Scenes */,
 				553BA19116B3105000B4E22B /* Controllers */,
 				653B145816B3131600E2FD0F /* Models */,
@@ -938,6 +964,7 @@
 		55B862BF16B2160500D5BA8D /* GameData */ = {
 			isa = PBXGroup;
 			children = (
+				388E061B16B356450090B788 /* sounds */,
 				388E061716B34E190090B788 /* loremipsum */,
 				553BA1AB16B32DEE00B4E22B /* ParticleSystems */,
 				55B862C016B2161600D5BA8D /* Textures */,
@@ -1048,6 +1075,8 @@
 				65259BD116B338670012B735 /* Default-568h@2x.png in Resources */,
 				65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */,
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
+				388E061E16B356450090B788 /* brum.mp3 in Resources */,
+				388E061F16B356450090B788 /* WilhelmScream.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1166,6 +1195,7 @@
 				653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */,
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
 				E619264616B31E4A00904535 /* EnemySprite.m in Sources */,
+				553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */,
 				65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */,
 				E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */,
 				65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */,
