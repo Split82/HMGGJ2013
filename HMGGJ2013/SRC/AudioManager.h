@@ -16,6 +16,8 @@
 
 - (void)scream;
 
-- (void)startBackgroundTrack;
+- (void)startBackgroundMusic;
+
+- (void)stopBackgroundMusic;
 
 @end

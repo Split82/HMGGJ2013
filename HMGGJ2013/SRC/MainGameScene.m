@@ -133,7 +133,7 @@
     
     [self scheduleNewEnemySpawn];
     
-    [[AudioManager sharedManager] startBackgroundTrack];
+    [[AudioManager sharedManager] startBackgroundMusic];
 }
 
 #pragma mark - Objects
@@ -269,6 +269,7 @@
     NSLog(@"Tap recognized");
     
     [[AudioManager sharedManager] scream];
+    [[AudioManager sharedManager] stopBackgroundMusic];
 
     EnemySprite *nearestEnemy = nil;
     float nearestDistance = -1;
