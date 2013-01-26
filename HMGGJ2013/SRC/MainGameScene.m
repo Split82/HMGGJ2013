@@ -626,30 +626,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void) displayAchievementWithName:(NSString *)name
 {
-    CGSize winSize = [[CCDirector sharedDirector] winSize];
-    
-    UIImage *image = [UIImage imageNamed:name];
-    CGSize size = [image size];
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:scale * 2 orientation:image.imageOrientation];
-    UIImageView *attachmentView = [[UIImageView alloc] initWithFrame:CGRectMake((winSize.width - (size.width * scale)) / 2, (winSize.height - (size.height * scale)) / 2,
-                                                                                size.width * scale, size.height * scale)];
-    [attachmentView setImage:image];
-    [attachmentView setAlpha:0];
-    [[CCDirector sharedDirector].view  addSubview:attachmentView];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        [attachmentView setAlpha:1];
-        int64_t delayInSeconds = 2.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [UIView animateWithDuration:0.5 animations:^{
-                [attachmentView setAlpha:0];
-            } completion:^(BOOL finished) {
-                [attachmentView removeFromSuperview];
-            }];
-        });
-    }];
+ 
 }
 
 - (void) showGameOver
