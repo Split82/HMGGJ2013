@@ -32,11 +32,13 @@
     NSMutableArray *tapEnemies;
     NSMutableArray *swipeEnemies;
     NSMutableArray *coins;
+    NSMutableArray *bombs;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
-
+    NSMutableArray *killedBombs;
+    
     CCParticleBatchNode *particleBatchNode;
 
     // State vars
@@ -72,11 +74,13 @@
     // Game objects
     tapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     swipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
-    killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
-    killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     coins = [[NSMutableArray alloc] initWithCapacity:100];
+    bombs = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
+    killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
+    killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -151,6 +155,14 @@
     [self scheduleNewEnemySpawn];
 }
 
+- (void)addBombAtPosX:(CGFloat)posX {
+
+    BombSprite *newBomb = [[BombSprite alloc] initWithStartPos:ccp(posX, 500) groundY:20];
+    newBomb.delegate = self;
+    [bombs addObject:newBomb];
+    [mainSpriteBatch addChild:newBomb];
+}
+
 - (void)scheduleNewEnemySpawn {
 
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
@@ -161,6 +173,13 @@
 - (void)coinDidDie:(CoinSprite *)coinSprite {
 
     [killedCoins addObject:coinSprite];
+}
+
+#pragma mark - BombSpriteDelegate
+
+- (void)bombDidDie:(BombSprite *)bombSprite {
+
+    [killedBombs addObject:bombSprite];
 }
 
 #pragma EnemySpriteDelegate
@@ -187,7 +206,7 @@
 
 - (void)longPressEnded {
 
-        NSLog(@"LongPress end");
+    [self addBombAtPosX:100];
 }
 
 - (void)swipeStarted:(CGPoint)pos {
@@ -224,11 +243,15 @@
     // Gestures
     [gestureRecognizer update:deltaTime];
 
-    // Coin
+    // Calcs
     for (CoinSprite *coin in coins) {
         [coin calc:deltaTime];
     }
 
+    for (BombSprite *bomb in bombs) {
+        [bomb calc:deltaTime];
+    }
+    
     for (EnemySprite *enemy in tapEnemies) {
         [enemy calc:deltaTime];
     }
@@ -244,6 +267,11 @@
     }
     [killedCoins removeAllObjects];
 
+    for (BombSprite *bomb in killedBombs) {
+        [bombs removeObject:bomb];
+        [bomb removeFromParentAndCleanup:YES];
+    }
+
     for (EnemySprite *killedEnemy in killedTapEnemies) {
 
         [tapEnemies removeObject:killedEnemy];
@@ -254,10 +282,8 @@
     for (EnemySprite *killedEnemy in killedSwipeEnemies) {
 
         [swipeEnemies removeObject:killedEnemy];
-        [killedEnemy removeFromParentAndCleanup:YES];        
-
+        [killedEnemy removeFromParentAndCleanup:YES];
     }
-
     [killedSwipeEnemies removeAllObjects];
 
     enemySpawnTime -= deltaTime;

@@ -144,6 +144,8 @@
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
 		55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C116B2199900D5BA8D /* GameObjects.plist */; };
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
+		55CDD44116B3670E00704F3B /* BombSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44016B3670E00704F3B /* BombSprite.m */; };
+		55CDD44516B3708100704F3B /* BombSpawner.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44416B3708100704F3B /* BombSpawner.m */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
@@ -431,6 +433,10 @@
 		55B860AE16B206F800D5BA8D /* MainGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainGameScene.m; sourceTree = "<group>"; };
 		55B862C116B2199900D5BA8D /* GameObjects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GameObjects.plist; sourceTree = "<group>"; };
 		55B862C216B2199900D5BA8D /* GameObjects.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameObjects.png; sourceTree = "<group>"; };
+		55CDD43F16B3670E00704F3B /* BombSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombSprite.h; sourceTree = "<group>"; };
+		55CDD44016B3670E00704F3B /* BombSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSprite.m; sourceTree = "<group>"; };
+		55CDD44316B3708100704F3B /* BombSpawner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombSpawner.h; sourceTree = "<group>"; };
+		55CDD44416B3708100704F3B /* BombSpawner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSpawner.m; sourceTree = "<group>"; };
 		65259BCD16B337690012B735 /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
 		65259BCE16B337690012B735 /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		65259BD016B338670012B735 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -908,6 +914,10 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				55CDD44316B3708100704F3B /* BombSpawner.h */,
+				55CDD44416B3708100704F3B /* BombSpawner.m */,
+				55CDD43F16B3670E00704F3B /* BombSprite.h */,
+				55CDD44016B3670E00704F3B /* BombSprite.m */,
 				553BA19716B3214000B4E22B /* CoinSprite.h */,
 				553BA19816B3214000B4E22B /* CoinSprite.m */,
 				E619264416B31E4A00904535 /* EnemySprite.h */,
@@ -1200,6 +1210,8 @@
 				E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */,
 				65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */,
 				388E061516B344B00090B788 /* AudioManager.m in Sources */,
+				55CDD44116B3670E00704F3B /* BombSprite.m in Sources */,
+				55CDD44516B3708100704F3B /* BombSpawner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
