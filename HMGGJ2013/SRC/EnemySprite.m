@@ -97,78 +97,50 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             ];
             
             NSArray *tapperClimbingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
+            @"BigClimb1.png",
+            @"BigClimb2.png",
+            @"BigClimb3.png",
+            @"BigClimb4.png",
+            @"BigClimb5.png",
+            @"BigClimb6.png",
+            @"BigClimb7.png",
             ];
             
             NSArray *tapperFallingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
+            @"BigClimb1.png",
             ];
             
             NSArray *swiperWalkingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
+            @"TallMove1.png",
+            @"TallMove2.png",
+            @"TallMove3.png",
+            @"TallMove4.png",
+            @"TallMove5.png",
+            @"TallMove6.png",
+            @"TallMove7.png",
+            @"TallMove8.png",
             ];
             
             NSArray *swiperClimbingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
+            @"TallMove1.png",
+            @"TallMove2.png",
+            @"TallMove3.png",
+            @"TallMove4.png",
+            @"TallMove5.png",
+            @"TallMove6.png",
+            @"TallMove7.png",
+            @"TallMove8.png",
             ];
             
             NSArray *swiperFallingAnimSpriteFrameNames = @[
-            @"monsterBigMove1.png",
-            @"monsterBigMove2.png",
-            @"monsterBigMove3.png",
-            @"monsterBigMove4.png",
-            @"monsterBigMove5.png",
-            @"monsterBigMove6.png",
-            @"monsterBigMove7.png",
-            @"monsterBigMove8.png",
-            @"monsterBigMove9.png",
-            @"monsterBigMove10.png",
-            @"monsterBigMove11.png",
-            @"monsterBigMove12.png",
+            @"TallMove1.png",
+            @"TallMove2.png",
+            @"TallMove3.png",
+            @"TallMove4.png",
+            @"TallMove5.png",
+            @"TallMove6.png",
+            @"TallMove7.png",
+            @"TallMove8.png",
             ];
             
             // tapper
@@ -238,8 +210,6 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
             walkingAnimSpriteFrames = swiperWalkingAnimSpriteFrames;
             climbingAnimSpriteFrames = swiperClimbingAnimSpriteFrames;
             fallingAnimSpriteFrames = swiperFallingAnimSpriteFrames;
-            
-            self.flipY = YES;
         }
         else {
             
