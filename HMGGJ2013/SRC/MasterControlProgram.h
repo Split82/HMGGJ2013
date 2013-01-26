@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EnemySprite.h"
 
 // the one who runs the game
 @protocol MainframeDelegate;
@@ -22,10 +23,12 @@
 
 @protocol MainframeDelegate <NSObject>
 
-- (void)addEnemy;
+- (void)addEnemy:(EnemyType)type;
 
 - (int)countTapEnemies;
 
 - (int)countSwipeEnemies;
+
+- (void)addCoinAtPos:(CGPoint)pos;
 
 @end
