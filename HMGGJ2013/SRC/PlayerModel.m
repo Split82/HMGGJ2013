@@ -380,7 +380,7 @@
 - (NSString *) _scoreFilePath
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    return [NSString stringWithFormat:@"%@/%@.scores.plist", [GKLocalPlayer localPlayer].playerID, path];
+    return [NSString stringWithFormat:@"%@/%@.scores.plist", path, [GKLocalPlayer localPlayer].playerID];
 }
 
 - (void) _submitScore:(GKScore *)score
@@ -428,7 +428,7 @@
 - (NSString *) _achievementsFilePath
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    return [NSString stringWithFormat:@"%@/%@.achievements.plist", [GKLocalPlayer localPlayer].playerID, path];
+    return [NSString stringWithFormat:@"%@/%@.achievements.plist", path, [GKLocalPlayer localPlayer].playerID];
 }
 
 - (void) _submitAchievement:(GKAchievement *)achievement
