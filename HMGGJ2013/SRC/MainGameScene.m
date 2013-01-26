@@ -176,6 +176,11 @@
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
+-(void)coinEndedCashingAnimation:(CoinSprite*)coin {
+    
+    [coin removeFromParentAndCleanup:YES];
+}
+
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
 
     for (EnemySprite *enemy in tapEnemies) {
@@ -299,8 +304,10 @@
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [coins removeObject:nearestCoin];
-        [nearestCoin removeFromParentAndCleanup:YES];
+
+        CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:CGPointMake(315, 470)], [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
         
+        [nearestCoin runAction:action];
         return;
     }
     
