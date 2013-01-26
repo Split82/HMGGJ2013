@@ -82,6 +82,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
+    CCSprite *slimeTop;
     MonsterSprite *monsterSprite;
     
     MasterControlProgram *masterControlProgram;
@@ -93,6 +94,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     BOOL gameOver;
     
     // UI vars
+    UIView *mainView;
     NSString *fontName;
     
     CCSprite *killSprite;
@@ -119,7 +121,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)onEnter {
 
     [super onEnter];
-
+    
     gestureRecognizer = [[GestureRecognizer alloc] init];
     gestureRecognizer.delegate = self;
     [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:gestureRecognizer priority:0 swallowsTouches:YES];
@@ -191,6 +193,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     slimeSprite.zOrder = 10;
     [mainSpriteBatch addChild:slimeSprite];
 
+    slimeTop = [[CCSprite alloc] initWithSpriteFrameName:@"tankWaterLevel.png"];
+    slimeTop.scale = [UIScreen mainScreen].scale * 2;    
+    slimeTop.anchorPoint = ccp(0.5, 0);
+    slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));
+    slimeTop.zOrder = 11;
+    [mainSpriteBatch addChild:slimeTop];
+
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
     foregroundSprite.anchorPoint = ccp(0.5, 0);
@@ -229,41 +238,47 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     fontName = @"Visitor TT1 BRK";
     UIFont *font = [UIFont fontWithName:fontName size:20];
     
+    UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
+    [view setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:view];
+    mainView = view;
+    
     CGFloat labelWidth = (320.0 - 10.0) / 2;
     CGSize contentSize = [CCDirector sharedDirector].winSize;
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
     killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 15.0);
-    [mainSpriteBatch addChild:killSprite];
+    killSprite.zOrder = 5000;
+    [self addChild:killSprite];
     
     killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 17.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
     [killsLabel setTextColor:[UIColor whiteColor]];
     [killsLabel setBackgroundColor:[UIColor clearColor]];
     [killsLabel setFont:font];
-    [[CCDirector sharedDirector].view addSubview:killsLabel];
+    [mainView addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0.5, 0);
-    coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
+    coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
     coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
-    [mainSpriteBatch addChild:coinsSprite];
+    [self addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
     [coinsLabel setTextAlignment:NSTextAlignmentRight];
     [coinsLabel setBackgroundColor:[UIColor clearColor]];
     [coinsLabel setFont:font];
-    [[CCDirector sharedDirector].view addSubview:coinsLabel];
+    [mainView addSubview:coinsLabel];
     
     healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
     [healthLabel setTextColor:[UIColor redColor]];
     [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
     [healthLabel setTextAlignment:NSTextAlignmentCenter];
     [healthLabel setBackgroundColor:[UIColor clearColor]];
-    //[[CCDirector sharedDirector].view addSubview:healthLabel];
+    //[mainView addSubview:healthLabel];
     
     UIImage *image;
     CGFloat offset = 0.0;
@@ -276,7 +291,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offset, 288.0, 24.0)];
     [rageBackgroundView setImage:image];
     [rageBackgroundView.layer setMagnificationFilter:kCAFilterNearest];
-    [[CCDirector sharedDirector].view addSubview:rageBackgroundView];
+    [mainView addSubview:rageBackgroundView];
     
     image = [UIImage imageNamed:@"progressBar"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
@@ -286,7 +301,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     rageView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 0.0, 8.0)];
     [rageView setClipsToBounds:YES];
     [rageView addSubview:imageView];
-    [[CCDirector sharedDirector].view addSubview:rageView];
+    [mainView addSubview:rageView];
     
     image = [UIImage imageNamed:@"pause"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
@@ -294,8 +309,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
     [pauseButton setImage:image];
     [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)]];
-    [[CCDirector sharedDirector].view addSubview:pauseButton];
+    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissToMenu)]];
+    [mainView addSubview:pauseButton];
     [self updateUI];
     
     int64_t delayInSeconds = 2.0;
@@ -640,9 +655,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 }
 
-- (void) dismiss {
-    [[CCDirector sharedDirector] dismissViewControllerAnimated:YES completion:^{
-        [[CCDirector sharedDirector] end];
+- (void) dismissToMenu {
+    [[CCDirector sharedDirector] popScene];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [mainView setAlpha:0];
+    } completion:^(BOOL finished) {
+        [mainView removeFromSuperview];
     }];
 }
 
@@ -663,7 +682,32 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void) displayAchievementWithName:(NSString *)name
 {
- 
+    /*
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    
+    UIImage *image = [UIImage imageNamed:name];
+    CGSize size = [image size];
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:scale * 2 orientation:image.imageOrientation];
+    UIImageView *attachmentView = [[UIImageView alloc] initWithFrame:CGRectMake((winSize.width - (size.width * scale)) / 2, (winSize.height - (size.height * scale)) / 2,
+                                                                                size.width * scale, size.height * scale)];
+    [attachmentView setImage:image];
+    [attachmentView setAlpha:0];
+    [mainView  addSubview:attachmentView];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        [attachmentView setAlpha:1];
+        int64_t delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [UIView animateWithDuration:0.5 animations:^{
+                [attachmentView setAlpha:0];
+            } completion:^(BOOL finished) {
+                [attachmentView removeFromSuperview];
+            }];
+        });
+    }];
+    */
 }
 
 - (void) showGameOver
@@ -674,6 +718,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
+    CCLayer *layer = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    layer.contentSize = [[CCDirector sharedDirector] winSize];
+    layer.zOrder = 2000;
+    [self addChild:layer];
+    
     gameOver = YES;
     CGSize screen = [CCDirector sharedDirector].winSize;
     gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
@@ -681,21 +730,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
     [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
     [gameOverLabel setText:@"Game Over, Loser!"];
-    [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
-    [[CCDirector sharedDirector].view addSubview:gameOverLabel];
+    [gameOverLabel setBackgroundColor:[UIColor clearColor]];
+    [mainView addSubview:gameOverLabel];
 
     restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
     [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
     [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
     [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
-    [[CCDirector sharedDirector].view addSubview:restartButton];
+    [mainView addSubview:restartButton];
 
-    [[CCDirector sharedDirector].view bringSubviewToFront:coinsLabel];
-    [coinsSprite setZOrder:10000];
-    [[CCDirector sharedDirector].view bringSubviewToFront:killsLabel];
-    [killSprite setZOrder:10000];
-    [[CCDirector sharedDirector].view bringSubviewToFront:pauseButton];
+    [mainView bringSubviewToFront:coinsLabel];
+    [mainView bringSubviewToFront:killsLabel];
+    [mainView bringSubviewToFront:pauseButton];
+    [rageView setAlpha:0];
+    [rageBackgroundView setAlpha:0];
 }
 
 - (void) restartGame
@@ -718,6 +767,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[AppDelegate player] newGame];
     [self updateUI];
     gameOver = NO;
+
+    [rageView setAlpha:1];
+    [rageBackgroundView setAlpha:1];
 }
 
 
@@ -811,8 +863,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [[AppDelegate player] calc:deltaTime];
 
+    // Slime
     [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
     [slimeSprite calc:deltaTime];
+
+    slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));    
 
     [monsterSprite calc:deltaTime];
 

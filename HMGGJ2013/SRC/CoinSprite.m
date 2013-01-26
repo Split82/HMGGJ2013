@@ -17,16 +17,7 @@
 #define START_BLINKING_TIME 4.5
 #define LIFE_TIME 6.0
 
-@interface CoinSprite() {
-    
-    float lifeTime;
-    float groundY;
-    CGPoint velocity;
-
-    NSArray *animationFrames;
-    int animationIndexes[14];
-    int animationOffset;
-}
+@interface CoinSprite()
 
 @end
 
