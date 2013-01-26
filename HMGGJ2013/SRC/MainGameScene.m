@@ -10,6 +10,7 @@
 #import "GameDataNameDefinitions.h"
 #import "EnemySprite.h"
 #import "AudioManager.h"
+#import "AppDelegate.h"
 
 #define TOP_HEIGHT 80
 
@@ -19,8 +20,12 @@
 
 #define ENEMY_SPAWN_TIME 1.0f
 #define ENEMY_SPAWN_DELTA_TIME 2.0f
+#define ENEMY_ATTACK_FORCE 5
 
-#define BOMB_KILL_PERIMETER 60
+#define BOMB_COINS_COST 2
+#define BOMB_KILL_PERIMETER 85
+
+#define TAP_MIN_DISTANCE2 (60*60)
 
 @interface MainGameScene() {
 
@@ -46,8 +51,19 @@
 
     // State vars
     BOOL sceneInitWasPerformed;
+    BOOL gameOver;
     
     float enemySpawnTime;
+    
+    // UI vars
+    NSString *fontName;
+    UILabel *killsLabel;
+    CCSprite *coinsSprite;
+    UILabel *coinsLabel;
+    UILabel *healthLabel;
+    
+    UILabel *gameOverLabel;
+    UIButton *restartButton;
 }
 
 @end
@@ -71,7 +87,6 @@
     if (sceneInitWasPerformed) {
         return;
     }
-
     sceneInitWasPerformed = YES;
 
     // Game objects
@@ -107,8 +122,8 @@
     backgroundSprite.anchorPoint = ccp(0, 0);
     backgroundSprite.position = ccp(0, 0);
     size = backgroundSprite.contentSize;
-    backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / backgroundSprite.contentSize.width;
-    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / backgroundSprite.contentSize.height;
+    backgroundSprite.scaleX = [CCDirector sharedDirector].winSize.width / size.width;
+    backgroundSprite.scaleY = [CCDirector sharedDirector].winSize.height / size.height;
     [mainSpriteBatch addChild:backgroundSprite];
 
     // Foreground
@@ -125,11 +140,6 @@
     [mainSpriteBatch addChild:bombSpawner];
 
     [self scheduleUpdate];
-
-    /*
-    CCParticleSystem *test = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
-    test.position = ccp(100, 100);
-    [particleBatchNode addChild:test];*/
     
     [self scheduleNewEnemySpawn];
     
@@ -148,7 +158,8 @@
 }
 
 - (void)addEnemy {
-
+    if (gameOver)
+        return;
     EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
 
     if (enemy.type == kEnemyTypeSwipe) {
@@ -179,19 +190,31 @@
     enemySpawnTime = ENEMY_SPAWN_TIME + (float)rand() / RAND_MAX * ENEMY_SPAWN_DELTA_TIME;
 }
 
+-(void)coinEndedCashingAnimation:(CoinSprite*)coin {
+    
+    [coin removeFromParentAndCleanup:YES];
+}
+
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
 
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedTapEnemies addObject:enemy];
+            [self kill:enemy];
         }
     }
 
     for (EnemySprite *enemy in swipeEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
             [killedSwipeEnemies addObject:enemy];
+            [self kill:enemy];
         }
     }
+
+    CCParticleSystem *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
+    explosionParticleSystem.autoRemoveOnFinish = YES;
+    explosionParticleSystem.position = pos;
+    [particleBatchNode addChild:explosionParticleSystem];
 }
 
 #pragma mark - CoinSpriteDelegate
@@ -221,6 +244,12 @@
 
         [killedSwipeEnemies addObject:enemy];
     }
+    [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
+    
+    if ([AppDelegate player].health == 0) {
+        [self gameOver];
+    }
+    [self updateUI];
 }
 
 #pragma mark - BombSpawnerDelegate
@@ -235,7 +264,7 @@
 - (void)longPressStarted:(CGPoint)pos {
 
     NSLog(@"LongPress start");
-    [bombSpawner startSpawningAtPos:pos];
+    [self dropBombAtPos:pos];
 }
 
 - (void)longPressEnded {
@@ -246,33 +275,63 @@
 
 - (void)swipeStarted:(CGPoint)pos {
 
-        NSLog(@"Swipe start");
+    NSLog(@"Swipe start");
 }
 
 - (void)swipeMoved:(CGPoint)pos {
 
-        NSLog(@"Swipe moved");    
+    NSLog(@"Swipe moved");    
 }
 
 - (void)swipeCancelled {
 
-            NSLog(@"Swipe cancelled"); 
+    NSLog(@"Swipe cancelled"); 
 }
 
 - (void)swipeEnded:(CGPoint)pos {
 
-        NSLog(@"Swipe ended");     
+    NSLog(@"Swipe ended");     
 }
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    NSLog(@"Tap recognized");
-    
     [[AudioManager sharedManager] scream];
     [[AudioManager sharedManager] stopBackgroundMusic];
 
     EnemySprite *nearestEnemy = nil;
+    CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
+    
+    for (CoinSprite *coin in coins) {
+        
+        if (nearestDistance < 0) {
+            
+            nearestDistance = ccpDistanceSQ(coin.position, pos);
+            nearestCoin = coin;
+        }
+        else {
+            
+            float distance = ccpDistanceSQ(coin.position, pos);
+            
+            if (distance < nearestDistance) {
+                
+                nearestDistance = distance;
+                nearestCoin = coin;
+            }
+        }
+    }
+    
+    if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
+        [coins removeObject:nearestCoin];
+
+        CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
+                                                        [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
+        
+        [nearestCoin runAction:action];
+        [self addCoin];
+        return;
+    }
+    
     for (EnemySprite *enemy in tapEnemies) {
         
         if (nearestDistance < 0) {
@@ -292,7 +351,7 @@
         }
     }
     
-    if (nearestEnemy && nearestDistance < 40*40) {
+    if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [nearestEnemy throwFromWall];
     }
@@ -376,6 +435,71 @@
         [self calc:FRAME_TIME_INTERVAL];
         calcTime -= FRAME_TIME_INTERVAL;
     }
+}
+
+#pragma mark -
+
+- (void) kill:(EnemySprite *)enemy
+{
+    [AppDelegate player].kills++;
+    [self addCoinAtPos:enemy.position];
+    [self updateUI];
+}
+
+- (void) addCoin
+{
+    [AppDelegate player].coins++;
+    [self updateUI];
+}
+
+- (void) dropBombAtPos:(CGPoint)pos
+{
+    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
+        [bombSpawner startSpawningAtPos:pos];
+        [[AppDelegate player] updateDropBombCount:1];
+        
+        [AppDelegate player].coins -= BOMB_COINS_COST;
+        [self updateUI];
+    }
+}
+
+- (void) gameOver
+{
+    if (gameOver)
+        return;
+    gameOver = YES;
+    CGSize screen = [CCDirector sharedDirector].winSize;
+    gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
+    [gameOverLabel setTextColor:[UIColor whiteColor]];
+    [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
+    [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
+    [gameOverLabel setText:@"Game Over, Loser!"];
+    [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+    [[CCDirector sharedDirector].view addSubview:gameOverLabel];
+    
+    restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
+    [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
+    [restartButton addTarget:self action:@selector(restart) forControlEvents:UIControlEventTouchUpInside];
+    [[CCDirector sharedDirector].view addSubview:restartButton];
+}
+
+- (void) restart
+{
+    [gameOverLabel removeFromSuperview];
+    gameOverLabel = nil;
+    [restartButton removeFromSuperview];
+    restartButton = nil;
+    
+    [killedBombs addObjectsFromArray:bombs];
+    [killedCoins addObjectsFromArray:coins];
+    [killedTapEnemies addObjectsFromArray:tapEnemies];
+    [killedSwipeEnemies addObjectsFromArray:swipeEnemies];
+    
+    [[AppDelegate player] newGame];
+    [self updateUI];
+    gameOver = NO;
 }
 
 @end

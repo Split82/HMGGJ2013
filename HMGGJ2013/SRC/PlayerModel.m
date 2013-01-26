@@ -46,10 +46,11 @@
     self = [super init];
     
     if (self) {
-        _writeLock = [[NSLock alloc] init];
+        // player defaults
+        [self newGame];
         
-        //[[NSFileManager defaultManager] createFileAtPath:[self _scoreFilePath] contents:nil attributes:nil];
-        //[[NSFileManager defaultManager] createFileAtPath:[self _achievementsFilePath] contents:nil attributes:nil];
+        // achievements & score
+        _writeLock = [[NSLock alloc] init];
         
         id unarchivedData = nil;
         unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:[self _scoreFilePath]];
@@ -101,6 +102,33 @@
     
     [_lastKillTime invalidate];
     _lastKillTime = nil;
+}
+
+#pragma mark -
+
+- (void) setKills:(NSInteger)kills
+{
+    _kills = kills;
+    [self updateKillCount:kills];
+}
+
+- (void) setCoins:(NSInteger)coins
+{
+    _coins = coins;
+    [self updateCoinsCount:coins];
+}
+
+- (void) setHealth:(NSInteger)health
+{
+    if (health < 0) health = 0;
+    _health = health;
+}
+
+- (void) newGame
+{
+    _kills = 0;
+    _coins = 10;
+    _health = 100;
 }
 
 #pragma mark Score
@@ -352,7 +380,7 @@
 - (NSString *) _scoreFilePath
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    return [NSString stringWithFormat:@"%@/%@.scores.plist", [GKLocalPlayer localPlayer].playerID, path];
+    return [NSString stringWithFormat:@"%@/%@.scores.plist", path, [GKLocalPlayer localPlayer].playerID];
 }
 
 - (void) _submitScore:(GKScore *)score
@@ -400,7 +428,7 @@
 - (NSString *) _achievementsFilePath
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    return [NSString stringWithFormat:@"%@/%@.achievements.plist", [GKLocalPlayer localPlayer].playerID, path];
+    return [NSString stringWithFormat:@"%@/%@.achievements.plist", path, [GKLocalPlayer localPlayer].playerID];
 }
 
 - (void) _submitAchievement:(GKAchievement *)achievement

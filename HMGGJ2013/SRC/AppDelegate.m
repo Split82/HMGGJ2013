@@ -39,11 +39,13 @@
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     MainMenuViewController *viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController" bundle:nil];
-    window.rootViewController = viewController;
-
+    [window setRootViewController:viewController];
 	[window makeKeyAndVisible];
 	
     [self setGameCenterAuthenticationComplete:NO];
+    
+    [self setPlayer:[[PlayerModel alloc] init]];
+    
     GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
     [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
         if ([localPlayer isAuthenticated]) {

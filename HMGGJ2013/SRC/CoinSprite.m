@@ -25,6 +25,7 @@
 
     NSArray *animationFrames;
     int animationIndexes[14];
+    int animationOffset;
 }
 
 @end
@@ -36,12 +37,15 @@
 
     self = [self initWithSpriteFrameName:@"coin1.png"];
     if (self) {
+        
         self.anchorPoint = ccp(0.5, 0);
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
-        groundY = startPos.y;
+        groundY = 20;
         velocity = ccp(25 - 50 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
 
+        animationOffset = rand() % 14;
+        
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
         animationFrames = @[
         [spriteFrameCache spriteFrameByName:@"coin1.png"],
@@ -84,7 +88,7 @@
         velocity = ccp(velocity.x, - velocity.y);
     }
 
-    [self setDisplayFrame:animationFrames[animationIndexes[(int)round(lifeTime / ANIMATION_SPEED) % 14]]];
+    [self setDisplayFrame:animationFrames[animationIndexes[(animationOffset + (int)round(lifeTime / ANIMATION_SPEED)) % 14]]];
 
     if (lifeTime > START_BLINKING_TIME) {
         self.visible = ((int)round(lifeTime / BLINKING_SPEED) % 2) == 0;

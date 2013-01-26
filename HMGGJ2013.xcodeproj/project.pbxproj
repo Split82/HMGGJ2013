@@ -137,9 +137,8 @@
 		553BA18E16B3103C00B4E22B /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA18C16B3103C00B4E22B /* MainMenuViewController.m */; };
 		553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */; };
 		553BA19916B3214000B4E22B /* CoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA19816B3214000B4E22B /* CoinSprite.m */; };
-		553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */; };
-		553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */; };
 		553BA1B916B33CA000B4E22B /* GestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553BA1B816B33CA000B4E22B /* GestureRecognizer.m */; };
+		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -147,10 +146,12 @@
 		55B862C416B2199900D5BA8D /* GameObjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B862C216B2199900D5BA8D /* GameObjects.png */; };
 		55CDD44116B3670E00704F3B /* BombSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44016B3670E00704F3B /* BombSprite.m */; };
 		55CDD44516B3708100704F3B /* BombSpawner.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD44416B3708100704F3B /* BombSpawner.m */; };
+		55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
 		65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD416B33A4F0012B735 /* AboutViewController.xib */; };
+		6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6527936B16B3E28900E4B82F /* visitor1.ttf */; };
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
@@ -424,10 +425,9 @@
 		553BA18D16B3103C00B4E22B /* MainMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenuViewController.xib; sourceTree = "<group>"; };
 		553BA19716B3214000B4E22B /* CoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinSprite.h; sourceTree = "<group>"; };
 		553BA19816B3214000B4E22B /* CoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinSprite.m; sourceTree = "<group>"; };
-		553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
-		553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
 		553BA1B716B33CA000B4E22B /* GestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureRecognizer.h; sourceTree = "<group>"; };
 		553BA1B816B33CA000B4E22B /* GestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureRecognizer.m; sourceTree = "<group>"; };
+		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -439,12 +439,14 @@
 		55CDD44016B3670E00704F3B /* BombSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSprite.m; sourceTree = "<group>"; };
 		55CDD44316B3708100704F3B /* BombSpawner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombSpawner.h; sourceTree = "<group>"; };
 		55CDD44416B3708100704F3B /* BombSpawner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombSpawner.m; sourceTree = "<group>"; };
+		55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SimpleParticleTexture.png; sourceTree = "<group>"; };
 		65259BCD16B337690012B735 /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
 		65259BCE16B337690012B735 /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		65259BD016B338670012B735 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		65259BD216B33A4F0012B735 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		65259BD316B33A4F0012B735 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		65259BD416B33A4F0012B735 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
+		6527936B16B3E28900E4B82F /* visitor1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = visitor1.ttf; path = Resources/visitor1.ttf; sourceTree = "<group>"; };
 		653B145A16B3133F00E2FD0F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		653B145B16B3133F00E2FD0F /* PlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerModel.m; sourceTree = "<group>"; };
 		653B148D16B31E6200E2FD0F /* AchievemntNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievemntNameDefinitions.h; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 		553741C216B1F72900D860C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6527936B16B3E28900E4B82F /* visitor1.ttf */,
 				65259BD016B338670012B735 /* Default-568h@2x.png */,
 				553741C316B1F72900D860C2 /* Default.png */,
 				553741C516B1F72900D860C2 /* Default-Landscape~ipad.png */,
@@ -934,8 +937,8 @@
 		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
 			isa = PBXGroup;
 			children = (
-				553BA1AE16B3302400B4E22B /* SimpleParticleTexture.png */,
-				553BA1AC16B32DFC00B4E22B /* ExplosionParticleSystem.plist */,
+				55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */,
+				55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */,
 			);
 			name = ParticleSystems;
 			sourceTree = "<group>";
@@ -1083,14 +1086,15 @@
 				55B862C316B2199900D5BA8D /* GameObjects.plist in Resources */,
 				55B862C416B2199900D5BA8D /* GameObjects.png in Resources */,
 				553BA18F16B3103C00B4E22B /* MainMenuViewController.xib in Resources */,
-				553BA1AD16B32DFC00B4E22B /* ExplosionParticleSystem.plist in Resources */,
-				553BA1AF16B3302400B4E22B /* SimpleParticleTexture.png in Resources */,
 				65259BD116B338670012B735 /* Default-568h@2x.png in Resources */,
 				65259BD616B33A4F0012B735 /* AboutViewController.xib in Resources */,
 				388E061916B34E3B0090B788 /* achievements.txt in Resources */,
 				388E061E16B356450090B788 /* brum.mp3 in Resources */,
 				386BAE7E16B36684002C4EF5 /* muhaha.wav in Resources */,
 				38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */,
+				55CDD45B16B38C0B00704F3B /* SimpleParticleTexture.png in Resources */,
+				55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */,
+				6527936C16B3E28900E4B82F /* visitor1.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
