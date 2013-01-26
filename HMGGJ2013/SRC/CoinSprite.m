@@ -33,7 +33,7 @@
 
 @implementation CoinSprite
 
-- (id)initWithStartPos:(CGPoint)startPos {
+- (id)initWithStartPos:(CGPoint)startPos groundY:(CGFloat)initGroundY {
 
     self = [self initWithSpriteFrameName:@"coin1.png"];
     if (self) {
@@ -41,7 +41,7 @@
         self.anchorPoint = ccp(0.5, 0);
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
-        groundY = 20;
+        groundY = initGroundY;
         velocity = ccp(25 - 50 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
 
         animationOffset = rand() % 14;
