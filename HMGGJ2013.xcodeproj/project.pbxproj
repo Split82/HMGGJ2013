@@ -148,6 +148,7 @@
 		653B145C16B3133F00E2FD0F /* PlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B145B16B3133F00E2FD0F /* PlayerModel.m */; };
 		653B148F16B31E6200E2FD0F /* AchievemntNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
+		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -435,6 +436,8 @@
 		653B148E16B31E6200E2FD0F /* AchievemntNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievemntNameDefinitions.m; sourceTree = "<group>"; };
 		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
+		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
+		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -893,6 +896,8 @@
 				553BA19816B3214000B4E22B /* CoinSprite.m */,
 				E619264416B31E4A00904535 /* EnemySprite.h */,
 				E619264516B31E4A00904535 /* EnemySprite.m */,
+				E6A61C7716B33AD8000912CA /* WallGrid.h */,
+				E6A61C7816B33AD8000912CA /* WallGrid.m */,
 			);
 			name = GameObjects;
 			sourceTree = "<group>";
@@ -1162,6 +1167,7 @@
 				553BA19916B3214000B4E22B /* CoinSprite.m in Sources */,
 				E619264616B31E4A00904535 /* EnemySprite.m in Sources */,
 				65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */,
+				E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */,
 				65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */,
 				388E061516B344B00090B788 /* AudioManager.m in Sources */,
 			);

@@ -19,12 +19,23 @@ typedef enum {
     kEnemyStateFalling,
 } EnemyState;
 
+@protocol EnemySpriteDelegate;
+
 @interface EnemySprite : CCSprite
+
 
 -(id) initWithType:(EnemyType)type;
 -(void) update:(ccTime)time;
 
+@property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;
 @property (nonatomic, assign) EnemyType type;
 @property (nonatomic, assign) EnemyState state;
+
+@end
+
+
+@protocol EnemySpriteDelegate
+
+- (void)enemyDidClimbWall:(EnemySprite*)enemy;
 
 @end
