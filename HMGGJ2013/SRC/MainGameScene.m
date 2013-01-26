@@ -26,6 +26,22 @@
 #define BOMB_KILL_PERIMETER 85
 
 #define TAP_MIN_DISTANCE2 (60*60)
+#define SWIPE_MIN_DISTANCE2 (20*20)
+
+float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
+    // Return minimum distance between line segment vw and point p
+    const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
+    if (l2 == 0.0) return ccpDistanceSQ(p, v);   // v == w case
+    // Consider the line extending the segment, parameterized as v + t (w - v).
+    // We find projection of point p onto the line.
+    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+    const float t = ccpDot(ccpSub(p, v), ccpSub(w, v)) / l2;
+    if (t < 0.0) return ccpDistanceSQ(p, v);       // Beyond the 'v' end of the segment
+    else if (t > 1.0) return ccpDistanceSQ(p, w);  // Beyond the 'w' end of the segment
+    const CGPoint projection = ccpAdd(v, ccpMult(ccpSub(w, v), t));  // Projection falls on the segment
+    return ccpDistanceSQ(p, projection);
+}
+
 
 @interface MainGameScene() {
 
@@ -207,7 +223,7 @@
 - (void)addEnemy {
     if (gameOver)
         return;
-    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)kEnemyTypeTap/*rand() % 2*/];
+    EnemySprite *enemy = [[EnemySprite alloc] initWithType:(EnemyType)rand() % 2];
 
     if (enemy.type == kEnemyTypeSwipe) {
 
@@ -327,7 +343,15 @@
 
 - (void)swipeMoved:(CGPoint)pos {
 
-    NSLog(@"Swipe moved");    
+    NSLog(@"Swipe moved");
+    
+    for (EnemySprite *enemy in swipeEnemies) {
+        
+        if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
+            
+            [enemy throwFromWall];
+        }
+    }
 }
 
 - (void)swipeCancelled {

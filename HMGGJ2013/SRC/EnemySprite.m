@@ -68,6 +68,11 @@
         
         climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET);
         
+        if (type == kEnemyTypeSwipe) {
+            
+            self.flipY = YES;
+        }
+        
         if (rand() % 2) {
             
             direction = 1;
