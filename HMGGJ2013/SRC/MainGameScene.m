@@ -28,6 +28,8 @@
 #define TAP_MIN_DISTANCE2 (60*60)
 #define SWIPE_MIN_DISTANCE2 (20*20)
 
+#define GROUND_Y 45
+
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
     const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
@@ -41,9 +43,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     const CGPoint projection = ccpAdd(v, ccpMult(ccpSub(w, v), t));  // Projection falls on the segment
     return ccpDistanceSQ(p, projection);
 }
-
-
-#define GROUND_Y 45
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y 46
