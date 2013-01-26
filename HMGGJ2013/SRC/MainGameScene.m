@@ -53,9 +53,9 @@
     BOOL sceneInitWasPerformed;
     BOOL gameOver;
     
-    // UI vars
     float enemySpawnTime;
     
+    // UI vars
     NSString *fontName;
     UILabel *killsLabel;
     CCSprite *coinsSprite;
