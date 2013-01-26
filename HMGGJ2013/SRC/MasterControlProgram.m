@@ -8,8 +8,8 @@
 
 #import "MasterControlProgram.h"
 #import "MainGameScene.h"
-
-#define ARC4RANDOM_MAX      0x100000000
+#import "CCDirector.h"
+#import "MainGameScene.h"
 
 // init values
 const float INIT_ENEMIES_PER_WAVE = 4.0f;
@@ -17,7 +17,6 @@ const float INIT_WAVE_PERIOD = 15.0f; // seconds
 
 const float INIT_SWIPE_TAP_ENEMIES_RATIO = 0.2;
 
-// constant values
 const float ENEMIES_GROWTH_PER_WAVE = 0.9;
 const float SWIPE_TAP_RATIO_GROWTH_PER_WAVE = 0.05;
 const float WAVE_LENGHT_DECREASE = 0.75; // second
@@ -33,6 +32,9 @@ const float WAVE_ENEMY_SPAWN_TIME = 0.5f;
 const float WAVE_ENEMY_SPAWN_DELTA_TIME = 0.5f;
 
 const float INCREASE_SPAWN_SPEED_FACTOR = 1.25f;
+
+const float RANDOM_COIN_SPAWN_TIME = 3.0f;
+const float RANDOM_COIN_SPAWN_DELTA_TIME = 5.0f;
 
 float increase(float value, float inc, float MAX) {
     if (value < MAX) {
@@ -54,13 +56,19 @@ float decrease(float value, float dec, float MIN) {
     return value;
 }
 
+float frand() {
+    return (float)rand() / RAND_MAX;
+}
+
 @implementation MasterControlProgram {
     float enemiesPerWave;
     float wavePeriod;
     float swipeTapRatio;
     
+    // timers
     float nextWaveTime;
     float nextEnemySpawnTime;
+    float nextRandomCoinTime;
     
     float enemySpawnTime;
     float enemySpawnTimeDelta;
@@ -82,8 +90,9 @@ float decrease(float value, float dec, float MIN) {
         enemySpawnTimeDelta = ENEMY_SPAWN_DELTA_TIME;
         
         waveSpawnSpeedFactor = 1.0f;
-        
+                
         [self scheduleNewEnemySpawn];
+        [self sheduleNewCoinSpawn];
     }
     
     return self;
@@ -92,7 +101,12 @@ float decrease(float value, float dec, float MIN) {
 - (void)calc:(ccTime)deltaTime; {
     nextWaveTime -= deltaTime;
     nextEnemySpawnTime -= deltaTime;
+    nextRandomCoinTime -= deltaTime;
 
+    if (nextRandomCoinTime < 0) {
+        [self spawnCoin];
+    }
+    
     if (nextWaveTime < 0) {
         [self startWave];
     }
@@ -106,7 +120,12 @@ float decrease(float value, float dec, float MIN) {
 
 - (void)scheduleNewEnemySpawn {
     
-    nextEnemySpawnTime = enemySpawnTime + (float)arc4random() / ARC4RANDOM_MAX * enemySpawnTimeDelta;
+    nextEnemySpawnTime = enemySpawnTime + frand() * enemySpawnTimeDelta;
+}
+
+- (void)sheduleNewCoinSpawn {
+    
+    nextRandomCoinTime = RANDOM_COIN_SPAWN_TIME + frand() * RANDOM_COIN_SPAWN_DELTA_TIME;
 }
 
 
@@ -133,7 +152,7 @@ float decrease(float value, float dec, float MIN) {
 - (void)spawnEnemy {
     
     // TODO for now, it's just randomness, not calculating true ration of spawned enemis
-    if ((float)arc4random() / ARC4RANDOM_MAX < swipeTapRatio) {
+    if (frand() < swipeTapRatio) {
         NSLog(@"Enemy Swipe");
         [self.mainframe addEnemy:kEnemyTypeSwipe];
     
@@ -155,6 +174,13 @@ float decrease(float value, float dec, float MIN) {
     }    
     
     [self scheduleNewEnemySpawn];
+}
+
+- (void)spawnCoin {
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    
+    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), winSize.height * frand() + GROUND_Y)];
+    [self sheduleNewCoinSpawn];
 }
 
 @end

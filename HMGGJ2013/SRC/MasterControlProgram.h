@@ -29,4 +29,6 @@
 
 - (int)countSwipeEnemies;
 
+- (void)addCoinAtPos:(CGPoint)pos;
+
 @end
