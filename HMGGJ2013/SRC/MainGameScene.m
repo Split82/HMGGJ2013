@@ -11,6 +11,7 @@
 #import "EnemySprite.h"
 #import "AudioManager.h"
 #import "AppDelegate.h"
+#import "MasterControlProgram.h"
 
 #define TOP_HEIGHT 80
 
@@ -46,6 +47,8 @@
     NSMutableArray *killedBombs;
 
     BombSpawner *bombSpawner;
+    
+    MasterControlProgram *masterControlProgram;
     
     CCParticleBatchNode *particleBatchNode;
 
@@ -457,11 +460,7 @@
     }
     [killedSwipeEnemies removeAllObjects];
 
-    enemySpawnTime -= deltaTime;
-    if (enemySpawnTime < 0) {
-        
-        [self addEnemy];
-    }
+    
 }
 
 - (void)update:(ccTime)deltaTime {

@@ -10,4 +10,6 @@
 
 @interface MasterControlProgram : NSObject
 
+- (void)calc;
+
 @end
