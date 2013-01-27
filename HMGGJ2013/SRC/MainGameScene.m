@@ -719,9 +719,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    [[AudioManager sharedManager] scream];
-    [[AudioManager sharedManager] stopBackgroundMusic];
-
     EnemySprite *nearestEnemy = nil;
     CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
@@ -870,6 +867,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark -
 
 - (void) createLightningToEnemy:(EnemySprite*)enemy {
+    [[AudioManager sharedManager] enemyHit];    
     
     CGPoint startPos = CGPointMake(0, 20);
     Lightning *lightning = [[Lightning alloc] initWithStartPos:startPos endPos:enemy.position];

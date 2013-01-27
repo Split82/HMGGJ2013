@@ -22,4 +22,6 @@
 
 - (void)groundHit;
 
+- (void)enemyHit;
+
 @end
