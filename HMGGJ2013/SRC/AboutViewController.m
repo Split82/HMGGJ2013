@@ -43,7 +43,7 @@
     [self.backgroundView.layer setMagnificationFilter:kCAFilterNearest];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"about-twitter"]];
-    [imageView setFrame:[self rectWithSize:CGSizeMake(82.0, 92.0) originY:118]];
+    [imageView setFrame:[self rectWithSize:CGSizeMake(82.0, 92.0) originY:118 - (IS_WIDESCREEN ? 0 : 42.0)]];
     [imageView.layer setMagnificationFilter:kCAFilterNearest];
     [imageView setUserInteractionEnabled:YES];
     [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twitterPressed:)]];
