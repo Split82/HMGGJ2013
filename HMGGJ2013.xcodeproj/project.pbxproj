@@ -165,6 +165,7 @@
 		55F18D8916B51FFB0034650D /* GroundHit1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8616B51FFB0034650D /* GroundHit1.wav */; };
 		55F18D8A16B51FFB0034650D /* GroundHit2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8716B51FFB0034650D /* GroundHit2.wav */; };
 		55F18D8B16B51FFB0034650D /* GroundHit3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8816B51FFB0034650D /* GroundHit3.wav */; };
+		55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F18D8E16B5234D0034650D /* RandomPicker.m */; };
 		650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 650CCB7916B494AB004F0241 /* MenuCoinSprite.m */; };
 		650CCBA816B4AE52004F0241 /* menu-resume.png in Resources */ = {isa = PBXBuildFile; fileRef = 650CCBA716B4AE52004F0241 /* menu-resume.png */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
@@ -502,6 +503,8 @@
 		55F18D8616B51FFB0034650D /* GroundHit1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundHit1.wav; sourceTree = "<group>"; };
 		55F18D8716B51FFB0034650D /* GroundHit2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundHit2.wav; sourceTree = "<group>"; };
 		55F18D8816B51FFB0034650D /* GroundHit3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundHit3.wav; sourceTree = "<group>"; };
+		55F18D8E16B5234D0034650D /* RandomPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomPicker.m; sourceTree = "<group>"; };
+		55F18D9016B5243F0034650D /* RandomPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomPicker.h; sourceTree = "<group>"; };
 		650CCB7816B494AB004F0241 /* MenuCoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCoinSprite.h; sourceTree = "<group>"; };
 		650CCB7916B494AB004F0241 /* MenuCoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCoinSprite.m; sourceTree = "<group>"; };
 		650CCBA716B4AE52004F0241 /* menu-resume.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-resume.png"; sourceTree = "<group>"; };
@@ -1064,6 +1067,8 @@
 			children = (
 				554AD1FB16B45D1800441632 /* ScreenShaker.h */,
 				554AD1FC16B45D1800441632 /* ScreenShaker.m */,
+				55F18D9016B5243F0034650D /* RandomPicker.h */,
+				55F18D8E16B5234D0034650D /* RandomPicker.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -1400,6 +1405,7 @@
 				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
 				5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */,
 				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,
+				55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
