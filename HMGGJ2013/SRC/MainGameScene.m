@@ -115,12 +115,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     UIView *rageView;
     UIImageView *rageBackgroundView;
+    CCLayer *menuBackground;
 }
 
 @end
 
 
 @implementation MainGameScene
+
+@synthesize menuBackground;
+@synthesize mainView;
 
 - (void)onEnter {
 
@@ -718,11 +722,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 }
 
-- (void) dismissToMenu {
-    if (!gameOver) {
-        [[AppDelegate player] storeScore:[AppDelegate player].points];
-    }
-    [[CCDirector sharedDirector] popScene];
+- (void) dismissToMenu {    
+    [[CCDirector sharedDirector] pause];
+    
+    menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
+    menuBackground.zOrder = 2000;
+    [self addChild:menuBackground];
+    
+    [[AppDelegate mainMenuScene] setGame:YES];
+    [[CCDirector sharedDirector].view addSubview:[[AppDelegate mainMenuScene] mainView]];
     
     [UIView animateWithDuration:0.25 animations:^{
         [mainView setAlpha:0];
@@ -784,10 +793,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
-    CCLayer *layer = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
-    layer.contentSize = [[CCDirector sharedDirector] winSize];
-    layer.zOrder = 2000;
-    [self addChild:layer];
+    menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
+    menuBackground.zOrder = 2000;
+    [self addChild:menuBackground];
     
     gameOver = YES;
     CGSize screen = [CCDirector sharedDirector].winSize;
@@ -811,6 +820,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView bringSubviewToFront:pauseButton];
     [rageView setAlpha:0];
     [rageBackgroundView setAlpha:0];
+    [pauseButton setAlpha:0];
     
     [[AppDelegate player] storeScore:[AppDelegate player].points];
 }
@@ -838,6 +848,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     [rageView setAlpha:1];
     [rageBackgroundView setAlpha:1];
+    [pauseButton setAlpha:1];
+    
+    [menuBackground removeFromParentAndCleanup:YES];
 }
 
 
@@ -981,5 +994,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         calcTime -= FRAME_TIME_INTERVAL;
     }
 }
+
+-(float) slimeSurfacePosY {
+    
+    return CGRectGetMaxY(slimeSprite.boundingBox);
+}
+
 
 @end

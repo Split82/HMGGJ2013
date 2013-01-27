@@ -20,4 +20,7 @@
 
 @interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate>
 
+@property (nonatomic, strong) CCLayer *menuBackground;
+@property (nonatomic, strong) UIView *mainView;
+
 @end
