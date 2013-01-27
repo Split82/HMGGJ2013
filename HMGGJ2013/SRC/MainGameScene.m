@@ -1102,13 +1102,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     [masterControlProgram calc:deltaTime];
     
-    if ([AppDelegate player].rage >= 1) {
-        [self addBombAtPosX:25.0];
-        [self addBombAtPosX:85.0];
-        [self addBombAtPosX:155.0];
-        [self addBombAtPosX:225.0];
-        [self addBombAtPosX:295.0];
-        [[AppDelegate player] updateDropBombCount:5];
+    if ([AppDelegate player].rage >= 1.0) {
+        [self addBombAtPosX:80.0];
+        [self addBombAtPosX:160.0];
+        [self addBombAtPosX:240.0];
+        [[AppDelegate player] updateDropBombCount:3];
         [self updateUI];
         [AppDelegate player].rage = 0;
     }
