@@ -41,5 +41,7 @@ typedef enum {
 @protocol EnemySpriteDelegate
 
 - (void)enemyDidClimbWall:(EnemySprite*)enemy;
+- (float)slimeSurfacePosY;
+
 
 @end
