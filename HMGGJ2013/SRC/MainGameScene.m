@@ -16,7 +16,9 @@
 #import "MasterControlProgram.h"
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
+#import "MonsterHearth.h"
 #import "MainMenuGameScene.h"
+#import "MenuCoinSprite.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -38,14 +40,17 @@
 #define TAP_PICK_COIN_MIN_DISTANCE2 (50*50)
 #define SWIPE_MIN_DISTANCE2 (30*30)
 
+#define SLIME_WIDTH 280
+#define SLIME_GROUND_Y (GROUND_Y + 1)
+#define SLIME_MAX_HEIGHT 300
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
     const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
     if (l2 == 0.0) return ccpDistanceSQ(p, v);   // v == w case
-    // Consider the line extending the segment, parameterized as v + t (w - v).
-    // We find projection of point p onto the line.
-    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+                                                 // Consider the line extending the segment, parameterized as v + t (w - v).
+                                                 // We find projection of point p onto the line.
+                                                 // It falls where t = [(p-v) . (w-v)] / |w-v|^2
     const float t = ccpDot(ccpSub(p, v), ccpSub(w, v)) / l2;
     if (t < 0.0) return ccpDistanceSQ(p, v);       // Beyond the 'v' end of the segment
     else if (t > 1.0) return ccpDistanceSQ(p, w);  // Beyond the 'w' end of the segment
@@ -53,9 +58,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     return ccpDistanceSQ(p, projection);
 }
 
-#define SLIME_WIDTH 280
-#define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 300
 
 @interface MainGameScene() {
 
@@ -73,18 +75,26 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *bombs;
     NSMutableArray *enemyBodyDebrises;
     NSMutableArray *bubbles;
+    NSMutableArray *labels;
+    NSMutableArray *flyingSkulls;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
     NSMutableArray *killedEnemyBodyDebrises;
-    NSMutableArray *killedBubbles;    
+    NSMutableArray *killedBubbles;
+    NSMutableArray *killedLabels;
+    NSMutableArray *killedFlyingSkulls;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
     CCSprite *slimeTop;
     MonsterSprite *monsterSprite;
+    MonsterHearth *monsterHearth;
+    
+    NSMutableArray *menuCoins;
+    MonsterHearth *menuHeart;
     
     MasterControlProgram *masterControlProgram;
     
@@ -151,19 +161,29 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bombs = [[NSMutableArray alloc] initWithCapacity:10];
     enemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
     bubbles = [[NSMutableArray alloc] initWithCapacity:40];
+    labels = [[NSMutableArray alloc] initWithCapacity:4];
+    flyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
     killedEnemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
-    killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];    
+    killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];
+    killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
+    killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    
+    menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
     [frameCache addSpriteFramesWithFile:kGameObjectsSpriteFramesFileName];
 
     CCSpriteFrame *placeholderSpriteFrame = [frameCache spriteFrameByName:kPlaceholderTextureFrameName];
+
+    // Load font texture
+    CCTexture2D *pixelFontTexture = [[CCTextureCache sharedTextureCache] addImage:@"PixelFont.png"];
+    [pixelFontTexture setAliasTexParameters];
 
     // Sprite batch
     mainSpriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:100];
@@ -191,8 +211,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     monsterSprite.zOrder = 3;
     [mainSpriteBatch addChild:monsterSprite];
 
+    // Monster hearth
+    monsterHearth = [[MonsterHearth alloc] init];
+    monsterHearth.anchorPoint = ccp(0.5, 0);
+    monsterHearth.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) - 18);
+    monsterHearth.zOrder = 4;
+    [mainSpriteBatch addChild:monsterHearth];
+
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    [slimeSprite setActualEnergy:0.5];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
@@ -265,10 +293,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
-    coinsSprite.anchorPoint = ccp(0.5, 0);
+    coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 20);
     [self addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
@@ -314,7 +342,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
     [pauseButton setImage:image];
     [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissToMenu)]];
+    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pauseGame)]];
     [mainView addSubview:pauseButton];
     [self updateUI];
     
@@ -351,11 +379,19 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)addCoinAtPos:(CGPoint)pos {
 
-    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     newCoin.zOrder = GAME_OBJECTS_Z_ORDER;
     newCoin.delegate = self;
     [coins addObject:newCoin];
     [mainSpriteBatch addChild:newCoin];
+}
+
+- (void)addMenuCoinAtPos:(CGPoint)pos {
+    CoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+    newCoin.zOrder = 4000;
+    newCoin.delegate = self;
+    [menuCoins addObject:newCoin];
+    [self addChild:newCoin];
 }
 
 - (void)addEnemy:(EnemyType)type {
@@ -388,7 +424,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 -(void)coinEndedCashingAnimation:(CoinSprite*)coin {
-    
+
     [coin removeFromParentAndCleanup:YES];
 }
 
@@ -444,7 +480,24 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
             kills++;
         }
     }
-    [AppDelegate player].points += kills;
+
+    if (kills > 0) {
+        [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
+    }
+    else if (kills == 2) {
+        [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (kills == 3) {
+        [self addScoreAddLabelWithText:@"TRIPLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (kills == 4) {
+        [self addScoreAddLabelWithText:@"MEGA KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (kills > 5) {
+        [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+
+    [AppDelegate player].points += kills * kills;
     [self updateUI];
 
     CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
@@ -453,11 +506,52 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [particleBatchNode addChild:explosionParticleSystem];
 }
 
+- (void)addScoreAddLabelWithText:(NSString*)text pos:(CGPoint)pos type:(ScoreAddLabelType)type addSkull:(BOOL)addSkull {
+
+    ScoreAddLabel *scoreAddLabel = [[ScoreAddLabel alloc] initWithText:text pos:pos type:type];
+    if (addSkull) {
+        scoreAddLabel.anchorPoint = ccp(1, 0.5);
+    }
+    else {
+        scoreAddLabel.anchorPoint = ccp(0.5, 0.5);
+    }
+    scoreAddLabel.scale = [UIScreen mainScreen].scale * 2;
+    scoreAddLabel.delegate = self;
+    scoreAddLabel.zOrder = 100;
+    [self addChild:scoreAddLabel];
+    [labels addObject:scoreAddLabel];
+
+    if (addSkull) {
+
+        FlyingSkullSprite *flyingSkull = [[FlyingSkullSprite alloc] initWithPos:ccpAdd(pos, ccp(4, -4))];
+        flyingSkull.delegate = self;
+        flyingSkull.scale = [UIScreen mainScreen].scale * 2;        
+        flyingSkull.zOrder = 100;
+        flyingSkull.anchorPoint = ccp(0, 0.5);
+        [flyingSkulls addObject:flyingSkull];
+        [mainSpriteBatch addChild:flyingSkull];
+    }
+}
+
+#pragma mark - ScoreAddDelegate
+
+- (void)scoreAddLabelDidFinish:(ScoreAddLabel *)label {
+
+    [killedLabels addObject:label];
+}
+
 #pragma mark - CoinSpriteDelegate
 
 - (void)coinDidDie:(CoinSprite *)coinSprite {
 
     [killedCoins addObject:coinSprite];
+}
+
+#pragma mark - FlyingSkullSpriteDelegate
+
+- (void)flyingSkullSpriteDidFinish:(FlyingSkullSprite *)flyingSkull {
+
+    [killedFlyingSkulls addObject:flyingSkull];
 }
 
 #pragma mark - BombSpriteDelegate
@@ -493,12 +587,24 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
 
-    [self addBombAtPosX:bombSpawner.pos.x];
+    if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
-    [[AppDelegate player] updateDropBombCount:1];
+        [self addScoreAddLabelWithText:@"NOT ENOUGH COINS!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else {
 
-    [AppDelegate player].coins -= BOMB_COINS_COST;
-    [self updateUI];
+        CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BombEmitParticleSystem.plist"];
+        explosionParticleSystem.autoRemoveOnFinish = YES;
+        explosionParticleSystem.position = _bombSpawner.pos;
+        [particleBatchNode addChild:explosionParticleSystem];
+
+        [self addBombAtPosX:bombSpawner.pos.x];
+
+        [[AppDelegate player] updateDropBombCount:1];
+
+        [AppDelegate player].coins -= BOMB_COINS_COST;
+        [self updateUI];
+    }
 }
 
 #pragma mark - EnemyBodyDebrisDelegate
@@ -526,9 +632,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
-    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
-        [bombSpawner startSpawningAtPos:pos];
-    }
+    [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
@@ -665,14 +769,31 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 }
 
-- (void) dismissToMenu {    
-    [[CCDirector sharedDirector] pause];
+- (void) setPause:(BOOL)pause
+{
+    _pause = pause;
+    if (_pause == NO) {
+        for (MenuCoinSprite *coin in menuCoins) {
+            [coin removeFromParentAndCleanup:YES];
+        }
+        [menuCoins removeAllObjects];
+        [menuHeart removeFromParentAndCleanup:YES];
+        menuHeart = nil;
+    }
+}
+
+- (void) pauseGame {
+    [self setPause:YES];
     
     menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
     menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
     menuBackground.zOrder = 2000;
     [self addChild:menuBackground];
     
+    CGFloat offset = 0.0;
+    if (!IS_WIDESCREEN) {
+        offset = 44.0;
+    }
     [[AppDelegate mainMenuScene] setGame:YES];
     [[CCDirector sharedDirector].view addSubview:[[AppDelegate mainMenuScene] mainView]];
     
@@ -681,6 +802,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     } completion:^(BOOL finished) {
         [mainView removeFromSuperview];
     }];
+    menuHeart = [[MonsterHearth alloc] init];
+    menuHeart.anchorPoint = ccp(0.5, 0);
+    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    menuHeart.zOrder = 5000;
+    [self addChild:menuHeart];
+    
+    [self addMenuCoinAtPos:CGPointMake(60.0, 410.0 - offset)];
+    [self addMenuCoinAtPos:CGPointMake(260.0, 410.0 - offset)];
 }
 
 #pragma mark -
@@ -800,7 +929,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - Update
 
 - (void)calc:(ccTime)deltaTime {
-
+    if (_pause) {
+        for (MenuCoinSprite *coin in menuCoins) {
+            [coin calc:deltaTime];
+        }
+        [menuHeart calc:deltaTime];
+        return;
+    }
     // Gestures
     [gestureRecognizer update:deltaTime];
 
@@ -832,6 +967,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         if (bubble.position.y > CGRectGetMaxY(slimeSprite.boundingBox) - bubble.boundingBox.size.height) {
             [killedBubbles addObject:bubble];
         }
+    }
+
+    for (ScoreAddLabel *label in labels) {
+        [label calc:deltaTime];
+    }
+
+    for (FlyingSkullSprite *skull in flyingSkulls) {
+        [skull calc:deltaTime];
     }
 
     // Killed
@@ -873,6 +1016,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [killedBubbles removeAllObjects];
 
+    for (ScoreAddLabel *label in killedLabels) {
+        [labels removeObject:label];
+        [label removeFromParentAndCleanup:YES];
+    }
+    [killedLabels removeAllObjects];
+
+    for (FlyingSkullSprite *skull in killedFlyingSkulls) {
+        [flyingSkulls removeObject:skull];
+        [skull removeFromParentAndCleanup:YES];
+    }
+    [killedFlyingSkulls removeAllObjects];
+
     [masterControlProgram calc:deltaTime];
     
     if ([AppDelegate player].rage >= 1) {
@@ -893,7 +1048,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));    
 
+    // Monster
     [monsterSprite calc:deltaTime];
+    [monsterHearth calc:deltaTime];
 
     // Shake
     [screenShaker calc:deltaTime];

@@ -23,6 +23,7 @@
 #import "SlimeBubbleSprite.h"
 #import "MainGameScene.h"
 #import "MenuCoinSprite.h"
+#import "MonsterHearth.h"
 #import <GameKit/GameKit.h>
 
 
@@ -34,7 +35,7 @@
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 135
+#define SLIME_MAX_HEIGHT 300
 
 
 @interface MainMenuGameScene () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
@@ -50,6 +51,7 @@
     CCSpriteBatchNode *mainSpriteBatch;
     SlimeSprite *slimeSprite;
     MonsterSprite *monsterSprite;
+    MonsterHearth *monsterHearth;
     
     CCParticleBatchNode *particleBatchNode;
     
@@ -114,6 +116,7 @@
     
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    [slimeSprite setActualEnergy:0.5];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
@@ -125,6 +128,12 @@
     monsterSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, GROUND_Y + 2);
     monsterSprite.zOrder = 3;
     [mainSpriteBatch addChild:monsterSprite];
+    
+    monsterHearth = [[MonsterHearth alloc] init];
+    monsterHearth.anchorPoint = ccp(0.5, 0);
+    monsterHearth.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    monsterHearth.zOrder = 5000;
+    [self addChild:monsterHearth];
     
     // Foreground
     CCSprite *foregroundSprite = [[CCSprite alloc] initWithSpriteFrameName:@"tankGraphic.png"];
@@ -181,18 +190,11 @@
     if (!IS_WIDESCREEN) {
         offset = 44.0;   
     }
-    imageSize = CGSizeMake(38, 29);
-    UIImageView *heartView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-hearth"]];
-    [heartView setFrame:[self rectWithSize:imageSize originY:78.0 - offset]];
-    [heartView.layer setMagnificationFilter:kCAFilterNearest];
-    [view addSubview:heartView];
-
     imageSize = CGSizeMake(80, 29);
     UIImageView *nameView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-logo"]];
     [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:nameView];
-    offset += 10.0;
     
     imageSize = CGSizeMake(62, 12);
     newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
@@ -226,8 +228,8 @@
     [aboutView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:aboutView];
     
-    [self addCoinAtPos:CGPointMake(60.0, 400.0 - offset)];
-    [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
+    [self addCoinAtPos:CGPointMake(60.0, 410.0 - offset)];
+    [self addCoinAtPos:CGPointMake(260.0, 410.0 - offset)];
 }
 
 - (void) setGame:(BOOL)game
@@ -261,7 +263,7 @@
 
 - (void)addCoinAtPos:(CGPoint)pos {
     
-    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     newCoin.zOrder = 3000;
     [coins addObject:newCoin];
     [self addChild:newCoin];
@@ -292,11 +294,11 @@
         [bubble removeFromParentAndCleanup:YES];
     }
     [killedBubbles removeAllObjects];
-    
-    [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
+
     [slimeSprite calc:deltaTime];
     
     [monsterSprite calc:deltaTime];
+    [monsterHearth calc:deltaTime];
     
     // Add bubbles
     if (rand() % 100 == 0) {
@@ -337,6 +339,7 @@
         MainGameScene *scene = (MainGameScene *)[[CCDirector sharedDirector] runningScene];
         [scene.menuBackground removeFromParentAndCleanup:YES];
         [scene.mainView setAlpha:0];
+        [scene setPause:NO];
         [[CCDirector sharedDirector].view addSubview:scene.mainView];
         
         [UIView animateWithDuration:0.25 animations:^{
