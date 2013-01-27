@@ -19,7 +19,7 @@
 #define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 3)
 
 #define CLIMBING_MOVEMENT_OFFSET 4.0f
-#define CLIMBING_ANIM_DELAY (1 / 30.0f * 3)
+#define CLIMBING_ANIM_DELAY (1 / 30.0f * 2)
 #define CLIMBING_BORDER_OFFSET 30.0f
 
 #define FALLING_ACCEL -400.0f
@@ -37,6 +37,8 @@
 #define ZAPPING_TIME 0.4f
 
 #define ZAPPING_SKELETON_TIME 0.08f
+
+#define MIN_SLEEP_TIME_INTERVAL 0.8f
 
 
 static NSMutableArray *swiperWalkingAnimSpriteFrames = nil;
@@ -400,7 +402,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
                 wakingUp = NO;
                 wakingAnimeDelayMul =  400.0f / fabs(verticalVel);
                 
-                sleepTime = MIN((fabs(verticalVel) - MIN_FALLING_SPPEED_FOR_SLEEP) * 0.006 + 0.3, 3);
+                sleepTime = MIN((fabs(verticalVel) - MIN_FALLING_SPPEED_FOR_SLEEP) * 0.006 + MIN_SLEEP_TIME_INTERVAL, 3);
                 
                 animFrameIndex = 1; // skip first front facing frame
                 moveTime = 0;
