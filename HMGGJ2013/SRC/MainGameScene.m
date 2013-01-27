@@ -28,7 +28,7 @@
 #define MAX_CALC_TIME 0.1f
 #define FRAME_TIME_INTERVAL (1.0f / 60)
 
-#define ENEMY_ATTACK_FORCE 5
+#define ENEMY_ATTACK_FORCE 100
 
 #define BOMB_COINS_COST 2
 #define BOMB_KILL_PERIMETER 85
@@ -1027,7 +1027,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 [label setColor:ccc3(145, 145, 153)];
                 [gameOverLayer addChild:label];
                 
-                label = [[CCLabelBMFont alloc] initWithString:player.displayName fntFile:@"PixelFont.fnt"];
+                NSString *string = [player.alias uppercaseString];
+                NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+                label = [[CCLabelBMFont alloc] initWithString:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] fntFile:@"PixelFont.fnt"];
                 label.anchorPoint = ccp(0, 0.5);
                 label.scale = [UIScreen mainScreen].scale * 2;
                 label.position = ccp(70.0, offsetY - i * 44.0);
