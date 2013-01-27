@@ -1340,6 +1340,9 @@
 				55F18DD016B55DD30034650D /* BombHit2.wav in Resources */,
 				55F18DD116B55DD30034650D /* BombHit3.wav in Resources */,
 				55F18DD416B5606B0034650D /* MenuMusic.mp3 in Resources */,
+				65708CE316B55460003C181A /* about-bg.png in Resources */,
+				65708CE516B556B8003C181A /* about-bg-2.png in Resources */,
+				65708CE716B55767003C181A /* about-twitter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
