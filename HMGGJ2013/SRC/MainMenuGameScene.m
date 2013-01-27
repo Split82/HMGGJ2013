@@ -234,7 +234,7 @@
 
 - (void)addCoinAtPos:(CGPoint)pos {
     
-    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     newCoin.zOrder = 3000;
     [coins addObject:newCoin];
     [self addChild:newCoin];

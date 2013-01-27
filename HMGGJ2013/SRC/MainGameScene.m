@@ -70,13 +70,15 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *bombs;
     NSMutableArray *enemyBodyDebrises;
     NSMutableArray *bubbles;
+    NSMutableArray *labels;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
     NSMutableArray *killedSwipeEnemies;
     NSMutableArray *killedBombs;
     NSMutableArray *killedEnemyBodyDebrises;
-    NSMutableArray *killedBubbles;    
+    NSMutableArray *killedBubbles;
+    NSMutableArray *killedLabels;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -144,19 +146,25 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bombs = [[NSMutableArray alloc] initWithCapacity:10];
     enemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
     bubbles = [[NSMutableArray alloc] initWithCapacity:40];
+    labels = [[NSMutableArray alloc] initWithCapacity:4];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedSwipeEnemies = [[NSMutableArray alloc] initWithCapacity:100];
     killedBombs = [[NSMutableArray alloc] initWithCapacity:10];
     killedEnemyBodyDebrises = [[NSMutableArray alloc] initWithCapacity:50];
-    killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];    
+    killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];
+    killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
     [frameCache addSpriteFramesWithFile:kGameObjectsSpriteFramesFileName];
 
     CCSpriteFrame *placeholderSpriteFrame = [frameCache spriteFrameByName:kPlaceholderTextureFrameName];
+
+    // Load font texture
+    CCTexture2D *pixelFontTexture = [[CCTextureCache sharedTextureCache] addImage:@"PixelFont.png"];
+    [pixelFontTexture setAliasTexParameters];
 
     // Sprite batch
     mainSpriteBatch = [[CCSpriteBatchNode alloc] initWithFile:placeholderSpriteFrame.textureFilename capacity:100];
@@ -257,10 +265,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
-    coinsSprite.anchorPoint = ccp(0.5, 0);
+    coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - coinsSprite.contentSize.height * coinsSprite.scale - 15.0);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 20);
     [mainSpriteBatch addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
@@ -338,7 +346,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)addCoinAtPos:(CGPoint)pos {
 
-    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    CoinSprite *newCoin = [[CoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     newCoin.zOrder = GAME_OBJECTS_Z_ORDER;
     newCoin.delegate = self;
     [coins addObject:newCoin];
@@ -431,13 +439,48 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
             kills++;
         }
     }
-    [AppDelegate player].points += kills;
+
+    if (kills > 0) {
+        [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising];
+    }
+    else if (kills == 2) {
+        [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking];
+    }
+    else if (kills == 3) {
+        [self addScoreAddLabelWithText:@"TRIPLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking];
+    }
+    else if (kills == 4) {
+        [self addScoreAddLabelWithText:@"MEGA KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking];
+    }
+    else if (kills > 5) {
+        [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking];
+    }
+
+    [AppDelegate player].points += kills * kills;
     [self updateUI];
 
     CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
     explosionParticleSystem.position = pos;
     [particleBatchNode addChild:explosionParticleSystem];
+}
+
+- (void)addScoreAddLabelWithText:(NSString*)text pos:(CGPoint)pos type:(ScoreAddLabelType)type {
+
+    ScoreAddLabel *scoreAddLabel = [[ScoreAddLabel alloc] initWithText:text pos:pos type:type];
+    scoreAddLabel.scale = [UIScreen mainScreen].scale * 2;
+    scoreAddLabel.delegate = self;
+    scoreAddLabel.position = pos;
+    scoreAddLabel.zOrder = 100;
+    [self addChild:scoreAddLabel];
+    [labels addObject:scoreAddLabel];
+}
+
+#pragma mark - ScoreAddDelegate
+
+- (void)scoreAddLabelDidFinish:(ScoreAddLabel *)label {
+
+    [killedLabels addObject:label];
 }
 
 #pragma mark - CoinSpriteDelegate
@@ -764,6 +807,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         }
     }
 
+    for (ScoreAddLabel *label in labels) {
+        [label calc:deltaTime];
+    }
+
     // Killed
     for (CoinSprite *coin in killedCoins) {
         [coins removeObject:coin];
@@ -802,6 +849,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [bubble removeFromParentAndCleanup:YES];
     }
     [killedBubbles removeAllObjects];
+
+    for (ScoreAddLabel *label in killedLabels) {
+        [labels removeObject:label];
+        [label removeFromParentAndCleanup:YES];
+    }
+    [killedLabels removeAllObjects];
 
     [masterControlProgram calc:deltaTime];
     

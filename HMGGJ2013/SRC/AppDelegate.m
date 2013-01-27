@@ -36,7 +36,9 @@
 #pragma mark UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
+    srand(time(NULL));
+
 	// Create the main window
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     

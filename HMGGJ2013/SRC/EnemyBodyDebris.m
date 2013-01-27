@@ -12,8 +12,9 @@
 #define FRICTION 0.97f
 #define BOUNCE_COEF 0.8f
 #define LIFE_TIME 3
+#define GROUND_Y_OFFSET -3
 
-#define START_BLOOD_EMISSION_RATE 30
+#define START_BLOOD_EMISSION_RATE 40
 
 @interface EnemyBodyDebris() {
 
@@ -91,9 +92,9 @@
         velocity = ccpMult(velocity, BOUNCE_COEF);
     }
 
-    if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5) {
+    if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5 + GROUND_Y_OFFSET) {
         CGPoint pos = self.position;        
-        pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5;
+        pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5 + GROUND_Y_OFFSET;
         self.position = pos;
         velocity.y = -velocity.y;
         velocity = ccpMult(velocity, BOUNCE_COEF);        

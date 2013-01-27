@@ -131,16 +131,7 @@
 - (void) setPoints:(NSInteger)points
 {
     int newPoints = points - _points;
-    float multiplier = 2;
-    if (newPoints >= 10)
-        multiplier += 3;
-    else if (newPoints >= 7)
-        multiplier += 1.4;
-    else if (newPoints >= 4)
-        multiplier += 1.0;
-    else if (newPoints >= 2)
-        multiplier += 0.5;
-    _points += newPoints;
+    _points = points;
     self.rage += (float)newPoints / kPlayerDefRageMultipler;
     _rageInterval = 0;
 }
