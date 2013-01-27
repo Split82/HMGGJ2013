@@ -14,6 +14,10 @@
 		3891715A16B4206C00EFAB71 /* MasterControlProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 3891715916B4206C00EFAB71 /* MasterControlProgram.m */; };
 		38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 38CDD78416B382AC0021D96A /* 8bit-gandam.mp3 */; };
 		5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */ = {isa = PBXBuildFile; fileRef = 5505210F16B4B63A0006D7F7 /* MonsterHearth.m */; };
+		5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */; };
+		5505211F16B4CCAE0006D7F7 /* BombEmitParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5505211E16B4CCAE0006D7F7 /* BombEmitParticleSystem.plist */; };
+		5505212216B4CE740006D7F7 /* PixelFont.png in Resources */ = {isa = PBXBuildFile; fileRef = 5505212016B4CE740006D7F7 /* PixelFont.png */; };
+		5505212316B4CE740006D7F7 /* PixelFont.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 5505212116B4CE740006D7F7 /* PixelFont.fnt */; };
 		553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741AF16B1F72900D860C2 /* QuartzCore.framework */; };
 		553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B116B1F72900D860C2 /* OpenGLES.framework */; };
 		553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B316B1F72900D860C2 /* OpenAL.framework */; };
@@ -149,8 +153,6 @@
 		554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FC16B45D1800441632 /* ScreenShaker.m */; };
 		554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */; };
 		554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD21A16B49B9D00441632 /* ScoreAddLabel.m */; };
-		554AD22716B4A3C900441632 /* PixelFont.png in Resources */ = {isa = PBXBuildFile; fileRef = 554AD22516B4A3C900441632 /* PixelFont.png */; };
-		554AD22816B4A3C900441632 /* PixelFont.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 554AD22616B4A3C900441632 /* PixelFont.fnt */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
@@ -197,6 +199,11 @@
 		38CDD78416B382AC0021D96A /* 8bit-gandam.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "8bit-gandam.mp3"; sourceTree = "<group>"; };
 		5505210E16B4B63A0006D7F7 /* MonsterHearth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonsterHearth.h; sourceTree = "<group>"; };
 		5505210F16B4B63A0006D7F7 /* MonsterHearth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonsterHearth.m; sourceTree = "<group>"; };
+		5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyingSkullSprite.h; sourceTree = "<group>"; };
+		5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlyingSkullSprite.m; sourceTree = "<group>"; };
+		5505211E16B4CCAE0006D7F7 /* BombEmitParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BombEmitParticleSystem.plist; sourceTree = "<group>"; };
+		5505212016B4CE740006D7F7 /* PixelFont.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PixelFont.png; sourceTree = "<group>"; };
+		5505212116B4CE740006D7F7 /* PixelFont.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PixelFont.fnt; sourceTree = "<group>"; };
 		553741AB16B1F72900D860C2 /* HMGGJ2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMGGJ2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		553741AF16B1F72900D860C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		553741B116B1F72900D860C2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -474,8 +481,6 @@
 		554AD21316B4978100441632 /* HMGGJ2013GameObjects.zwd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HMGGJ2013GameObjects.zwd; sourceTree = "<group>"; };
 		554AD21916B49B9D00441632 /* ScoreAddLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreAddLabel.h; sourceTree = "<group>"; };
 		554AD21A16B49B9D00441632 /* ScoreAddLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreAddLabel.m; sourceTree = "<group>"; };
-		554AD22516B4A3C900441632 /* PixelFont.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PixelFont.png; sourceTree = "<group>"; };
-		554AD22616B4A3C900441632 /* PixelFont.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PixelFont.fnt; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -984,6 +989,8 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
+				5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */,
 				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
 				5505210F16B4B63A0006D7F7 /* MonsterHearth.m */,
 				554AD1E516B42AE600441632 /* MonsterSprite.h */,
@@ -1019,6 +1026,7 @@
 		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
 			isa = PBXGroup;
 			children = (
+				5505211E16B4CCAE0006D7F7 /* BombEmitParticleSystem.plist */,
 				554AD1F716B450AB00441632 /* BloodParticleSystem.plist */,
 				55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */,
 				55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */,
@@ -1047,8 +1055,8 @@
 		554AD20A16B4818200441632 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				554AD22516B4A3C900441632 /* PixelFont.png */,
-				554AD22616B4A3C900441632 /* PixelFont.fnt */,
+				5505212016B4CE740006D7F7 /* PixelFont.png */,
+				5505212116B4CE740006D7F7 /* PixelFont.fnt */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -1232,9 +1240,10 @@
 				6529B0D216B4892600E83114 /* menu-topscore-h.png in Resources */,
 				6529B0D316B4892600E83114 /* menu-topscore.png in Resources */,
 				6529B0D516B48BDB00E83114 /* menu-logo.png in Resources */,
-				554AD22716B4A3C900441632 /* PixelFont.png in Resources */,
-				554AD22816B4A3C900441632 /* PixelFont.fnt in Resources */,
 				650CCBA816B4AE52004F0241 /* menu-resume.png in Resources */,
+				5505211F16B4CCAE0006D7F7 /* BombEmitParticleSystem.plist in Resources */,
+				5505212216B4CE740006D7F7 /* PixelFont.png in Resources */,
+				5505212316B4CE740006D7F7 /* PixelFont.fnt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1370,6 +1379,7 @@
 				650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */,
 				554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */,
 				5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */,
+				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
