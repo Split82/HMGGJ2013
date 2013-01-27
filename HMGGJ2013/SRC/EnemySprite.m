@@ -582,11 +582,11 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     [self updateSpritePos];
 }
 
--(void) throwFromWall {
+-(BOOL) throwFromWall {
     
     if (state != kEnemyStateClimbing && state != kEnemyStateCrossing) {
         
-        return;
+        return NO;
     }
     
     state = kEnemyStateZapping;
@@ -602,7 +602,8 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     elapsedTime = 0;
     
     [self updateSpritePos];
-    
+ 
+    return YES;
 }
 
 - (void) updateSpritePos {

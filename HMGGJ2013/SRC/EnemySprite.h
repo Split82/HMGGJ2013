@@ -30,7 +30,7 @@ typedef enum {
 
 -(id) initWithType:(EnemyType)type;
 -(void) calc:(ccTime)time;
--(void) throwFromWall;
+-(BOOL) throwFromWall;
 
 @property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;
 @property (nonatomic, assign) EnemyType type;

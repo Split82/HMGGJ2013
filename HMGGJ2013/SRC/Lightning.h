@@ -8,13 +8,23 @@
 
 #import "CCNode.h"
 
+@protocol LightningDelegate;
+
 @interface Lightning : CCNode
 
 @property (nonatomic, assign) BOOL finished;
+
+@property (nonatomic, weak) id <LightningDelegate> delegate;
 
 - (void)draw;
 - (id)initWithStartPos:(CGPoint)initStartPos endPos:(CGPoint)initEndPos;
 
 - (void)calc:(ccTime)dt;
+
+@end
+
+@protocol LightningDelegate <NSObject>
+
+- (void)lightningDidFinish:(Lightning*)lightning;
 
 @end

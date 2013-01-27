@@ -81,6 +81,8 @@ static const float kSegmentLength = 20.0f;
         colors[i * 4 + 1] = (int)(255 * 0.4f + size * 0.2f);
         colors[i * 4 + 2] = (int)(255);
         colors[i * 4 + 2] = (int)(255);
+        
+        points[i] = ccpAdd(points[i], ccpMult(CGPointMake((float)rand() / RAND_MAX * 2 - 1, (float)rand() / RAND_MAX * 2 - 1), 2.0f));
     }
     
     glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, colors);
@@ -107,7 +109,7 @@ static const float kSegmentLength = 20.0f;
     if (elapsedTime > kGenerateNewInterval) {
         
         finished = YES;
-        [self removeFromParentAndCleanup:YES];
+        [_delegate lightningDidFinish:self];
         return;
     }
     

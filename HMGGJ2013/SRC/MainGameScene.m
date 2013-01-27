@@ -77,6 +77,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *bubbles;
     NSMutableArray *labels;
     NSMutableArray *flyingSkulls;
+    NSMutableArray *lightnings;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
@@ -86,6 +87,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedBubbles;
     NSMutableArray *killedLabels;
     NSMutableArray *killedFlyingSkulls;
+    NSMutableArray *killedLightnings;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -163,6 +165,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bubbles = [[NSMutableArray alloc] initWithCapacity:40];
     labels = [[NSMutableArray alloc] initWithCapacity:4];
     flyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    lightnings = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
@@ -172,6 +175,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];
     killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
     killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    killedLightnings = [[NSMutableArray alloc] initWithCapacity:10];
     
     menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
@@ -555,6 +559,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedFlyingSkulls addObject:flyingSkull];
 }
 
+
+#pragma mark - LightningDelegate
+
+- (void)lightningDidFinish:(Lightning *)lightning {
+    
+    [killedLightnings addObject:lightning];
+}
+
 #pragma mark - BombSpriteDelegate
 
 - (void)bombDidDie:(BombSprite *)bombSprite {
@@ -659,7 +671,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
             
-            [enemy throwFromWall];
+            if ([enemy throwFromWall]) {
+                
+                [self createLightningToEnemy:enemy];
+            }
         }
     }
 }
@@ -761,14 +776,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         /*
         if (distance < TAP_THROW_MIN_DISTANCE2) {
         
-            [enemy throwFromWall];
+             if ([enemy throwFromWall]) {
+             
+             [self createLightningToEnemy:enemy];
+             }
+
         }
         */
     }
 
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
-        [nearestEnemy throwFromWall];
+        if ([nearestEnemy throwFromWall]) {
+            
+            [self createLightningToEnemy:nearestEnemy];
+        }
 
     }
 
@@ -818,6 +840,15 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 #pragma mark -
+
+- (void) createLightningToEnemy:(EnemySprite*)enemy {
+    
+    CGPoint startPos = CGPointMake(0, 20);
+    Lightning *lightning = [[Lightning alloc] initWithStartPos:startPos endPos:enemy.position];
+    lightning.zOrder = 30;
+    [self addChild:lightning];
+    [lightnings addObject:lightning];
+}
 
 - (void) enemyDidDie:(EnemySprite *)enemy
 {
@@ -981,6 +1012,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     for (FlyingSkullSprite *skull in flyingSkulls) {
         [skull calc:deltaTime];
     }
+    
+    for (Lightning *lightning in lightnings) {
+        [lightning calc:deltaTime];
+    }
+    
 
     // Killed
     for (CoinSprite *coin in killedCoins) {
@@ -1032,6 +1068,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [skull removeFromParentAndCleanup:YES];
     }
     [killedFlyingSkulls removeAllObjects];
+    
+    for (Lightning *lightning in killedLightnings) {
+        [lightnings removeObject:lightning];
+        [lightning removeFromParentAndCleanup:YES];
+    }
+    [killedLightnings removeAllObjects];
 
     [masterControlProgram calc:deltaTime];
     
