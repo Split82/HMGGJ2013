@@ -115,9 +115,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // UI vars
     UIView *mainView;
     
+    NSString *lastKill;
     CCSprite *killSprite;
     CCLabelBMFont *killsLabel;
     
+    NSString *lastCoin;
     CCSprite *coinsSprite;
     CCLabelBMFont *coinsLabel;
     
@@ -132,6 +134,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     // Leaderboard
     GKLeaderboard *leaderboard;
+    
+    BOOL bombSpawning;
 }
 
 @end
@@ -280,6 +284,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self scheduleUpdate];
     
     //[[AudioManager sharedManager] startBackgroundTrack];
+    bombSpawning = NO;
 
     [self initUI];
 }
@@ -344,23 +349,40 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (gameOver) {
         return;
     }
-    [killsLabel removeFromParentAndCleanup:YES];
-    killsLabel = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%d", [AppDelegate player].points] fntFile:@"PixelFont.fnt"];
-    killsLabel.anchorPoint = ccp(0, 0);
-    killsLabel.scale = [UIScreen mainScreen].scale * 1.3;
-    killsLabel.position = ccp(40.0, [CCDirector sharedDirector].winSize.height - 36.0);
-    killsLabel.zOrder = 5000;
-    [killsLabel setColor:ccc3(255, 255, 255)];
-    [self addChild:killsLabel];
+    NSString *kill = [NSString stringWithFormat:@"%d", [AppDelegate player].points];
     
-    [coinsLabel removeFromParentAndCleanup:YES];
-    coinsLabel = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%d", [AppDelegate player].coins] fntFile:@"PixelFont.fnt"];
-    coinsLabel.anchorPoint = ccp(1, 0);
-    coinsLabel.scale = [UIScreen mainScreen].scale * 1.3;
-    coinsLabel.position = ccp(320 - 38.0, [CCDirector sharedDirector].winSize.height - 36.0);
-    coinsLabel.zOrder = 5000;
-    [coinsLabel setColor:ccc3(255, 255, 255)];
-    [self addChild:coinsLabel];
+    if (![lastKill isEqualToString:kill]) {
+        [killsLabel removeFromParentAndCleanup:YES];
+        killsLabel = [[CCLabelBMFont alloc] initWithString:kill fntFile:@"PixelFont.fnt"];
+        killsLabel.anchorPoint = ccp(0, 0);
+        killsLabel.scale = [UIScreen mainScreen].scale * 1.3;
+        killsLabel.position = ccp(40.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        killsLabel.zOrder = 5000;
+        [killsLabel setColor:ccc3(255, 255, 255)];
+        [self addChild:killsLabel];
+    }
+    lastKill = kill;
+    NSString *coin = [NSString stringWithFormat:@"%d", [AppDelegate player].coins];
+    
+    if (![lastCoin isEqualToString:coin]) {
+        [coinsLabel removeFromParentAndCleanup:YES];
+        coinsLabel = [[CCLabelBMFont alloc] initWithString:coin fntFile:@"PixelFont.fnt"];
+        coinsLabel.anchorPoint = ccp(1, 0);
+        coinsLabel.scale = [UIScreen mainScreen].scale * 1.3;
+        coinsLabel.position = ccp(320 - 38.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        coinsLabel.zOrder = 5000;
+        [coinsLabel setColor:ccc3(255, 255, 255)];
+        [self addChild:coinsLabel];
+    }
+    lastCoin = coin;
+    
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
@@ -615,6 +637,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - BombSpawnerDelegate
 
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
+    
+    bombSpawning = NO;
 
     if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
@@ -624,6 +648,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     else {
 
+        [[AudioManager sharedManager] bombReleased];
         [self addBombAtPosX:bombSpawner.pos.x];
 
         [[AppDelegate player] updateDropBombCount:1];
@@ -665,12 +690,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
+    [[AudioManager sharedManager] bombSpawningStarted];
+    bombSpawning = YES;
+    
     [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
 
     //NSLog(@"LongPress end");
+    
+    if (bombSpawning) {
+        [[AudioManager sharedManager] bombSpawningCancelled];
+    }
+    
+    bombSpawning = NO;
     [bombSpawner cancelSpawning];
 }
 
@@ -1008,7 +1042,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 [label setColor:ccc3(145, 145, 153)];
                 [gameOverLayer addChild:label];
                 
-                label = [[CCLabelBMFont alloc] initWithString:player.displayName fntFile:@"PixelFont.fnt"];
+                NSString *string = [player.alias uppercaseString];
+                NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+                label = [[CCLabelBMFont alloc] initWithString:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] fntFile:@"PixelFont.fnt"];
                 label.anchorPoint = ccp(0, 0.5);
                 label.scale = [UIScreen mainScreen].scale * 2;
                 label.position = ccp(70.0, offsetY - i * 44.0);
@@ -1030,6 +1066,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLayer addChild:menuHeart];
     
     [self addChild:gameOverLayer];
+    [[AppDelegate player] newGame];
 }
 
 - (void) restartGame
@@ -1063,6 +1100,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     coinsSprite.zOrder = 5000;
     killSprite.zOrder = 5000;
+    
+    lastCoin = nil;
+    lastKill = nil;
 }
 
 
@@ -1249,15 +1289,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     else if (numberOfKillsInLastFrame > 5) {
         [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
     }
-
-    // UI
-    CGSize contentSize = [CCDirector sharedDirector].winSize;
-    CGFloat offset = 0.0;
-    if (contentSize.height == 480.0)
-        offset = 2.0;
-    else
-        offset = 22.0;
-    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
+[self updateUI];
 }
 
 - (void)update:(ccTime)deltaTime {
