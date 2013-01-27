@@ -190,7 +190,7 @@
     if (!IS_WIDESCREEN) {
         offset = 44.0;   
     }
-    imageSize = CGSizeMake(80, 29);
+    imageSize = CGSizeMake(80, 39);
     UIImageView *nameView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-logo"]];
     [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
@@ -228,8 +228,8 @@
     [aboutView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:aboutView];
     
-    [self addCoinAtPos:CGPointMake(60.0, 410.0 - offset)];
-    [self addCoinAtPos:CGPointMake(260.0, 410.0 - offset)];
+    [self addCoinAtPos:CGPointMake(60.0, 400.0 - offset)];
+    [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
 }
 
 - (void) setGame:(BOOL)game
