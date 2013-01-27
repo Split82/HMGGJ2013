@@ -172,6 +172,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];
     killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
     killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    
+    menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
     // Load texture atlas
     CCSpriteFrameCache *frameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -294,8 +296,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26);
-    [mainSpriteBatch addChild:coinsSprite];
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 20);
+    [self addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
     [coinsLabel setTextColor:[UIColor whiteColor]];
