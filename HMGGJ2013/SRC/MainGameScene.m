@@ -453,6 +453,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     NSInteger kills = 0;
     
+    [[AudioManager sharedManager] explode];
+    
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
 
