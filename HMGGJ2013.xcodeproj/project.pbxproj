@@ -1410,6 +1410,7 @@
 				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
 				5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */,
 				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,
+				55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */,
 				E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
