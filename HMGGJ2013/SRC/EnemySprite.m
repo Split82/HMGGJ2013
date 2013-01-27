@@ -98,7 +98,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
 
 -(id) initWithType:(EnemyType)_type {
     
-    if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
+    if (self = [self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
         self.type = _type;

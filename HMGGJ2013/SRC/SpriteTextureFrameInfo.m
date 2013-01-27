@@ -14,7 +14,7 @@
 
 - (id) initWithFrameName:(NSString*)_frameName offset:(CGPoint)_offset {
     
-    if ([super init]) {
+    if (self = [super init]) {
         
         self.frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_frameName];
         self.offset = _offset;

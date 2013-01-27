@@ -184,6 +184,7 @@
 		659A0A5416B4690B00D3B1A8 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 659A0A5316B4690B00D3B1A8 /* pause.png */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
+		E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A9C16B4E18E002F86CA /* Lightning.m */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -523,6 +524,8 @@
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
 		E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteTextureFrameInfo.h; sourceTree = "<group>"; };
 		E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteTextureFrameInfo.m; sourceTree = "<group>"; };
+		E6213A9B16B4E18E002F86CA /* Lightning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lightning.h; sourceTree = "<group>"; };
+		E6213A9C16B4E18E002F86CA /* Lightning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lightning.m; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -987,6 +990,8 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				E6213A9B16B4E18E002F86CA /* Lightning.h */,
+				E6213A9C16B4E18E002F86CA /* Lightning.m */,
 				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
 				5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */,
 				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
@@ -1376,6 +1381,7 @@
 				554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */,
 				5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */,
 				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
+				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
