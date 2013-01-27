@@ -13,7 +13,7 @@
 #define kPlayerDefHealth        100
 #define kPlayerDefRageDealy     15
 #define kPlayerDefRageMultipler 10
-#define kPlayerDefRageReduction 3
+#define kPlayerDefRageReduction 1.5
 
 #define kPlayerSyncTimer        30
 
@@ -138,7 +138,7 @@
 
 - (void) _rageReduction
 {
-    _rage -= 0.1;
+    _rage -= 0.05;
     if (_rage <= 0) {
         _rage = 0;
         _rageInterval = 0;
