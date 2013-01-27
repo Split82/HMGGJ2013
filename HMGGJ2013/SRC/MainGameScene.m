@@ -129,6 +129,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCLayer *menuBackground;
     
     CCLayer *gameOverLayer;
+    
+    // Leaderboard
+    GKLeaderboard *leaderboard;
 }
 
 @end
@@ -157,6 +160,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     sceneInitWasPerformed = YES;
 
+    leaderboard = [[GKLeaderboard alloc] init];
+    
     // Screen shaker
     screenShaker = [[ScreenShaker alloc] init];
 
@@ -356,13 +361,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsLabel.zOrder = 5000;
     [coinsLabel setColor:ccc3(255, 255, 255)];
     [self addChild:coinsLabel];
-    CGSize contentSize = [CCDirector sharedDirector].winSize;
-    CGFloat offset = 0.0;
-    if (contentSize.height == 480.0)
-        offset = 2.0;
-    else
-        offset = 22.0;
-    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
@@ -455,6 +453,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
     
     NSInteger kills = 0;
+    
+    [[AudioManager sharedManager] explode];
     
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
@@ -970,46 +970,52 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [label setColor:ccc3(255, 211, 14)];
     [gameOverLayer addChild:label];
     
-    label = [[CCLabelBMFont alloc] initWithString:[AppDelegate player].points == 0 ? @"Loser!" : @"New Record" fntFile:@"PixelFont.fnt"];
-    label.anchorPoint = ccp(0.5, 0.5);
-    label.scale = [UIScreen mainScreen].scale * 2;
-    label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 3, 315.0);
-    [label setColor:ccc3(255, 211, 14)];
-    [gameOverLayer addChild:label];
-    
+    if ([[AppDelegate player] topScore] < [AppDelegate player].points || [AppDelegate player].points == 0) {
+        label = [[CCLabelBMFont alloc] initWithString:[AppDelegate player].points == 0 ? @"Loser!" : @"New Record" fntFile:@"PixelFont.fnt"];
+        label.anchorPoint = ccp(0.5, 0.5);
+        label.scale = [UIScreen mainScreen].scale * 2;
+        label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 3, 315.0);
+        [label setColor:ccc3(255, 211, 14)];
+        [gameOverLayer addChild:label];
+    }    
     sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-gameover.png"];
     sprite.anchorPoint = ccp(0.5, 0.5);
     sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 458);
     sprite.scale = [UIScreen mainScreen].scale * 2;
     [gameOverLayer addChild:sprite];
-    NSArray *names = @[@"Augard", @"Loki", @"Split"];
-    NSArray *score = @[@125000, @113502, @2312];
     
-    int i, lines = 3;
-    for (i = 0; i < lines; i++) {
-        CGFloat offsetY = 265.0;
+    [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
+        if (!gameOver)
+            return;
+        CCLabelBMFont *label;
         
-        label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", i + 1] fntFile:@"PixelFont.fnt"];
-        label.anchorPoint = ccp(0.5, 0.5);
-        label.scale = [UIScreen mainScreen].scale * 2;
-        label.position = ccp(40.0, offsetY - i * 44.0);
-        [label setColor:ccc3(145, 145, 153)];
-        [gameOverLayer addChild:label];
-        
-        label = [[CCLabelBMFont alloc] initWithString:names[i] fntFile:@"PixelFont.fnt"];
-        label.anchorPoint = ccp(0, 0.5);
-        label.scale = [UIScreen mainScreen].scale * 2;
-        label.position = ccp(70.0, offsetY - i * 44.0);
-        [label setColor:ccc3(145, 145, 153)];
-        [gameOverLayer addChild:label];
-        
-        label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%@", score[i]] fntFile:@"PixelFont.fnt"];
-        label.anchorPoint = ccp(1, 0.5);
-        label.scale = [UIScreen mainScreen].scale * 2;
-        label.position = ccp(290.0, offsetY - i * 44.0);
-        [label setColor:ccc3(145, 145, 153)];
-        [gameOverLayer addChild:label];
-    }
+        int i, lines = 3;
+        for (i = 0; i < lines; i++) {
+            GKScore *score = scores[i];
+            CGFloat offsetY = 265.0;
+            
+            label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", i + 1] fntFile:@"PixelFont.fnt"];
+            label.anchorPoint = ccp(0.5, 0.5);
+            label.scale = [UIScreen mainScreen].scale * 2;
+            label.position = ccp(40.0, offsetY - i * 44.0);
+            [label setColor:ccc3(145, 145, 153)];
+            [gameOverLayer addChild:label];
+            
+            label = [[CCLabelBMFont alloc] initWithString:score.playerID fntFile:@"PixelFont.fnt"];
+            label.anchorPoint = ccp(0, 0.5);
+            label.scale = [UIScreen mainScreen].scale * 2;
+            label.position = ccp(70.0, offsetY - i * 44.0);
+            [label setColor:ccc3(145, 145, 153)];
+            [gameOverLayer addChild:label];
+            
+            label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%lli", score.value] fntFile:@"PixelFont.fnt"];
+            label.anchorPoint = ccp(1, 0.5);
+            label.scale = [UIScreen mainScreen].scale * 2;
+            label.position = ccp(290.0, offsetY - i * 44.0);
+            [label setColor:ccc3(145, 145, 153)];
+            [gameOverLayer addChild:label];
+        }
+    }];
     menuHeart = [[MonsterHearth alloc] init];
     menuHeart.anchorPoint = ccp(0.5, 0);
     menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, 472);
@@ -1236,7 +1242,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
 
     // UI
-    [self updateUI];
+    CGSize contentSize = [CCDirector sharedDirector].winSize;
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 - (void)update:(ccTime)deltaTime {

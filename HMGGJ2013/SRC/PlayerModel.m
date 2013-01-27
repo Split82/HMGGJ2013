@@ -17,6 +17,7 @@
 
 #define kPlayerSyncTimer        30
 
+#define kPlayerTopScore             @"kPlayerTopScore"
 #define kPlayerFirstKill            @"kPlayerFirstKill"
 #define kPlayerBloodBath            @"kPlayerBloodBath"
 #define kPlayerGlobalGameCount      @"kPlayerGlobalGameCount"
@@ -128,6 +129,11 @@
 
 #pragma mark -
 
+- (NSInteger) topScore
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerTopScore];
+}
+
 - (void) setPoints:(NSInteger)points
 {
     _points = points;
@@ -178,6 +184,10 @@
 
 - (void) newGame
 {
+    NSInteger topScore = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerTopScore];
+    if (topScore < _points)
+        [[NSUserDefaults standardUserDefaults] setInteger:topScore forKey:kPlayerTopScore];
+    
     _points = 0;
     _kills = 0;
     _coins = kPlayerDefCoins;

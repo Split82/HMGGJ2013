@@ -137,7 +137,7 @@
             [self setGameCenterAuthenticationComplete:NO];
             [_mainMenu setDisplayGameCenter:NO];
         }
-    }];
+    }];    
 	return YES;
 }
 
