@@ -20,4 +20,8 @@
 
 - (void)stopBackgroundMusic;
 
+- (void)groundHit;
+
+- (void)enemyHit;
+
 @end
