@@ -288,7 +288,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Update
     [self scheduleUpdate];
     
-    //[[AudioManager sharedManager] startBackgroundTrack];
+    //[[AudioManager sharedManager] startBackgroundMusic];
     bombSpawning = NO;
 
     [self initUI];
@@ -634,6 +634,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [killedSwipeEnemies addObject:enemy];
     }
     [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
+    int diff = (100 - [AppDelegate player].health);
+    monsterHearth.infarkt = (float)diff / 100;
     
     WaterSplash *waterSplash = [[WaterSplash alloc] init];
     waterSplash.scale = [UIScreen mainScreen].scale * 2;
@@ -998,6 +1000,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (gameOver) {
         return;
     }
+    [monsterHearth setInfarkt:0];
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
