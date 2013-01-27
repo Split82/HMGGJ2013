@@ -72,6 +72,10 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     
     float sleepTime;
     float wakingAnimeDelayMul;
+    
+    NSMutableArray *stars;
+    
+    float elapsedTime;
 }
 
 @end
@@ -86,7 +90,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
-        self.type = 0;//_type;
+        self.type = _type;
         self.state = kEnemyStateWalking;
         self.scale = [UIScreen mainScreen].scale * 2;
         animFrameIndex = 0;
@@ -233,6 +237,20 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
 
         [self updateSpritePos];
         
+        stars = [[NSMutableArray alloc] initWithCapacity:3];
+        
+        CCSprite *star;
+        
+        for (int i = 0; i < 3; i++) {
+            
+            star = [[CCSprite alloc] initWithSpriteFrameName:@"starConfused.png"];
+            star.anchorPoint = ccp(0.5, 0.5f);
+            star.zOrder = 30;
+            [self addChild:star];
+            
+            [stars addObject:star];
+            star.visible = NO;
+        }
     }
     
     return self;
@@ -243,6 +261,26 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     
     animTime += time;
     moveTime += time;
+    elapsedTime += time;
+    
+    for (int i = 0; i < [stars count]; i++) {
+        
+        CCSprite *star = stars[i];
+        CGPoint newPos = star.position;
+        
+        newPos.y = 5;
+        if (type == kEnemyTypeTap) {
+            
+            newPos.x = 4.8f;
+        }
+        else {
+            
+            newPos.x = 4.0f;
+        }
+        newPos.x += sinf(elapsedTime * 7 + i * 2 * 3.14 / [stars count]) * 4;
+        
+        star.position = newPos;
+    }
     
     switch (state) {
             
@@ -387,6 +425,11 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
 
                     animTime -= sleepTime;
                     animFrameIndex = [sleepingAnimSpriteFrames count] - 2;
+                    
+                    for (CCSprite *star in stars) {
+                        
+                        star.visible = NO;
+                    }
                 }
             }
             else {
@@ -400,9 +443,17 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
                     
                     
                     // fell on ground
-                    if (animFrameIndex >= (int)[sleepingAnimSpriteFrames count]) {
+                    if (animFrameIndex >= (int)[sleepingAnimSpriteFrames count] - 1) {
                         
                         animFrameIndex = [sleepingAnimSpriteFrames count] - 1;
+                        
+                        if (sleepTime > 0.3) {
+                            
+                            for (CCSprite *star in stars) {
+                                
+                                star.visible = YES;
+                            }
+                        }
                     }
                     // fully waked up
                     else if (animFrameIndex < 0) {
@@ -437,6 +488,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
                         moveTime = 0;
                         
                         [self updateSpritePos];
+
                         return;
                     }
                     
@@ -454,6 +506,8 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
                 animFrameIndex += (int)(animTime / CROSSING_ANIM_DELAY);
                 
                 if (animFrameIndex >= [crossingAnimSpriteFrames count]) {
+                    
+                    spritePos.y -= 10; // move down some
                     
                     animTime = 0;
                     moveTime = 0;
