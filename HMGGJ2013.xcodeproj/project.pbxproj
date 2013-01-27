@@ -204,6 +204,7 @@
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
 		E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A9C16B4E18E002F86CA /* Lightning.m */; };
 		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
+		E6213AB916B531A4002F86CA /* Trail.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AB816B531A4002F86CA /* Trail.m */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -566,6 +567,8 @@
 		E6213A9C16B4E18E002F86CA /* Lightning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lightning.m; sourceTree = "<group>"; };
 		E6213AAB16B52304002F86CA /* WaterSplash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterSplash.h; sourceTree = "<group>"; };
 		E6213AAC16B52305002F86CA /* WaterSplash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaterSplash.m; sourceTree = "<group>"; };
+		E6213AB716B531A3002F86CA /* Trail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trail.h; sourceTree = "<group>"; };
+		E6213AB816B531A4002F86CA /* Trail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trail.m; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1048,6 +1051,8 @@
 				E6213AAC16B52305002F86CA /* WaterSplash.m */,
 				E6213A9B16B4E18E002F86CA /* Lightning.h */,
 				E6213A9C16B4E18E002F86CA /* Lightning.m */,
+				E6213AB716B531A3002F86CA /* Trail.h */,
+				E6213AB816B531A4002F86CA /* Trail.m */,
 				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
 				5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */,
 				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
@@ -1462,6 +1467,7 @@
 				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,
 				55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */,
 				E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */,
+				E6213AB916B531A4002F86CA /* Trail.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

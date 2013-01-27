@@ -80,6 +80,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *bombExplosions;
     NSMutableArray *lightnings;
     NSMutableArray *waterSplashes;
+    NSMutableArray *trails;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
@@ -92,6 +93,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedBombExplosions;
     NSMutableArray *killedLightnings;
     NSMutableArray *killedWaterSplashes;
+    NSMutableArray *killedTrails;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -132,6 +134,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     CCLayer *gameOverLayer;
     
+    Trail *currentTrail;
     // Leaderboard
     GKLeaderboard *leaderboard;
     
@@ -181,6 +184,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
     lightnings = [[NSMutableArray alloc] initWithCapacity:10];
     waterSplashes = [[NSMutableArray alloc] initWithCapacity:10];
+    trails = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
@@ -193,6 +197,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedBombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
     killedLightnings = [[NSMutableArray alloc] initWithCapacity:10];
     killedWaterSplashes = [[NSMutableArray alloc] initWithCapacity:4];
+    killedTrails = [[NSMutableArray alloc] initWithCapacity:4];
     
     menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
@@ -586,6 +591,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedWaterSplashes addObject:waterSplash];
 }
 
+#pragma mark - TrailDelegate
+
+- (void)trailDidFinish:(Trail *)trail {
+    
+    if (trail == currentTrail) {
+        
+        currentTrail = nil;
+    }
+    
+    [killedTrails addObject:trail];
+}
+
 
 #pragma mark - BombSpriteDelegate
 
@@ -727,15 +744,26 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
             }
         }
     }
+    
+    if (currentTrail) {
+        
+        [currentTrail addPoint:pos];
+    }
+    else {
+        
+        [self createNewTrail:gestureRecognizer.startPos endPos:pos];
+    }
 }
 
 - (void)swipeCancelled {
 
+    currentTrail = nil;
     //NSLog(@"Swipe cancelled");
 }
 
 - (void)swipeEnded:(CGPoint)pos {
 
+    currentTrail = nil;
     //NSLog(@"Swipe ended");
 }
 
@@ -887,6 +915,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 #pragma mark -
+
+- (void) createNewTrail:(CGPoint)startPos endPos:(CGPoint)endPos {
+    
+    currentTrail = [[Trail alloc] initWithStartPos:startPos endPos:endPos];
+    currentTrail.delegate = self;
+    currentTrail.zOrder = 999;
+    [self addChild:currentTrail];
+    
+    [trails addObject:currentTrail];
+}
 
 - (void) createLightningToEnemy:(EnemySprite*)enemy {
     [[AudioManager sharedManager] enemyHit];    
@@ -1169,6 +1207,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [waterSplash calc:deltaTime];
     }
 
+    for (Trail *trail in trails) {
+        [trail calc:deltaTime];
+    }
+    
     for (BombExplosion *bombExplosion in bombExplosions) {
         [bombExplosion calc:deltaTime];
     }
@@ -1184,6 +1226,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [bombs removeObject:bomb];
         [bomb removeFromParentAndCleanup:YES];
     }
+    [killedBombs removeAllObjects];
 
     for (EnemySprite *killedEnemy in killedTapEnemies) {
 
@@ -1235,6 +1278,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [waterSplash removeFromParentAndCleanup:YES];
     }
     [killedWaterSplashes removeAllObjects];
+    
+    for (Trail *trail in killedTrails) {
+        [trails removeObject:trail];
+        [trail removeFromParentAndCleanup:YES];
+    }
+    [killedTrails removeAllObjects];
     
     for (BombExplosion *bombExplosion in killedBombExplosions) {
         [bombExplosions removeObject:bombExplosion];
