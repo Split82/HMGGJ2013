@@ -995,6 +995,8 @@
 			children = (
 				5505212416B4F4BF0006D7F7 /* BombExplosion.h */,
 				5505212516B4F4C00006D7F7 /* BombExplosion.m */,
+				E6213A9B16B4E18E002F86CA /* Lightning.h */,
+				E6213A9C16B4E18E002F86CA /* Lightning.m */,
 				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
 				5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */,
 				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
@@ -1385,6 +1387,7 @@
 				5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */,
 				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
 				5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */,
+				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,                
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

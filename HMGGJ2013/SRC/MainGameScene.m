@@ -78,6 +78,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *labels;
     NSMutableArray *flyingSkulls;
     NSMutableArray *bombExplosions;
+    NSMutableArray *lightnings;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
@@ -88,6 +89,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedLabels;
     NSMutableArray *killedFlyingSkulls;
     NSMutableArray *killedBombExplosions;
+    NSMutableArray *killedLightnings;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -168,6 +170,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     labels = [[NSMutableArray alloc] initWithCapacity:4];
     flyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
     bombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
+    lightnings = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
@@ -178,6 +181,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
     killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
     killedBombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
+    killedLightnings = [[NSMutableArray alloc] initWithCapacity:10];
     
     menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
