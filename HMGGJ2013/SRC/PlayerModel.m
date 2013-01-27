@@ -165,7 +165,7 @@
 {
     NSInteger diff = coins - _coins;
     _coins = coins;
-    [self updateCoinsCount:coins];
+    [self updateCoinsCount:diff];
 }
 
 - (void) setHealth:(NSInteger)health
