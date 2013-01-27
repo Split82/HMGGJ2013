@@ -8,6 +8,7 @@
 
 #import "AudioManager.h"
 #import "CDAudioManager.h"
+#import "RandomPicker.h"
 
 const int SOUND_BRUM = 1;
 const int SOUND_GANDAM = 2;
@@ -24,7 +25,7 @@ const int BUFF_EFFECTS = kASC_Right;
     
     ALuint backgroundSound;
     
-    NSMutableArray *groundHitTable;
+    RandomPicker *groundPicker;
 }
 
 + (id)sharedManager {
@@ -50,7 +51,7 @@ const int BUFF_EFFECTS = kASC_Right;
         // only this app will be playing sound
         [CDAudioManager initAsynchronously:kAMM_FxPlusMusic];
         
-        groundHitTable = [[NSMutableArray alloc] initWithArray:@[@0, @1, @2]];
+        groundPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_GROUND_HIT_1], [NSNumber numberWithInt:SOUND_GROUND_HIT_2], [NSNumber numberWithInt:SOUND_GROUND_HIT_3]] minimumPickupInterval:0.100];
     }
     
     return self;
@@ -91,7 +92,11 @@ const int BUFF_EFFECTS = kASC_Right;
 }
 
 - (void)groundHit {
+    NSNumber *hit = [groundPicker pickRandomItem];
     
+    if (hit) {
+        [self playEffect:[hit intValue]];
+    }
 }
 
 @end
