@@ -36,7 +36,7 @@
 
 #define ZAPPING_TIME 0.5f
 
-#define ZAPPING_SKELETON_TIME (2 / 30.0f)
+#define ZAPPING_SKELETON_TIME 0.08f
 
 
 static NSMutableArray *swiperWalkingAnimSpriteFrames = nil;
@@ -430,13 +430,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
             //zapping
             if (state == kEnemyStateZapping) {
                 
-                if (animTime > zappingDelay) {
-
-                    animFrameIndex++;
-                    animFrameIndex = animFrameIndex % [zappingAnimSpriteFrames count];
-                    
-                    zappingDelay = ZAPPING_SKELETON_TIME;
-                }
+                animFrameIndex = (int)roundf(animTime / zappingDelay) % [zappingAnimSpriteFrames count];
                 
                 if (zappingTime < 0) {
                     
@@ -603,7 +597,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     horizontalVel = (float)rand() / RAND_MAX * 50 + 50;
     
     zappingTime = ZAPPING_TIME;
-    zappingDelay = 0;
+    zappingDelay = ZAPPING_SKELETON_TIME;
     
     elapsedTime = 0;
     
