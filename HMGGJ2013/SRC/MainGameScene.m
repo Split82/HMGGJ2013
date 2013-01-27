@@ -326,7 +326,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
 
     CGSize contentSize = [CCDirector sharedDirector].winSize;
-    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - 22.0, 272.0 * [AppDelegate player].rage, 8.0)];
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
