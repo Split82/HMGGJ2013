@@ -17,6 +17,7 @@
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
 #import "MonsterHearth.h"
+#import "MainMenuGameScene.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 

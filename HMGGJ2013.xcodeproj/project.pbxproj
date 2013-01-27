@@ -1234,6 +1234,7 @@
 				6529B0D516B48BDB00E83114 /* menu-logo.png in Resources */,
 				554AD22716B4A3C900441632 /* PixelFont.png in Resources */,
 				554AD22816B4A3C900441632 /* PixelFont.fnt in Resources */,
+				650CCBA816B4AE52004F0241 /* menu-resume.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
