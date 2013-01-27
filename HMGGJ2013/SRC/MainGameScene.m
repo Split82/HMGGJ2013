@@ -484,7 +484,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (kills > 0) {
         [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
     }
-    else if (kills == 2) {
+
+    if (kills == 2) {
         [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
     }
     else if (kills == 3) {
