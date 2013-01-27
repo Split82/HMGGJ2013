@@ -86,7 +86,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
-        self.type = 0;//_type;
+        self.type = _type;
         self.state = kEnemyStateWalking;
         self.scale = [UIScreen mainScreen].scale * 2;
         animFrameIndex = 0;
