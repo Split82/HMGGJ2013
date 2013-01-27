@@ -19,4 +19,7 @@
 - (IBAction)showAchievementsButtonPressed:(id)sender;
 - (IBAction)showAboutButtonPressed:(id)sender;
 
+@property (nonatomic, strong) UIView *mainView;
+@property (nonatomic, assign) BOOL game;
+
 @end

@@ -21,6 +21,7 @@
 #import "MasterControlProgram.h"
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
+#import "MainGameScene.h"
 #import "MenuCoinSprite.h"
 #import <GameKit/GameKit.h>
 
@@ -44,6 +45,8 @@
     NSMutableArray *bubbles;
     NSMutableArray *killedBubbles;
     
+    UIImageView *newgame;
+    
     CCSpriteBatchNode *mainSpriteBatch;
     SlimeSprite *slimeSprite;
     MonsterSprite *monsterSprite;
@@ -58,6 +61,8 @@
 @end
 
 @implementation MainMenuGameScene
+
+@synthesize mainView = mainView;
 
 - (void)onEnter {
     
@@ -189,12 +194,12 @@
     [view addSubview:nameView];
     
     imageSize = CGSizeMake(62, 12);
-    UIImageView *newGame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
-    [newGame setUserInteractionEnabled:YES];
-    [newGame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
-    [newGame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
-    [newGame.layer setMagnificationFilter:kCAFilterNearest];
-    [view addSubview:newGame];
+    newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
+    [newgame setUserInteractionEnabled:YES];
+    [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
+    [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
+    [newgame.layer setMagnificationFilter:kCAFilterNearest];
+    [view addSubview:newgame];
     
     imageSize = CGSizeMake(82, 12);
     UIImageView *leaderboard = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-topscore"]];
@@ -224,6 +229,24 @@
     [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
 }
 
+- (void) setGame:(BOOL)game
+{
+    if (!_game && game) {
+        CGFloat offset = 0.0;
+        if (!IS_WIDESCREEN) {
+            offset = 44.0;
+        }
+        [newgame removeFromSuperview];
+        CGSize imageSize = CGSizeMake(82, 12);
+        newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-resume"]];
+        [newgame setUserInteractionEnabled:YES];
+        [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
+        [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
+        [newgame.layer setMagnificationFilter:kCAFilterNearest];
+        [mainView addSubview:newgame];
+    }
+    _game = game;
+}
 
 #pragma mark - Objects
 
@@ -309,17 +332,33 @@
 }
 
 - (IBAction)startGameButtonPressed:(id)sender {
-    MainGameScene *scene = [[MainGameScene alloc] init];
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        [mainView setAlpha:0];
-    } completion:^(BOOL finished) {
-        [mainView setAlpha:1];
-        [mainView removeFromSuperview];
-    }];
-    [[CCDirector sharedDirector] pushScene:scene];
-    
-    [[AppDelegate player] gameStarted];
+    if ([self game]) {
+        MainGameScene *scene = (MainGameScene *)[[CCDirector sharedDirector] runningScene];
+        [scene.menuBackground removeFromParentAndCleanup:YES];
+        [scene.mainView setAlpha:0];
+        [[CCDirector sharedDirector].view addSubview:scene.mainView];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [mainView setAlpha:0];
+            [scene.mainView setAlpha:1];
+        } completion:^(BOOL finished) {
+            [mainView setAlpha:1];
+            [mainView removeFromSuperview];
+        }];
+        [[CCDirector sharedDirector] resume];
+    } else {
+        MainGameScene *scene = [[MainGameScene alloc] init];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [mainView setAlpha:0];
+        } completion:^(BOOL finished) {
+            [mainView setAlpha:1];
+            [mainView removeFromSuperview];
+        }];
+        [[CCDirector sharedDirector] pushScene:scene];
+        
+        [[AppDelegate player] gameStarted];
+    }
 }
 
 - (IBAction)showLeaderboardButtonPressed:(id)sender {

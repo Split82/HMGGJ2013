@@ -29,6 +29,11 @@
 
 #pragma mark -
 
++ (MainMenuGameScene *) mainMenuScene
+{
+    return [(id)[[UIApplication sharedApplication] delegate] mainMenu];
+}
+
 + (PlayerModel *) player
 {
     return [(id)[[UIApplication sharedApplication] delegate] player];
