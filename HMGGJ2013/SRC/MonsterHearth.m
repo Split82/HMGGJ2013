@@ -43,6 +43,8 @@
         animationIndexes[3] = 3;
         animationIndexes[4] = 2;
         animationIndexes[5] = 1;
+        
+        _infarkt = 0;
     }
     return self;
 }
@@ -50,8 +52,8 @@
 - (void)calc:(ccTime)deltaTime {
 
     elapsedTime += deltaTime;
-
-    [self setDisplayFrame:animationFrames[animationIndexes[((int)round(elapsedTime / ANIMATION_SPEED)) % 6]]];
+    float h = 0.11 * _infarkt;
+    [self setDisplayFrame:animationFrames[animationIndexes[((int)round(elapsedTime / (ANIMATION_SPEED - h))) % 6]]];
 }
 
 @end
