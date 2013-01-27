@@ -200,6 +200,9 @@
 		65708CD616B53E3A003C181A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CD316B53E3A003C181A /* Default-568h@2x.png */; };
 		65708CD716B53E3A003C181A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CD416B53E3A003C181A /* Default.png */; };
 		65708CD816B53E3A003C181A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CD516B53E3A003C181A /* Default@2x.png */; };
+		65708CE316B55460003C181A /* about-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CE216B55460003C181A /* about-bg.png */; };
+		65708CE516B556B8003C181A /* about-bg-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CE416B556B8003C181A /* about-bg-2.png */; };
+		65708CE716B55767003C181A /* about-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CE616B55767003C181A /* about-twitter.png */; };
 		659A0A5416B4690B00D3B1A8 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 659A0A5316B4690B00D3B1A8 /* pause.png */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
@@ -560,6 +563,9 @@
 		65708CD316B53E3A003C181A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		65708CD416B53E3A003C181A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		65708CD516B53E3A003C181A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
+		65708CE216B55460003C181A /* about-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about-bg.png"; sourceTree = "<group>"; };
+		65708CE416B556B8003C181A /* about-bg-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about-bg-2.png"; sourceTree = "<group>"; };
+		65708CE616B55767003C181A /* about-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about-twitter.png"; sourceTree = "<group>"; };
 		659A0A5316B4690B00D3B1A8 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
@@ -1175,6 +1181,9 @@
 		55B862C016B2161600D5BA8D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				65708CE616B55767003C181A /* about-twitter.png */,
+				65708CE416B556B8003C181A /* about-bg-2.png */,
+				65708CE216B55460003C181A /* about-bg.png */,
 				650CCBB916B52423004F0241 /* go-play.png */,
 				6529B0D416B48BDB00E83114 /* menu-logo.png */,
 				6529B0C216B4892600E83114 /* menu-about-h.png */,
