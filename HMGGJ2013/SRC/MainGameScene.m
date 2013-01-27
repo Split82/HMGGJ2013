@@ -299,12 +299,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [view setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:view];
     mainView = view;
-    
+
     CGSize contentSize = [CCDirector sharedDirector].winSize;
+    UIImage *image;
+    CGFloat offset = 0.0;
+    if (contentSize.height > 480.0)
+        offset = 18.0;
+
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
-    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 13.0);
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 13.0 - offset);
     killSprite.zOrder = 5000;
     [self addChild:killSprite];
     
@@ -312,11 +317,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26 - offset);
     [self addChild:coinsSprite];
     
-    UIImage *image;
-    CGFloat offset = 0.0;
     if (contentSize.height == 480.0)
         offset = 2.0;
     else
@@ -338,9 +341,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [rageView addSubview:imageView];
     [mainView addSubview:rageView];
     
+    if (contentSize.height > 480.0)
+        offset = 16.0;
+    
     image = [UIImage imageNamed:@"pause"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    pauseButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2, 13.0, 24.0, 28.0)];
+    pauseButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2, 13.0 + offset, 24.0, 28.0)];
     [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
     [pauseButton setImage:image];
     [pauseButton setUserInteractionEnabled:YES];
@@ -354,6 +360,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (gameOver) {
         return;
     }
+    CGFloat offset = 0.0;
+    if ([CCDirector sharedDirector].winSize.height > 480.0)
+        offset = 18.0;
     NSString *kill = [NSString stringWithFormat:@"%d", [AppDelegate player].points];
     
     if (![lastKill isEqualToString:kill]) {
@@ -361,7 +370,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         killsLabel = [[CCLabelBMFont alloc] initWithString:kill fntFile:@"PixelFont.fnt"];
         killsLabel.anchorPoint = ccp(0, 0);
         killsLabel.scale = [UIScreen mainScreen].scale * 1.3;
-        killsLabel.position = ccp(40.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        killsLabel.position = ccp(40.0, [CCDirector sharedDirector].winSize.height - 36.0 - offset);
         killsLabel.zOrder = 5000;
         [killsLabel setColor:ccc3(255, 255, 255)];
         [self addChild:killsLabel];
@@ -374,7 +383,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         coinsLabel = [[CCLabelBMFont alloc] initWithString:coin fntFile:@"PixelFont.fnt"];
         coinsLabel.anchorPoint = ccp(1, 0);
         coinsLabel.scale = [UIScreen mainScreen].scale * 1.3;
-        coinsLabel.position = ccp(320 - 38.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        coinsLabel.position = ccp(320 - 38.0, [CCDirector sharedDirector].winSize.height - 36.0 - offset);
         coinsLabel.zOrder = 5000;
         [coinsLabel setColor:ccc3(255, 255, 255)];
         [self addChild:coinsLabel];
@@ -382,7 +391,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     lastCoin = coin;
     
     CGSize contentSize = [CCDirector sharedDirector].winSize;
-    CGFloat offset = 0.0;
     if (contentSize.height == 480.0)
         offset = 2.0;
     else
