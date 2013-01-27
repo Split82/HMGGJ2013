@@ -20,6 +20,7 @@ typedef enum {
     kEnemyStateSleeping,
     kEnemyStateCrossing,
     kEnemyStateFallingInto,
+    kEnemyStateZapping,
 } EnemyState;
 
 @protocol EnemySpriteDelegate;
