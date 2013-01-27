@@ -12,7 +12,7 @@
 #define kPlayerDefCoins         10
 #define kPlayerDefHealth        100
 #define kPlayerDefRageDealy     15
-#define kPlayerDefRageMultipler 8
+#define kPlayerDefRageMultipler 9
 #define kPlayerDefRageReduction 0.7
 
 #define kPlayerSyncTimer        30

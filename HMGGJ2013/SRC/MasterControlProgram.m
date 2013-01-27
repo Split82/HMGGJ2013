@@ -19,7 +19,7 @@
 #define NOWAIT 0.0f
 
 const float START_ENEMIES_PER_WAVE[]      = {    1.000f,    1.000f,    5.000f,    8.000f};
-const float END_ENEMIES_PER_WAVE[]        = {   16.000f,   16.000f,   20.000f,   15.000f};
+const float END_ENEMIES_PER_WAVE[]        = {   16.000f,   10.000f,   20.000f,   15.000f};
 
 const float START_SWIPE_ENEMIES_RATIO[]   = {    0.000f,    1.000f,    0.200f,    0.400f};
 const float END_SWIPE_ENEMIES_RATIO[]     = {    0.000f,    1.000f,    0.650f,    0.500f};
@@ -41,7 +41,7 @@ const float ENEMY_WAVE_SPAWN_DELTA_TIME[] = {    2.000f,    1.000f,    0.500f,  
 const float WAVE_WAIT_FOR_USER[]          = {    8.000f,    5.000f,    3.000f,    NOWAIT};
 
 // after how many levels level up
-const int LEVEL_UP_WAVE_COUNT[] = {3, 6, 9, 12};
+const int LEVEL_UP_WAVE_COUNT[] = {3, 5, 8, 11};
 const int LEVEL_COUNT = 4;
 
 const float INCREASE_SPAWN_SPEED_FACTOR = 1.25f;
