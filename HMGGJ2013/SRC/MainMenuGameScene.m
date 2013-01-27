@@ -192,6 +192,7 @@
     [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:nameView];
+    offset += 10.0;
     
     imageSize = CGSizeMake(62, 12);
     newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
