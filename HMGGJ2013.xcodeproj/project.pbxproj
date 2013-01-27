@@ -167,6 +167,7 @@
 		55F18D8B16B51FFB0034650D /* GroundHit3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8816B51FFB0034650D /* GroundHit3.wav */; };
 		650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 650CCB7916B494AB004F0241 /* MenuCoinSprite.m */; };
 		650CCBA816B4AE52004F0241 /* menu-resume.png in Resources */ = {isa = PBXBuildFile; fileRef = 650CCBA716B4AE52004F0241 /* menu-resume.png */; };
+		650CCBBA16B52423004F0241 /* go-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 650CCBB916B52423004F0241 /* go-play.png */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
 		65259BD116B338670012B735 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65259BD016B338670012B735 /* Default-568h@2x.png */; };
 		65259BD516B33A4F0012B735 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BD316B33A4F0012B735 /* AboutViewController.m */; };
@@ -483,7 +484,6 @@
 		554AD1FC16B45D1800441632 /* ScreenShaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenShaker.m; sourceTree = "<group>"; };
 		554AD1FE16B462C900441632 /* SlimeBubbleSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlimeBubbleSprite.h; sourceTree = "<group>"; };
 		554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlimeBubbleSprite.m; sourceTree = "<group>"; };
-		554AD21316B4978100441632 /* HMGGJ2013GameObjects.zwd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HMGGJ2013GameObjects.zwd; sourceTree = "<group>"; };
 		554AD21916B49B9D00441632 /* ScoreAddLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreAddLabel.h; sourceTree = "<group>"; };
 		554AD21A16B49B9D00441632 /* ScoreAddLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreAddLabel.m; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
@@ -505,6 +505,7 @@
 		650CCB7816B494AB004F0241 /* MenuCoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCoinSprite.h; sourceTree = "<group>"; };
 		650CCB7916B494AB004F0241 /* MenuCoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCoinSprite.m; sourceTree = "<group>"; };
 		650CCBA716B4AE52004F0241 /* menu-resume.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-resume.png"; sourceTree = "<group>"; };
+		650CCBB916B52423004F0241 /* go-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "go-play.png"; sourceTree = "<group>"; };
 		65259BCD16B337690012B735 /* GameDataNameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDataNameDefinitions.h; sourceTree = "<group>"; };
 		65259BCE16B337690012B735 /* GameDataNameDefinitions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDataNameDefinitions.m; sourceTree = "<group>"; };
 		65259BD016B338670012B735 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1120,7 +1121,7 @@
 		55B862C016B2161600D5BA8D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				554AD21316B4978100441632 /* HMGGJ2013GameObjects.zwd */,
+				650CCBB916B52423004F0241 /* go-play.png */,
 				6529B0D416B48BDB00E83114 /* menu-logo.png */,
 				6529B0C216B4892600E83114 /* menu-about-h.png */,
 				6529B0C316B4892600E83114 /* menu-about.png */,
@@ -1262,6 +1263,7 @@
 				55F18D8916B51FFB0034650D /* GroundHit1.wav in Resources */,
 				55F18D8A16B51FFB0034650D /* GroundHit2.wav in Resources */,
 				55F18D8B16B51FFB0034650D /* GroundHit3.wav in Resources */,
+				650CCBBA16B52423004F0241 /* go-play.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
