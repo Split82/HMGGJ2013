@@ -16,24 +16,28 @@
 #define BLINKING_SPEED 0.12
 #define START_BLINKING_TIME 4.5
 #define LIFE_TIME 6.0
+#define BOUNCE_COEF 1.0f
 
-@interface CoinSprite()
+@interface CoinSprite() {
+
+    CGRect spaceBounds;    
+}
 
 @end
 
 
 @implementation CoinSprite
 
-- (id)initWithStartPos:(CGPoint)startPos groundY:(CGFloat)initGroundY {
+- (id)initWithStartPos:(CGPoint)startPos spaceBounds:(CGRect)initSpaceBounds {
 
     self = [self initWithSpriteFrameName:@"coin1.png"];
     if (self) {
         
-        self.anchorPoint = ccp(0.5, 0);
+        self.anchorPoint = ccp(0.5, 0.5);
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
-        groundY = initGroundY;
-        velocity = ccp(25 - 50 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
+        spaceBounds = initSpaceBounds;
+        velocity = ccp(1000 - 2000 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
 
         animationOffset = rand() % 14;
         
@@ -73,10 +77,28 @@
     velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
     self.position = ccpAdd(self.position, ccpMult(velocity, deltaTime));
     
-    if (position_.y < groundY) {
+    if (self.position.x > CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5) {
+        CGPoint pos = self.position;
+        pos.x = CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5;
+        self.position = pos;
+        velocity.x = -velocity.x;
+        velocity = ccpMult(velocity, BOUNCE_COEF);
+    }
 
-        self.position = ccp(position_.x, groundY);
-        velocity = ccp(velocity.x, - velocity.y);
+    if (self.position.x < CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5) {
+        CGPoint pos = self.position;
+        pos.x = CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5;
+        self.position = pos;
+        velocity.x = -velocity.x;
+        velocity = ccpMult(velocity, BOUNCE_COEF);
+    }
+
+    if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5) {
+        CGPoint pos = self.position;
+        pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5;
+        self.position = pos;
+        velocity.y = -velocity.y;
+        velocity = ccpMult(velocity, BOUNCE_COEF);
     }
 
     [self setDisplayFrame:animationFrames[animationIndexes[(animationOffset + (int)round(lifeTime / ANIMATION_SPEED)) % 14]]];

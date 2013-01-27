@@ -29,6 +29,11 @@
 
 #pragma mark -
 
++ (MainMenuGameScene *) mainMenuScene
+{
+    return [(id)[[UIApplication sharedApplication] delegate] mainMenu];
+}
+
 + (PlayerModel *) player
 {
     return [(id)[[UIApplication sharedApplication] delegate] player];
@@ -37,7 +42,9 @@
 #pragma mark UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
+    srand(time(NULL));
+
 	// Create the main window
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -57,7 +64,7 @@
     director.wantsFullScreenLayout = YES;
     
     // Display FSP and SPF
-    [director setDisplayStats:YES];
+    //[director setDisplayStats:YES];
     
     // set FPS at 60
     [director setAnimationInterval:1.0/60];

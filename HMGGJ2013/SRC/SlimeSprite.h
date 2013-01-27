@@ -15,5 +15,6 @@
 - (id)initWithWidth:(CGFloat)width maxHeight:(CGFloat)initMaxHeight;
 - (void)calc:(ccTime)deltaTime;
 - (void)setEnergy:(CGFloat)energy; // 0 - 1
+- (void)setActualEnergy:(CGFloat)actualEnergy; // No animation
 
 @end

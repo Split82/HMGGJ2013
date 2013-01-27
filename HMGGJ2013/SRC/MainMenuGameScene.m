@@ -21,6 +21,7 @@
 #import "MasterControlProgram.h"
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
+#import "MainGameScene.h"
 #import "MenuCoinSprite.h"
 #import <GameKit/GameKit.h>
 
@@ -33,7 +34,7 @@
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 135
+#define SLIME_MAX_HEIGHT 300
 
 
 @interface MainMenuGameScene () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
@@ -43,6 +44,8 @@
     NSMutableArray *coins;
     NSMutableArray *bubbles;
     NSMutableArray *killedBubbles;
+    
+    UIImageView *newgame;
     
     CCSpriteBatchNode *mainSpriteBatch;
     SlimeSprite *slimeSprite;
@@ -58,6 +61,8 @@
 @end
 
 @implementation MainMenuGameScene
+
+@synthesize mainView = mainView;
 
 - (void)onEnter {
     
@@ -109,6 +114,7 @@
     
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    [slimeSprite setActualEnergy:0.5];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
@@ -187,14 +193,15 @@
     [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:nameView];
+    offset += 10.0;
     
     imageSize = CGSizeMake(62, 12);
-    UIImageView *newGame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
-    [newGame setUserInteractionEnabled:YES];
-    [newGame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
-    [newGame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
-    [newGame.layer setMagnificationFilter:kCAFilterNearest];
-    [view addSubview:newGame];
+    newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
+    [newgame setUserInteractionEnabled:YES];
+    [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
+    [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
+    [newgame.layer setMagnificationFilter:kCAFilterNearest];
+    [view addSubview:newgame];
     
     imageSize = CGSizeMake(82, 12);
     UIImageView *leaderboard = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-topscore"]];
@@ -224,6 +231,24 @@
     [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
 }
 
+- (void) setGame:(BOOL)game
+{
+    if (!_game && game) {
+        CGFloat offset = 0.0;
+        if (!IS_WIDESCREEN) {
+            offset = 44.0;
+        }
+        [newgame removeFromSuperview];
+        CGSize imageSize = CGSizeMake(82, 12);
+        newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-resume"]];
+        [newgame setUserInteractionEnabled:YES];
+        [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
+        [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
+        [newgame.layer setMagnificationFilter:kCAFilterNearest];
+        [mainView addSubview:newgame];
+    }
+    _game = game;
+}
 
 #pragma mark - Objects
 
@@ -237,7 +262,7 @@
 
 - (void)addCoinAtPos:(CGPoint)pos {
     
-    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos groundY:GROUND_Y];
+    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     newCoin.zOrder = 3000;
     [coins addObject:newCoin];
     [self addChild:newCoin];
@@ -268,8 +293,7 @@
         [bubble removeFromParentAndCleanup:YES];
     }
     [killedBubbles removeAllObjects];
-    
-    [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
+
     [slimeSprite calc:deltaTime];
     
     [monsterSprite calc:deltaTime];
@@ -309,17 +333,33 @@
 }
 
 - (IBAction)startGameButtonPressed:(id)sender {
-    MainGameScene *scene = [[MainGameScene alloc] init];
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        [mainView setAlpha:0];
-    } completion:^(BOOL finished) {
-        [mainView setAlpha:1];
-        [mainView removeFromSuperview];
-    }];
-    [[CCDirector sharedDirector] pushScene:scene];
-    
-    [[AppDelegate player] gameStarted];
+    if ([self game]) {
+        MainGameScene *scene = (MainGameScene *)[[CCDirector sharedDirector] runningScene];
+        [scene.menuBackground removeFromParentAndCleanup:YES];
+        [scene.mainView setAlpha:0];
+        [[CCDirector sharedDirector].view addSubview:scene.mainView];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [mainView setAlpha:0];
+            [scene.mainView setAlpha:1];
+        } completion:^(BOOL finished) {
+            [mainView setAlpha:1];
+            [mainView removeFromSuperview];
+        }];
+        [[CCDirector sharedDirector] resume];
+    } else {
+        MainGameScene *scene = [[MainGameScene alloc] init];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [mainView setAlpha:0];
+        } completion:^(BOOL finished) {
+            [mainView setAlpha:1];
+            [mainView removeFromSuperview];
+        }];
+        [[CCDirector sharedDirector] pushScene:scene];
+        
+        [[AppDelegate player] gameStarted];
+    }
 }
 
 - (IBAction)showLeaderboardButtonPressed:(id)sender {

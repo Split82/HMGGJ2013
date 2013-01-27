@@ -13,10 +13,14 @@
 #import "BombSpawner.h"
 #import "MasterControlProgram.h"
 #import "EnemyBodyDebris.h"
+#import "ScoreAddLabel.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 #define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate>
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate>
+
+@property (nonatomic, strong) CCLayer *menuBackground;
+@property (nonatomic, strong) UIView *mainView;
 
 @end
