@@ -18,6 +18,7 @@
 #import "SlimeBubbleSprite.h"
 #import "MonsterHearth.h"
 #import "MainMenuGameScene.h"
+#import "MenuCoinSprite.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -91,6 +92,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCSprite *slimeTop;
     MonsterSprite *monsterSprite;
     MonsterHearth *monsterHearth;
+    
+    NSMutableArray *menuCoins;
+    MonsterHearth *menuHeart;
     
     MasterControlProgram *masterControlProgram;
     
@@ -336,7 +340,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
     [pauseButton setImage:image];
     [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissToMenu)]];
+    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pauseGame)]];
     [mainView addSubview:pauseButton];
     [self updateUI];
     
@@ -378,6 +382,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     newCoin.delegate = self;
     [coins addObject:newCoin];
     [mainSpriteBatch addChild:newCoin];
+}
+
+- (void)addMenuCoinAtPos:(CGPoint)pos {
+    CoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+    newCoin.zOrder = 4000;
+    newCoin.delegate = self;
+    [menuCoins addObject:newCoin];
+    [self addChild:newCoin];
 }
 
 - (void)addEnemy:(EnemyType)type {
@@ -755,14 +767,31 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 }
 
-- (void) dismissToMenu {    
-    [[CCDirector sharedDirector] pause];
+- (void) setPause:(BOOL)pause
+{
+    _pause = pause;
+    if (_pause == NO) {
+        for (MenuCoinSprite *coin in menuCoins) {
+            [coin removeFromParentAndCleanup:YES];
+        }
+        [menuCoins removeAllObjects];
+        [menuHeart removeFromParentAndCleanup:YES];
+        menuHeart = nil;
+    }
+}
+
+- (void) pauseGame {
+    [self setPause:YES];
     
     menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
     menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
     menuBackground.zOrder = 2000;
     [self addChild:menuBackground];
     
+    CGFloat offset = 0.0;
+    if (!IS_WIDESCREEN) {
+        offset = 44.0;
+    }
     [[AppDelegate mainMenuScene] setGame:YES];
     [[CCDirector sharedDirector].view addSubview:[[AppDelegate mainMenuScene] mainView]];
     
@@ -771,6 +800,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     } completion:^(BOOL finished) {
         [mainView removeFromSuperview];
     }];
+    menuHeart = [[MonsterHearth alloc] init];
+    menuHeart.anchorPoint = ccp(0.5, 0);
+    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    menuHeart.zOrder = 5000;
+    [self addChild:menuHeart];
+    
+    [self addMenuCoinAtPos:CGPointMake(60.0, 410.0 - offset)];
+    [self addMenuCoinAtPos:CGPointMake(260.0, 410.0 - offset)];
 }
 
 #pragma mark -
@@ -890,7 +927,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - Update
 
 - (void)calc:(ccTime)deltaTime {
-
+    if (_pause) {
+        for (MenuCoinSprite *coin in menuCoins) {
+            [coin calc:deltaTime];
+        }
+        [menuHeart calc:deltaTime];
+        return;
+    }
     // Gestures
     [gestureRecognizer update:deltaTime];
 

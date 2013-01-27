@@ -24,4 +24,6 @@
 @property (nonatomic, strong) CCLayer *menuBackground;
 @property (nonatomic, strong) UIView *mainView;
 
+@property (nonatomic, assign) BOOL pause;
+
 @end
