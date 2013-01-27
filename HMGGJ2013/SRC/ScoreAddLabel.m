@@ -30,6 +30,7 @@
     if (self) {
         _type = type;
         startPos = pos;
+        self.position = pos;
     }
     return self;
 }
