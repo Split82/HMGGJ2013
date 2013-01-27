@@ -30,6 +30,8 @@ const int SOUND_BOMB_SPAWNER_RELEASED = 16;
 const int SOUND_BOMB_SPAWNER_CANCELLED = 17;
 const int SOUND_BOMB_SPAWNER = 18;
 
+const int SOUND_MENU_MUSIC = 19;
+
 const int BUFF_BG = kASC_Left;
 const int BUFF_EFFECTS = kASC_Right;
 
@@ -120,16 +122,26 @@ const int BUFF_EFFECTS = kASC_Right;
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BOMB_SPAWNER_CANCELLED filePath:@"BombSpawnerCancelled.wav"]];
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BOMB_SPAWNER filePath:@"BombSpawner.wav"]];
     
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_MENU_MUSIC filePath:@"MenuMusic.mp3"]];
+    
     [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
 - (void)startBackgroundMusic {
     //[soundEngine playSound:SOUND_GANDAM sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
+    
+    [soundEngine playSound:SOUND_MENU_MUSIC sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
+}
+
+- (void)startMenuMusic {
+    
+    //[soundEngine stopSourceGroup:BUFF_BG];
+    [soundEngine playSound:SOUND_MENU_MUSIC sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }
 
 - (void)stopBackgroundMusic {
     
-    [soundEngine stopSound:backgroundSound];
+    [soundEngine stopSourceGroup:BUFF_BG];
 }
 
 - (void)groundHit {
