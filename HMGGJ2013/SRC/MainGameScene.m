@@ -941,7 +941,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void) createLightningToEnemy:(EnemySprite*)enemy {
     [[AudioManager sharedManager] enemyHit];    
     
-    CGPoint startPos = CGPointMake([CCDirector sharedDirector].winSize.width / 2, [CCDirector sharedDirector].winSize.height - 60);
+    CGPoint startPos = CGPointMake([CCDirector sharedDirector].winSize.width / 2, [CCDirector sharedDirector].winSize.height / 2 + 220);
     Lightning *lightning = [[Lightning alloc] initWithStartPos:startPos endPos:enemy.position];
     lightning.zOrder = 30;
     [self addChild:lightning];
