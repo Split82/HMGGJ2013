@@ -20,4 +20,6 @@
 
 - (void)stopBackgroundMusic;
 
+- (void)groundHit;
+
 @end
