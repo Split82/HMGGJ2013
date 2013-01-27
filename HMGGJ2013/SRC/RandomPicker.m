@@ -28,6 +28,7 @@
         items = [NSMutableArray arrayWithArray:initItems];
         minimumPickupInterval = initMinimumPickupInterval;
         
+        canPick = YES;        
     }
     return self;
 }
