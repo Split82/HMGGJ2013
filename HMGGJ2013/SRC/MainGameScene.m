@@ -881,11 +881,15 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [menuCoins removeAllObjects];
         [menuHeart removeFromParentAndCleanup:YES];
         menuHeart = nil;
+        
+        gestureRecognizer.delegate = self;
     }
 }
 
 - (void) pauseGame {
     [self setPause:YES];
+    
+    gestureRecognizer.delegate = nil;
     
     menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
     menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
@@ -1001,9 +1005,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self addChild:menuBackground];
     
     CGSize contentSize = [[CCDirector sharedDirector] winSize];
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 34.0;
+    
     UIImage *image = [UIImage imageNamed:@"go-play"];
     image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    restartButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0, 114.0 * 2, 16.0 * 2)];
+    restartButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0 - offset * 2, 114.0 * 2, 16.0 * 2)];
     [restartButton.layer setMagnificationFilter:kCAFilterNearest];
     [restartButton setImage:image];
     [restartButton setUserInteractionEnabled:YES];
@@ -1024,13 +1032,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCSprite *sprite;
     sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-bones.png"];
     sprite.anchorPoint = ccp(0.5, 0.5);
-    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 120);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 120 - offset);
     sprite.scale = [UIScreen mainScreen].scale * 2;
     [gameOverLayer addChild:sprite];
     
     sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-bones2.png"];
     sprite.anchorPoint = ccp(0.5, 0.5);
-    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 400);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 400 - offset);
     sprite.scale = [UIScreen mainScreen].scale * 2;
     [gameOverLayer addChild:sprite];
 
@@ -1038,7 +1046,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", [AppDelegate player].points] fntFile:@"PixelFont.fnt"];
     label.anchorPoint = ccp(0.5, 0.5);
     label.scale = [UIScreen mainScreen].scale * 4;
-    label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 5, 350.0);
+    label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 5, 350.0 - offset);
     [label setColor:ccc3(255, 211, 14)];
     [gameOverLayer addChild:label];
     
@@ -1046,13 +1054,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         label = [[CCLabelBMFont alloc] initWithString:[AppDelegate player].points == 0 ? @"Loser!" : @"New Record" fntFile:@"PixelFont.fnt"];
         label.anchorPoint = ccp(0.5, 0.5);
         label.scale = [UIScreen mainScreen].scale * 2;
-        label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 3, 315.0);
+        label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 3, 315.0 - offset);
         [label setColor:ccc3(255, 211, 14)];
         [gameOverLayer addChild:label];
     }    
     sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-gameover.png"];
     sprite.anchorPoint = ccp(0.5, 0.5);
-    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 458);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 458.0 - offset);
     sprite.scale = [UIScreen mainScreen].scale * 2;
     [gameOverLayer addChild:sprite];
     
@@ -1076,7 +1084,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", score.rank] fntFile:@"PixelFont.fnt"];
                 label.anchorPoint = ccp(0.5, 0.5);
                 label.scale = [UIScreen mainScreen].scale * 2;
-                label.position = ccp(40.0, offsetY - i * 44.0);
+                label.position = ccp(40.0, offsetY - i * 44.0 - offset);
                 [label setColor:ccc3(145, 145, 153)];
                 [gameOverLayer addChild:label];
                 
@@ -1085,24 +1093,25 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 label = [[CCLabelBMFont alloc] initWithString:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] fntFile:@"PixelFont.fnt"];
                 label.anchorPoint = ccp(0, 0.5);
                 label.scale = [UIScreen mainScreen].scale * 2;
-                label.position = ccp(70.0, offsetY - i * 44.0);
+                label.position = ccp(70.0, offsetY - i * 44.0 - offset);
                 [label setColor:ccc3(145, 145, 153)];
                 [gameOverLayer addChild:label];
                 
                 label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%lld", score.value] fntFile:@"PixelFont.fnt"];
                 label.anchorPoint = ccp(1, 0.5);
                 label.scale = [UIScreen mainScreen].scale * 2;
-                label.position = ccp(290.0, offsetY - i * 44.0);
+                label.position = ccp(290.0, offsetY - i * 44.0 - offset);
                 [label setColor:ccc3(145, 145, 153)];
                 [gameOverLayer addChild:label];
             }
         }];
     }];
-    menuHeart = [[MonsterHearth alloc] init];
-    menuHeart.anchorPoint = ccp(0.5, 0);
-    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, 472);
-    [gameOverLayer addChild:menuHeart];
-    
+    if (contentSize.height > 480.0) {
+        menuHeart = [[MonsterHearth alloc] init];
+        menuHeart.anchorPoint = ccp(0.5, 0);
+        menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, 472.0 - offset);
+        [gameOverLayer addChild:menuHeart];
+    }    
     [self addChild:gameOverLayer];
     [[AppDelegate player] newGame];
 }
