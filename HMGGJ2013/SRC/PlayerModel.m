@@ -130,10 +130,7 @@
 
 - (void) setPoints:(NSInteger)points
 {
-    int newPoints = points - _points;
     _points = points;
-    self.rage += (float)newPoints / kPlayerDefRageMultipler;
-    _rageInterval = 0;
 }
 
 - (void) _rageReduction
@@ -149,6 +146,8 @@
 {
     NSInteger diff = kills - _kills;
     _kills = kills;
+    self.rage += (float)diff / kPlayerDefRageMultipler;
+    _rageInterval = 0;
     [self updateKillCount:diff];
 }
 
@@ -455,11 +454,15 @@
 
 - (void) _submitScores
 {
-    int index = [_scores count] - 1;
-    while (index >= 0) {
-        GKScore *score = _scores[index];
-        [self _submitScore:score];
-        index--;
+    @try {
+        int index = [_scores count] - 1;
+        while (index >= 0) {
+            GKScore *score = _scores[index];
+            [self _submitScore:score];
+            index--;
+        }
+    } @catch (NSException *exception) {
+      
     }
 }
 
