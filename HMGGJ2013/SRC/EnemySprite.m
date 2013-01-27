@@ -11,7 +11,7 @@
 #import "MainGameScene.h"
 #import "SpriteTextureFrameInfo.h"
 #import "WallGrid.h"
-
+#import "AudioManager.h"
 
 #define ENEMY_HALF_WIDTH 20.0f
 
@@ -433,6 +433,8 @@ static WallGrid *wallGrid = nil;
             
             if (((state == kEnemyStateFalling) || (state == kEnemyStateZapping)) && (spritePos.y < GROUND_Y)) {
                 
+                [[AudioManager sharedManager] groundHit];
+                
                 spritePos.y = GROUND_Y;
                 
                 if (fabs(verticalVel) < MIN_FALLING_SPPEED_FOR_SLEEP) {
@@ -457,7 +459,7 @@ static WallGrid *wallGrid = nil;
             }
             else if ((state == kEnemyStateFallingInto) && (spritePos.y < [_delegate slimeSurfacePosY])) {
                 
-                [_delegate enemyDidClimbWall:self];
+                [_delegate enemyDidFallIntoSlime:self];
                 return;
             }
             
@@ -557,7 +559,7 @@ static WallGrid *wallGrid = nil;
             break;
         }
         case kEnemyStateCrossing: {
-            
+    
             if (animTime > CROSSING_ANIM_DELAY) {
                 
                 animFrameIndex += (int)(animTime / CROSSING_ANIM_DELAY);

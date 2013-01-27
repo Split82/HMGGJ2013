@@ -8,10 +8,19 @@
 
 #import "AudioManager.h"
 #import "CDAudioManager.h"
+#import "RandomPicker.h"
 
 const int SOUND_BRUM = 1;
 const int SOUND_GANDAM = 2;
 const int SOUND_MUHAHA = 3;
+
+const int SOUND_GROUND_HIT_1 = 4;
+const int SOUND_GROUND_HIT_2 = 5;
+const int SOUND_GROUND_HIT_3 = 6;
+
+const int SOUND_ENEMY_HIT_1 = 7;
+const int SOUND_ENEMY_HIT_2 = 8;
+const int SOUND_ENEMY_HIT_3 = 9;
 
 const int BUFF_BG = kASC_Left;
 const int BUFF_EFFECTS = kASC_Right;
@@ -20,6 +29,9 @@ const int BUFF_EFFECTS = kASC_Right;
     CDSoundEngine* soundEngine;
     
     ALuint backgroundSound;
+    
+    RandomPicker *groundPicker;
+    RandomPicker *enemyHitPicker;
 }
 
 + (id)sharedManager {
@@ -43,7 +55,11 @@ const int BUFF_EFFECTS = kASC_Right;
         [soundEngine defineSourceGroups:sourceGroups];
         
         // only this app will be playing sound
-        [CDAudioManager initAsynchronously:kAMM_FxPlusMusic];        
+        [CDAudioManager initAsynchronously:kAMM_FxPlusMusic];
+        
+        groundPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_GROUND_HIT_1], [NSNumber numberWithInt:SOUND_GROUND_HIT_2], [NSNumber numberWithInt:SOUND_GROUND_HIT_3]] minimumPickupInterval:0.100];
+        
+        enemyHitPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_ENEMY_HIT_1], [NSNumber numberWithInt:SOUND_ENEMY_HIT_2], [NSNumber numberWithInt:SOUND_ENEMY_HIT_3]] minimumPickupInterval:0.100];
     }
     
     return self;
@@ -63,6 +79,14 @@ const int BUFF_EFFECTS = kASC_Right;
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_GANDAM filePath:@"8bit-gandam.mp3"]];
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_MUHAHA filePath:@"muhaha.wav"]];
     
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_GROUND_HIT_1 filePath:@"GroundHit1.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_GROUND_HIT_2 filePath:@"GroundHit2.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_GROUND_HIT_3 filePath:@"GroundHit3.wav"]];
+    
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_ENEMY_HIT_1 filePath:@"ElHit1.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_ENEMY_HIT_2 filePath:@"ElHit2.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_ENEMY_HIT_3 filePath:@"ElHit3.wav"]];
+    
     [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
@@ -78,6 +102,22 @@ const int BUFF_EFFECTS = kASC_Right;
 - (void)stopBackgroundMusic {
     
     [soundEngine stopSound:backgroundSound];
+}
+
+- (void)groundHit {
+    NSNumber *hit = [groundPicker pickRandomItem];
+    
+    if (hit) {
+        [self playEffect:[hit intValue]];
+    }
+}
+
+- (void)enemyHit {
+    NSNumber *hit = [enemyHitPicker pickRandomItem];
+    
+    if (hit) {
+       [self playEffect:[hit intValue]];
+    }
 }
 
 @end

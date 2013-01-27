@@ -32,7 +32,7 @@ const float SWIPE_ENEMIES_DELTA[]         = { CALCULATE, CALCULATE, CALCULATE, C
 const float WAVE_LENGHT_DELTA[]           = { CALCULATE, CALCULATE, CALCULATE, CALCULATE};
 
 const float ENEMY_IDLE_SPAWN_TIME[]       = {    7.000f,    7.000f,    7.000f,    0.500f};
-const float ENEMY_IDLE_SPAWN_DELTA_TIME[] = {   10.000f,    0.000f,    3.000f,    1.000f};
+const float ENEMY_IDLE_SPAWN_DELTA_TIME[] = {   10.000f,   10.000f,    3.000f,    1.000f};
 
 const float ENEMY_WAVE_SPAWN_TIME[]       = {    0.500f,    0.500f,    0.200f,    0.500f};
 const float ENEMY_WAVE_SPAWN_DELTA_TIME[] = {    2.000f,    1.000f,    0.500f,    1.000f};
