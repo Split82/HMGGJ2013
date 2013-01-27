@@ -335,6 +335,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) updateUI {
+    
     if (gameOver) {
         return;
     }
