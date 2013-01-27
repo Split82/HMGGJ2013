@@ -16,6 +16,8 @@
 
 @property (nonatomic, weak) id <LightningDelegate> delegate;
 
+@property (nonatomic, weak) CCNode* lightningTarget;
+
 - (void)draw;
 - (id)initWithStartPos:(CGPoint)initStartPos endPos:(CGPoint)initEndPos;
 

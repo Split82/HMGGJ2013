@@ -8,7 +8,7 @@
 #import "Lightning.h"
 
 static const float kUpdateInterval = 0.1f;
-static const float kGenerateNewInterval = 0.3f;
+static const float kGenerateNewInterval = 0.4f;
 static const float kMiddlePointOffsetMul = 0.5f;
 
 static const float kArcWidth = 20;
@@ -83,6 +83,15 @@ static const float kSegmentLength = 20.0f;
         colors[i * 4 + 2] = (int)(255);
         
         points[i] = ccpAdd(points[i], ccpMult(CGPointMake((float)rand() / RAND_MAX * 2 - 1, (float)rand() / RAND_MAX * 2 - 1), 2.0f));
+    }
+    
+    if (_lightningTarget) {
+        
+        points[pointsCount - 1] = _lightningTarget.position;
+    }
+    else {
+        
+        points[pointsCount - 1] = endPos;
     }
     
     glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, colors);

@@ -848,6 +848,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     lightning.zOrder = 30;
     [self addChild:lightning];
     [lightnings addObject:lightning];
+    
+    lightning.lightningTarget = enemy;
 }
 
 - (void) enemyDidDie:(EnemySprite *)enemy
