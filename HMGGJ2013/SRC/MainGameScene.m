@@ -348,7 +348,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     NSString *kill = [NSString stringWithFormat:@"%d", [AppDelegate player].points];
     
-    if ([lastKill isEqualToString:kill]) {
+    if (![lastKill isEqualToString:kill]) {
         [killsLabel removeFromParentAndCleanup:YES];
         killsLabel = [[CCLabelBMFont alloc] initWithString:kill fntFile:@"PixelFont.fnt"];
         killsLabel.anchorPoint = ccp(0, 0);
@@ -361,7 +361,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     lastKill = kill;
     NSString *coin = [NSString stringWithFormat:@"%d", [AppDelegate player].coins];
     
-    if ([lastCoin isEqualToString:coin]) {
+    if (![lastCoin isEqualToString:coin]) {
         [coinsLabel removeFromParentAndCleanup:YES];
         coinsLabel = [[CCLabelBMFont alloc] initWithString:coin fntFile:@"PixelFont.fnt"];
         coinsLabel.anchorPoint = ccp(1, 0);
