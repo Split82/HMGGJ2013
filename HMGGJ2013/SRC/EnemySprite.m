@@ -107,7 +107,7 @@ static WallGrid *wallGrid = nil;
 
 -(id) initWithType:(EnemyType)_type {
     
-    if (self = [self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
+    if (self = [self initWithSpriteFrameName:@"monsterBigMove1.png"]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
         self.type = _type;
