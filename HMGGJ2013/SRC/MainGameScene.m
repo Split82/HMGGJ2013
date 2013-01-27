@@ -77,6 +77,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *bubbles;
     NSMutableArray *labels;
     NSMutableArray *flyingSkulls;
+    NSMutableArray *bombExplosions;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
@@ -86,6 +87,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedBubbles;
     NSMutableArray *killedLabels;
     NSMutableArray *killedFlyingSkulls;
+    NSMutableArray *killedBombExplosions;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -99,6 +101,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     MasterControlProgram *masterControlProgram;
     
     CCParticleBatchNode *particleBatchNode;
+
+    int numberOfKillsInLastFrame;
 
     // State vars
     BOOL sceneInitWasPerformed;
@@ -163,6 +167,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     bubbles = [[NSMutableArray alloc] initWithCapacity:40];
     labels = [[NSMutableArray alloc] initWithCapacity:4];
     flyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    bombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
@@ -172,6 +177,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedBubbles = [[NSMutableArray alloc] initWithCapacity:2];
     killedLabels = [[NSMutableArray alloc] initWithCapacity:4];
     killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
+    killedBombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
     
     menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
@@ -484,27 +490,23 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (kills > 0) {
         [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
     }
-
-    if (kills == 2) {
-        [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
-    }
-    else if (kills == 3) {
-        [self addScoreAddLabelWithText:@"TRIPLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
-    }
-    else if (kills == 4) {
-        [self addScoreAddLabelWithText:@"MEGA KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
-    }
-    else if (kills > 5) {
-        [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
-    }
-
     [AppDelegate player].points += kills * kills;
-    [self updateUI];
 
-    CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
+    numberOfKillsInLastFrame += kills;
+
+    /*CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
     explosionParticleSystem.autoRemoveOnFinish = YES;
     explosionParticleSystem.position = pos;
-    [particleBatchNode addChild:explosionParticleSystem];
+    [particleBatchNode addChild:explosionParticleSystem];*/
+
+    BombExplosion *newBombExplosion = [[BombExplosion alloc] init];
+    newBombExplosion.zOrder = GAME_OBJECTS_Z_ORDER - 1;
+    newBombExplosion.scale = [UIScreen mainScreen].scale * 2;
+    newBombExplosion.anchorPoint = ccp(0.5, 0);
+    newBombExplosion.position = pos;
+    newBombExplosion.delegate = self;
+    [mainSpriteBatch addChild:newBombExplosion];
+    [bombExplosions addObject:newBombExplosion];
 }
 
 - (void)addScoreAddLabelWithText:(NSString*)text pos:(CGPoint)pos type:(ScoreAddLabelType)type addSkull:(BOOL)addSkull {
@@ -582,6 +584,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self showGameOver];
     }
     [self updateUI];
+}
+
+#pragma mark - BombExplosionDelegate
+
+- (void)bombExplosionDidFinish:(BombExplosion *)bombExplosion {
+
+    [killedBombExplosions addObject:bombExplosion];
 }
 
 #pragma mark - BombSpawnerDelegate
@@ -929,6 +938,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - Update
 
 - (void)calc:(ccTime)deltaTime {
+    
     if (_pause) {
         for (MenuCoinSprite *coin in menuCoins) {
             [coin calc:deltaTime];
@@ -936,6 +946,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [menuHeart calc:deltaTime];
         return;
     }
+
+    numberOfKillsInLastFrame = 0;
+
     // Gestures
     [gestureRecognizer update:deltaTime];
 
@@ -975,6 +988,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     for (FlyingSkullSprite *skull in flyingSkulls) {
         [skull calc:deltaTime];
+    }
+
+    for (BombExplosion *bombExplosion in bombExplosions) {
+        [bombExplosion calc:deltaTime];
     }
 
     // Killed
@@ -1028,6 +1045,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [killedFlyingSkulls removeAllObjects];
 
+    for (BombExplosion *bombExplosion in killedBombExplosions) {
+        [bombExplosions removeObject:bombExplosion];
+        [bombExplosion removeFromParentAndCleanup:YES];
+    }
+    [killedBombExplosions removeAllObjects];
+
     [masterControlProgram calc:deltaTime];
     
     if ([AppDelegate player].rage >= 1) {
@@ -1060,6 +1083,22 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (slimeSprite.boundingBox.size.height > 10 && rand() % 100 == 0) {
         [self addBubble:ccp(slimeSprite.boundingBox.origin.x + (slimeSprite.boundingBox.size.width - 40) * rand() / RAND_MAX + 20, GROUND_Y + 5 + rand() % 7)];
     }
+
+    // Killing
+    if (numberOfKillsInLastFrame == 2) {
+        [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (numberOfKillsInLastFrame == 3) {
+        [self addScoreAddLabelWithText:@"TRIPLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (numberOfKillsInLastFrame == 4) {
+        [self addScoreAddLabelWithText:@"MEGA KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+    else if (numberOfKillsInLastFrame > 5) {
+        [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    }
+
+    // UI
     [self updateUI];
 }
 

@@ -17,6 +17,7 @@
 		5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */; };
 		5505212216B4CE740006D7F7 /* PixelFont.png in Resources */ = {isa = PBXBuildFile; fileRef = 5505212016B4CE740006D7F7 /* PixelFont.png */; };
 		5505212316B4CE740006D7F7 /* PixelFont.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 5505212116B4CE740006D7F7 /* PixelFont.fnt */; };
+		5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5505212516B4F4C00006D7F7 /* BombExplosion.m */; };
 		553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741AF16B1F72900D860C2 /* QuartzCore.framework */; };
 		553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B116B1F72900D860C2 /* OpenGLES.framework */; };
 		553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B316B1F72900D860C2 /* OpenAL.framework */; };
@@ -202,6 +203,8 @@
 		5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlyingSkullSprite.m; sourceTree = "<group>"; };
 		5505212016B4CE740006D7F7 /* PixelFont.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PixelFont.png; sourceTree = "<group>"; };
 		5505212116B4CE740006D7F7 /* PixelFont.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PixelFont.fnt; sourceTree = "<group>"; };
+		5505212416B4F4BF0006D7F7 /* BombExplosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombExplosion.h; sourceTree = "<group>"; };
+		5505212516B4F4C00006D7F7 /* BombExplosion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombExplosion.m; sourceTree = "<group>"; };
 		553741AB16B1F72900D860C2 /* HMGGJ2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMGGJ2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		553741AF16B1F72900D860C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		553741B116B1F72900D860C2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -987,6 +990,8 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				5505212416B4F4BF0006D7F7 /* BombExplosion.h */,
+				5505212516B4F4C00006D7F7 /* BombExplosion.m */,
 				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
 				5505211B16B4C58A0006D7F7 /* FlyingSkullSprite.m */,
 				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
@@ -1376,6 +1381,7 @@
 				554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */,
 				5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */,
 				5505211C16B4C58A0006D7F7 /* FlyingSkullSprite.m in Sources */,
+				5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
