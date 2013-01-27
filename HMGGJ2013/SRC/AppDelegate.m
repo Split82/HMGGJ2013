@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "AudioManager.h"
+#import "MainGameScene.h"
 #import "MainMenuGameScene.h"
 #import <GameKit/GameKit.h>
 
@@ -162,6 +163,10 @@
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    MainGameScene *scene = (id)[[CCDirector sharedDirector] runningScene];
+    if ([scene isKindOfClass:[MainGameScene class]] && ![scene pause]) {
+        [scene performSelector:@selector(pauseGame)];
+    }
     [[CCDirector sharedDirector] stopAnimation];
 }
 
