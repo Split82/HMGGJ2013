@@ -13,7 +13,7 @@
 #define FRICTION 0.97f
 #define GRAVITY -2000.0f
 #define BLINKING_SPEED 0.12f
-#define BOUNCE_COEF 0.7f
+#define BOUNCE_COEF 0.8f
 #define GROW_SPEED 0.1
 
 @interface BombSprite() {

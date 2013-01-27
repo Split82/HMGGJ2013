@@ -49,6 +49,8 @@ const float INCREASE_SPAWN_SPEED_FACTOR = 1.25f;
 const float RANDOM_COIN_SPAWN_TIME = 3.0f;
 const float RANDOM_COIN_SPAWN_DELTA_TIME = 5.0f;
 
+const int MIN_PLAYER_COINS_TO_SPAWN_A_COIN = 4;
+
 float increase(float value, float inc, float MAX) {
     if (value < MAX) {
         value += inc;
@@ -263,9 +265,13 @@ float frand() {
 }
 
 - (void)spawnCoin {
-    CGSize winSize = [[CCDirector sharedDirector] winSize];
     
-    [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
+    if ([self.mainframe getPlayerCoins] <= MIN_PLAYER_COINS_TO_SPAWN_A_COIN) {
+        CGSize winSize = [[CCDirector sharedDirector] winSize];
+        
+        [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
+    }
+    
     [self sheduleNewCoinSpawn];
 }
 
