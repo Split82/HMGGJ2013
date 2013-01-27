@@ -61,7 +61,6 @@
     
     slots[index] = [NSNumber numberWithBool:YES];
     
-    NSLog(@"%i", index);
     return index;
 }
 

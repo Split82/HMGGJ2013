@@ -18,11 +18,12 @@
 #import "BombExplosion.h"
 #import "Lightning.h"
 #import "WaterSplash.h"
+#import "Trail.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 #define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate, FlyingSkullSpriteDelegate, BombExplosionDelegate,LightningDelegate, WaterSplashDelegate>
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate, FlyingSkullSpriteDelegate, BombExplosionDelegate,LightningDelegate, WaterSplashDelegate, TrailDelegate>
 
 @property (nonatomic, strong) CCLayer *menuBackground;
 @property (nonatomic, strong) UIView *mainView;

@@ -41,7 +41,7 @@ typedef enum {
 
 @implementation GestureRecognizer
 
-@synthesize lastPos;
+@synthesize lastPos, startPos;
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
 
