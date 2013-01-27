@@ -24,5 +24,6 @@
 
 - (void)explode;
 
+- (void)coinHit;
 
 @end

@@ -22,6 +22,10 @@ const int SOUND_EXPLOSION_1 = 10;
 const int SOUND_EXPLOSION_2 = 11;
 const int SOUND_EXPLOSION_3 = 12;
 
+const int SOUND_COIN_HIT_1 = 13;
+const int SOUND_COIN_HIT_2 = 14;
+const int SOUND_COIN_HIT_3 = 15;
+
 const int BUFF_BG = kASC_Left;
 const int BUFF_EFFECTS = kASC_Right;
 
@@ -33,6 +37,7 @@ const int BUFF_EFFECTS = kASC_Right;
     RandomPicker *groundPicker;
     RandomPicker *enemyHitPicker;
     RandomPicker *explosionPicker;
+    RandomPicker *coinHitPicker;
 }
 
 + (id)sharedManager {
@@ -63,6 +68,8 @@ const int BUFF_EFFECTS = kASC_Right;
         enemyHitPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_ENEMY_HIT_1], [NSNumber numberWithInt:SOUND_ENEMY_HIT_2], [NSNumber numberWithInt:SOUND_ENEMY_HIT_3]] minimumPickupInterval:0.100];
         
         explosionPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_EXPLOSION_1], [NSNumber numberWithInt:SOUND_EXPLOSION_2], [NSNumber numberWithInt:SOUND_EXPLOSION_3]] minimumPickupInterval:0.100];
+        
+        coinHitPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_COIN_HIT_1], [NSNumber numberWithInt:SOUND_COIN_HIT_2], [NSNumber numberWithInt:SOUND_COIN_HIT_3]] minimumPickupInterval:0.100];
     }
     
     return self;
@@ -100,6 +107,10 @@ const int BUFF_EFFECTS = kASC_Right;
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_EXPLOSION_2 filePath:@"Explosion2.wav"]];
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_EXPLOSION_3 filePath:@"Explosion3.wav"]];
     
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_COIN_HIT_1 filePath:@"CoinHit1.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_COIN_HIT_2 filePath:@"CoinHit2.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_COIN_HIT_3 filePath:@"CoinHit3.wav"]];
+    
     [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
@@ -122,6 +133,10 @@ const int BUFF_EFFECTS = kASC_Right;
 
 - (void)explode {
     [self playEffectFromPicker:explosionPicker];
+}
+
+- (void)coinHit {
+    [self playEffectFromPicker:coinHitPicker];
 }
 
 @end
