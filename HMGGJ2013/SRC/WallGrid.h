@@ -10,5 +10,8 @@
 
 @interface WallGrid : NSObject
 
+- (void)releaseSlot:(int)index;
+- (int)takeSlot:(float)pos;
+- (BOOL)isSlotTaken:(float)pos;
 
 @end

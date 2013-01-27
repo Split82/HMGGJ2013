@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 typedef enum {
     kEnemyTypeSwipe,
     kEnemyTypeTap,
@@ -31,6 +32,7 @@ typedef enum {
 -(id) initWithType:(EnemyType)type;
 -(void) calc:(ccTime)time;
 -(BOOL) throwFromWall;
++(void) resetWallGrid;
 
 @property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;
 @property (nonatomic, assign) EnemyType type;

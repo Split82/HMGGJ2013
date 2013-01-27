@@ -10,13 +10,14 @@
 #import "GameDataNameDefinitions.h"
 #import "MainGameScene.h"
 #import "SpriteTextureFrameInfo.h"
+#import "WallGrid.h"
 
 
 #define ENEMY_HALF_WIDTH 20.0f
 
 #define WALKING_MOVEMENT_OFFSET 2.0f
 #define WALKING_ANIM_DELAY (1 / 30.0f)
-#define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 3)
+#define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 2)
 
 #define CLIMBING_MOVEMENT_OFFSET 4.0f
 #define CLIMBING_ANIM_DELAY (1 / 30.0f * 2)
@@ -40,6 +41,8 @@
 
 #define MIN_SLEEP_TIME_INTERVAL 0.8f
 
+#define WALL_GRID_SLOT_HEIGHT 40.0f
+
 
 static NSMutableArray *swiperWalkingAnimSpriteFrames = nil;
 static NSMutableArray *swiperClimbingAnimSpriteFrames = nil;
@@ -54,6 +57,8 @@ static NSMutableArray *tapperFallingAnimSpriteFrames = nil;
 static NSMutableArray *tapperCrossingAnimSpriteFrames = nil;
 static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
 static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
+
+static WallGrid *wallGrid = nil;
 
 @interface EnemySprite() {
  
@@ -89,6 +94,8 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     float zappingTime;
     float zappingDelay;
     
+    
+    int hasWallSlotAtIndex;
 }
 
 @end
@@ -109,10 +116,33 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
         animFrameIndex = 0;
         animTime = 0;
         moveTime = 0;
-        wakingUp = FALSE;
+        wakingUp = NO;
+        hasWallSlotAtIndex = -1;
         
-        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2);
-        
+        if (rand() % 2) {
+            
+            direction = 1;
+            
+            spritePos = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
+            
+            climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width  / 2;
+            
+        }
+        else {
+            
+            direction = -1;
+            self.flipX = YES;
+            
+            spritePos = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
+            
+            climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2 -(float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width / 2;
+            
+        }
+
+        if (!wallGrid) {
+            
+            wallGrid = [[WallGrid alloc] init];
+        }
 
         if (!swiperWalkingAnimSpriteFrames) {
             
@@ -226,19 +256,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
         }
         
         
-        if (rand() % 2) {
-            
-            direction = 1;
-            
-            spritePos = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
-        }
-        else {
-            
-            direction = -1;
-            self.flipX = YES;
-            
-            spritePos = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
-        }
+
         
         
         if (type == kEnemyTypeSwipe) {
@@ -280,6 +298,14 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     }
     
     return self;
+}
+
+- (void) dealloc {
+    
+    if ((state == kEnemyStateClimbing) && (hasWallSlotAtIndex >= 0)) {
+        
+        [wallGrid releaseSlot:hasWallSlotAtIndex];
+    }
 }
 
 
@@ -331,14 +357,23 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
                 
                 if ((newSpritePos.x <= climbXPos && spritePos.x > climbXPos) || (newSpritePos.x >= climbXPos && spritePos.x < climbXPos)) {
                     
-                    state = kEnemyStateClimbing;
-                    animFrameIndex = 0;
-                    moveTime = 0;
-                    animTime = 0;
-                    
-                    [self updateSpritePos];
-                    
-                    return;
+                    if ([wallGrid isSlotTaken:position_.x]) {
+                     
+                        [self updateClimbPos];
+                    }
+                    else {
+                        
+                        state = kEnemyStateClimbing;
+                        hasWallSlotAtIndex = [wallGrid takeSlot:position_.x];
+                        
+                        animFrameIndex = 0;
+                        moveTime = 0;
+                        animTime = 0;
+                        
+                        [self updateSpritePos];
+                        
+                        return;
+                    }
                 }
                 
                 spritePos = newSpritePos;
@@ -381,6 +416,13 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
                 spritePos = newSpritePos;
                 
                 [self updateSpritePos];
+                
+                if ((spritePos.y > (WALL_GRID_SLOT_HEIGHT + GROUND_Y)) && (hasWallSlotAtIndex >= 0)) {
+                    
+                    [wallGrid releaseSlot:hasWallSlotAtIndex];
+                    hasWallSlotAtIndex = -1;
+                }
+                
             }
             
             break;
@@ -574,7 +616,16 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     // climb
     else {
         
-        state = kEnemyStateClimbing;
+        if ([wallGrid isSlotTaken:position_.x]) {
+         
+            state = kEnemyStateWalking;
+            [self updateClimbPos];
+        }
+        else {
+        
+            state = kEnemyStateClimbing;
+            hasWallSlotAtIndex = [wallGrid takeSlot:position_.x];
+        }
     }
     
     animFrameIndex = 0;
@@ -584,11 +635,24 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     [self updateSpritePos];
 }
 
++(void) resetWallGrid {
+    
+    
+}
+
+
 -(BOOL) throwFromWall {
     
     if (state != kEnemyStateClimbing && state != kEnemyStateCrossing) {
         
         return NO;
+    }
+    
+    
+    if ((state == kEnemyStateClimbing) && (hasWallSlotAtIndex >= 0)) {
+        
+        [wallGrid releaseSlot:hasWallSlotAtIndex];
+        hasWallSlotAtIndex = -1;
     }
     
     state = kEnemyStateZapping;
@@ -606,6 +670,20 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     [self updateSpritePos];
  
     return YES;
+}
+
+- (void) updateClimbPos {
+    
+    climbXPos += (float)rand() / RAND_MAX * ENEMY_HALF_WIDTH * direction / 2;
+    
+    if (climbXPos > ([CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2)) {
+        
+        climbXPos -= ENEMY_HALF_WIDTH;
+    }
+    else if (climbXPos < CLIMBING_BORDER_OFFSET) {
+        
+        climbXPos += ENEMY_HALF_WIDTH;
+    }
 }
 
 - (void) updateSpritePos {

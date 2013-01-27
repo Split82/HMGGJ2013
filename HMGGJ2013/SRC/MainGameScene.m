@@ -129,6 +129,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     UIView *rageView;
     UIImageView *rageBackgroundView;
     CCLayer *menuBackground;
+    
+    CCLayer *gameOverLayer;
 }
 
 @end
@@ -355,12 +357,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pauseGame)]];
     [mainView addSubview:pauseButton];
     [self updateUI];
-    
-    int64_t delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self displayAchievementWithName:@"killingspree"];
-    });
 }
 
 - (void) updateUI {
@@ -942,6 +938,31 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [pauseButton setAlpha:0];
     
     [[AppDelegate player] storeScore:[AppDelegate player].points];
+    
+    gameOverLayer = [[CCLayer alloc] init];
+    gameOverLayer.zOrder = 5000;
+    
+    CCLabelBMFont *label;
+    label = [[CCLabelBMFont alloc] initWithString:@"185" fntFile:@"PixelFont.fnt"];
+    label.anchorPoint = ccp(0.5, 0.5);
+    label.scale = [UIScreen mainScreen].scale * 6;
+    label.position = CGPointMake([CCDirector sharedDirector].winSize.width / 2, 360.0);
+    [label setColor:ccc3(255, 211, 14)];
+    [gameOverLayer addChild:label];
+    
+    label = [[CCLabelBMFont alloc] initWithString:@"New Record" fntFile:@"PixelFont.fnt"];
+    label.anchorPoint = ccp(0.5, 0.5);
+    label.scale = [UIScreen mainScreen].scale * 2.5;
+    label.position = CGPointMake([CCDirector sharedDirector].winSize.width / 2, 305.0);
+    [label setColor:ccc3(255, 211, 14)];
+    [gameOverLayer addChild:label];
+    
+    menuHeart = [[MonsterHearth alloc] init];
+    menuHeart.anchorPoint = ccp(0.5, 0);
+    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    [gameOverLayer addChild:menuHeart];
+    
+    [self addChild:gameOverLayer];
 }
 
 - (void) restartGame
@@ -968,6 +989,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [rageView setAlpha:1];
     [rageBackgroundView setAlpha:1];
     [pauseButton setAlpha:1];
+    
+    [gameOverLayer removeFromParentAndCleanup:YES];
+    gameOverLayer = nil;
+    menuHeart = nil;
     
     [menuBackground removeFromParentAndCleanup:YES];
 }
@@ -1102,13 +1127,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     [masterControlProgram calc:deltaTime];
     
-    if ([AppDelegate player].rage >= 1) {
-        [self addBombAtPosX:25.0];
-        [self addBombAtPosX:85.0];
-        [self addBombAtPosX:155.0];
-        [self addBombAtPosX:225.0];
-        [self addBombAtPosX:295.0];
-        [[AppDelegate player] updateDropBombCount:5];
+    if ([AppDelegate player].rage >= 1.0) {
+        [self addBombAtPosX:80.0];
+        [self addBombAtPosX:160.0];
+        [self addBombAtPosX:240.0];
+        [[AppDelegate player] updateDropBombCount:3];
         [self updateUI];
         [AppDelegate player].rage = 0;
     }
@@ -1123,6 +1146,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Monster
     [monsterSprite calc:deltaTime];
     [monsterHearth calc:deltaTime];
+    
+    [menuHeart calc:deltaTime];
 
     // Shake
     [screenShaker calc:deltaTime];
