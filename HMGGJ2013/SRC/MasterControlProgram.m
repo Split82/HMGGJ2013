@@ -163,7 +163,6 @@ float frand() {
 - (void)levelUp {
     if (level < LEVEL_COUNT-1) {
         level += 1;
-        NSLog(@"Level up to Level %d", level);
         
         [self initLevel];
     }
@@ -206,7 +205,6 @@ float frand() {
         // wait for player to kill the previous wave
         if ([self.mainframe countTapEnemies] + [self.mainframe countSwipeEnemies] > 1) {
             
-            NSLog(@"User still fighting, wating");
             nextWaveTime = WAVE_WAIT_FOR_USER[level];
             return;
         }
@@ -226,7 +224,6 @@ float frand() {
     }
     
     enemiesToGenerate = (int)round(enemiesPerWave);
-    NSLog(@"Starting wave[level: %d, waveNum: %d, enemies: %d, swipeTapRation: %f, wavePeriod: %f, speedFactor: %f]", level, waveNumber, enemiesToGenerate, swipeEnemiesRatio, waveLength, waveSpawnSpeedFactor);
     
     enemySpawnTime = ENEMY_WAVE_SPAWN_TIME[level] / waveSpawnSpeedFactor;
     enemySpawnTimeDelta = ENEMY_WAVE_SPAWN_DELTA_TIME[level] / waveSpawnSpeedFactor;
@@ -240,11 +237,9 @@ float frand() {
 - (void)spawnEnemy {
     
     if (frand() <= swipeEnemiesRatio) {
-        NSLog(@"Enemy Swipe");
         [self.mainframe addEnemy:kEnemyTypeSwipe];
     
     } else {
-        NSLog(@"Enemy Tap");
         [self.mainframe addEnemy:kEnemyTypeTap];
     }
     
@@ -255,7 +250,6 @@ float frand() {
         // end of wave spawning
         if (enemiesToGenerate == 0) {
             
-            NSLog(@"Enging wave\n");
             enemySpawnTime = ENEMY_IDLE_SPAWN_TIME[level];
             enemySpawnTimeDelta = ENEMY_IDLE_SPAWN_DELTA_TIME[level];
         }

@@ -288,7 +288,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Update
     [self scheduleUpdate];
     
-    //[[AudioManager sharedManager] startMenuMusic];
+    [[AudioManager sharedManager] startBackgroundMusic];
     bombSpawning = NO;
 
     [self initUI];
