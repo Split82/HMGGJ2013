@@ -79,6 +79,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *flyingSkulls;
     NSMutableArray *bombExplosions;
     NSMutableArray *lightnings;
+    NSMutableArray *waterSplashes;
 
     NSMutableArray *killedCoins;
     NSMutableArray *killedTapEnemies;
@@ -90,6 +91,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedFlyingSkulls;
     NSMutableArray *killedBombExplosions;
     NSMutableArray *killedLightnings;
+    NSMutableArray *killedWaterSplashes;
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -173,6 +175,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     flyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
     bombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
     lightnings = [[NSMutableArray alloc] initWithCapacity:10];
+    waterSplashes = [[NSMutableArray alloc] initWithCapacity:10];
 
     killedCoins = [[NSMutableArray alloc] initWithCapacity:10];
     killedTapEnemies = [[NSMutableArray alloc] initWithCapacity:100];
@@ -184,6 +187,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killedFlyingSkulls = [[NSMutableArray alloc] initWithCapacity:4];
     killedBombExplosions = [[NSMutableArray alloc] initWithCapacity:4];
     killedLightnings = [[NSMutableArray alloc] initWithCapacity:10];
+    killedWaterSplashes = [[NSMutableArray alloc] initWithCapacity:4];
     
     menuCoins = [[NSMutableArray alloc] initWithCapacity:2];
 
@@ -565,6 +569,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedLightnings addObject:lightning];
 }
 
+#pragma mark - WaterSplashDelegate
+
+- (void)waterSplashDidFinish:(WaterSplash *)waterSplash {
+    
+    [killedWaterSplashes addObject:waterSplash];
+}
+
+
 #pragma mark - BombSpriteDelegate
 
 - (void)bombDidDie:(BombSprite *)bombSprite {
@@ -576,7 +588,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 #pragma mark - EnemySpriteDelegate
 
-- (void)enemyDidClimbWall:(EnemySprite*)enemy {
+- (void)enemyDidFallIntoSlime:(EnemySprite*)enemy {
 
     if (enemy.type == kEnemyTypeTap) {
 
@@ -587,6 +599,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [killedSwipeEnemies addObject:enemy];
     }
     [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
+    
+    WaterSplash *waterSplash = [[WaterSplash alloc] init];
+    waterSplash.scale = [UIScreen mainScreen].scale * 2;
+    waterSplash.anchorPoint = ccp(0.5, 0);
+    CGPoint waterSplashPos = enemy.position;
+    waterSplashPos.y = CGRectGetMaxY(slimeSprite.boundingBox);
+    waterSplash.position = waterSplashPos;
+    waterSplash.delegate = self;
+    waterSplash.zOrder = 16;
+    [mainSpriteBatch addChild:waterSplash];
+    [waterSplashes addObject:waterSplash];
     
     if ([AppDelegate player].health == 0) {
         [self showGameOver];
@@ -1056,7 +1079,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     for (Lightning *lightning in lightnings) {
         [lightning calc:deltaTime];
     }
-    
+
+    for (WaterSplash *waterSplash in waterSplashes) {
+        [waterSplash calc:deltaTime];
+    }
 
     for (BombExplosion *bombExplosion in bombExplosions) {
         [bombExplosion calc:deltaTime];
@@ -1119,6 +1145,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     [killedLightnings removeAllObjects];
 
+    for (WaterSplash *waterSplash in killedWaterSplashes) {
+        [waterSplashes removeObject:waterSplash];
+        [waterSplash removeFromParentAndCleanup:YES];
+    }
+    [killedWaterSplashes removeAllObjects];
+    
     for (BombExplosion *bombExplosion in killedBombExplosions) {
         [bombExplosions removeObject:bombExplosion];
         [bombExplosion removeFromParentAndCleanup:YES];

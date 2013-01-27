@@ -457,7 +457,7 @@ static WallGrid *wallGrid = nil;
             }
             else if ((state == kEnemyStateFallingInto) && (spritePos.y < [_delegate slimeSurfacePosY])) {
                 
-                [_delegate enemyDidClimbWall:self];
+                [_delegate enemyDidFallIntoSlime:self];
                 return;
             }
             
