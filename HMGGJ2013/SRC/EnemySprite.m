@@ -107,7 +107,7 @@ static WallGrid *wallGrid = nil;
 
 -(id) initWithType:(EnemyType)_type {
     
-    if (self = [self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
+    if (self = [self initWithSpriteFrameName:@"monsterBigMove1.png"]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
         self.type = _type;
@@ -444,7 +444,7 @@ static WallGrid *wallGrid = nil;
                 }
 
                 wakingUp = NO;
-                wakingAnimeDelayMul =  400.0f / fabs(verticalVel);
+                wakingAnimeDelayMul =  200.0f / fabs(verticalVel);
                 
                 sleepTime = MIN((fabs(verticalVel) - MIN_FALLING_SPPEED_FOR_SLEEP) * 0.006 + MIN_SLEEP_TIME_INTERVAL, 3);
                 

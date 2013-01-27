@@ -116,19 +116,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     // UI vars
     UIView *mainView;
-    NSString *fontName;
     
+    NSString *lastKill;
     CCSprite *killSprite;
-    UILabel *killsLabel;
+    CCLabelBMFont *killsLabel;
     
+    NSString *lastCoin;
     CCSprite *coinsSprite;
-    UILabel *coinsLabel;
-    UILabel *healthLabel;
-    
-    UILabel *gameOverLabel;
-    UIButton *restartButton;
+    CCLabelBMFont *coinsLabel;
     
     UIImageView *pauseButton;
+    UIImageView *restartButton;
     
     UIView *rageView;
     UIImageView *rageBackgroundView;
@@ -165,6 +163,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     sceneInitWasPerformed = YES;
 
+    leaderboard = [[GKLeaderboard alloc] init];
+    
     // Screen shaker
     screenShaker = [[ScreenShaker alloc] init];
 
@@ -285,34 +285,24 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self scheduleUpdate];
     
     //[[AudioManager sharedManager] startBackgroundTrack];
-    
+    bombSpawning = NO;
+
     [self initUI];
 }
 
 - (void) initUI {
-    fontName = @"Visitor TT1 BRK";
-    UIFont *font = [UIFont fontWithName:fontName size:20];
-    
     UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
     [view setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:view];
     mainView = view;
     
-    CGFloat labelWidth = (320.0 - 10.0) / 2;
     CGSize contentSize = [CCDirector sharedDirector].winSize;
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
-    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 15.0);
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 13.0);
     killSprite.zOrder = 5000;
     [self addChild:killSprite];
-    
-    killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 17.0, labelWidth - 28.0, 21.0)];
-    [killsLabel setTextAlignment:NSTextAlignmentLeft];
-    [killsLabel setTextColor:[UIColor whiteColor]];
-    [killsLabel setBackgroundColor:[UIColor clearColor]];
-    [killsLabel setFont:font];
-    [mainView addSubview:killsLabel];
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
@@ -320,20 +310,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
     coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26);
     [self addChild:coinsSprite];
-    
-    coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
-    [coinsLabel setTextColor:[UIColor whiteColor]];
-    [coinsLabel setTextAlignment:NSTextAlignmentRight];
-    [coinsLabel setBackgroundColor:[UIColor clearColor]];
-    [coinsLabel setFont:font];
-    [mainView addSubview:coinsLabel];
-    
-    healthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 215.0, 320.0, 40.0)];
-    [healthLabel setTextColor:[UIColor redColor]];
-    [healthLabel setFont:[UIFont fontWithName:fontName size:30]];
-    [healthLabel setTextAlignment:NSTextAlignmentCenter];
-    [healthLabel setBackgroundColor:[UIColor clearColor]];
-    //[mainView addSubview:healthLabel];
     
     UIImage *image;
     CGFloat offset = 0.0;
@@ -370,10 +346,37 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) updateUI {
-    [killsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].points]];
-    [coinsLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].coins]];
-    [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
-
+    
+    if (gameOver) {
+        return;
+    }
+    NSString *kill = [NSString stringWithFormat:@"%d", [AppDelegate player].points];
+    
+    if (![lastKill isEqualToString:kill]) {
+        [killsLabel removeFromParentAndCleanup:YES];
+        killsLabel = [[CCLabelBMFont alloc] initWithString:kill fntFile:@"PixelFont.fnt"];
+        killsLabel.anchorPoint = ccp(0, 0);
+        killsLabel.scale = [UIScreen mainScreen].scale * 1.3;
+        killsLabel.position = ccp(40.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        killsLabel.zOrder = 5000;
+        [killsLabel setColor:ccc3(255, 255, 255)];
+        [self addChild:killsLabel];
+    }
+    lastKill = kill;
+    NSString *coin = [NSString stringWithFormat:@"%d", [AppDelegate player].coins];
+    
+    if (![lastCoin isEqualToString:coin]) {
+        [coinsLabel removeFromParentAndCleanup:YES];
+        coinsLabel = [[CCLabelBMFont alloc] initWithString:coin fntFile:@"PixelFont.fnt"];
+        coinsLabel.anchorPoint = ccp(1, 0);
+        coinsLabel.scale = [UIScreen mainScreen].scale * 1.3;
+        coinsLabel.position = ccp(320 - 38.0, [CCDirector sharedDirector].winSize.height - 36.0);
+        coinsLabel.zOrder = 5000;
+        [coinsLabel setColor:ccc3(255, 255, 255)];
+        [self addChild:coinsLabel];
+    }
+    lastCoin = coin;
+    
     CGSize contentSize = [CCDirector sharedDirector].winSize;
     CGFloat offset = 0.0;
     if (contentSize.height == 480.0)
@@ -473,6 +476,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)makeBombExplosionAtPos:(CGPoint)pos {
     
     NSInteger kills = 0;
+    
+    [[AudioManager sharedManager] explode];
     
     for (EnemySprite *enemy in tapEnemies) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
@@ -645,6 +650,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - BombSpawnerDelegate
 
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
+    
+    bombSpawning = NO;
 
     if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
@@ -654,6 +661,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     else {
 
+        [[AudioManager sharedManager] bombReleased];
         [self addBombAtPosX:bombSpawner.pos.x];
 
         [[AppDelegate player] updateDropBombCount:1];
@@ -695,12 +703,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
+    [[AudioManager sharedManager] bombSpawningStarted];
+    bombSpawning = YES;
+    
     [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
 
     //NSLog(@"LongPress end");
+    
+    if (bombSpawning) {
+        [[AudioManager sharedManager] bombSpawningCancelled];
+    }
+    
+    bombSpawning = NO;
     [bombSpawner cancelSpawning];
 }
 
@@ -747,9 +764,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void)tapRecognized:(CGPoint)pos {
-
-    [[AudioManager sharedManager] scream];
-    [[AudioManager sharedManager] stopBackgroundMusic];
 
     EnemySprite *nearestEnemy = nil;
     CoinSprite *nearestCoin = nil;
@@ -909,6 +923,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) createLightningToEnemy:(EnemySprite*)enemy {
+    [[AudioManager sharedManager] enemyHit];    
     
     CGPoint startPos = CGPointMake(0, 20);
     Lightning *lightning = [[Lightning alloc] initWithStartPos:startPos endPos:enemy.position];
@@ -970,31 +985,29 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
+    [killsLabel removeFromParentAndCleanup:YES];
+    [killSprite setZOrder:0];
+    
+    [coinsLabel removeFromParentAndCleanup:YES];
+    [coinsSprite setZOrder:0];
+    
     menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
     menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
     menuBackground.zOrder = 2000;
     [self addChild:menuBackground];
     
-    gameOver = YES;
-    CGSize screen = [CCDirector sharedDirector].winSize;
-    gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
-    [gameOverLabel setTextColor:[UIColor whiteColor]];
-    [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
-    [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
-    [gameOverLabel setText:@"Game Over, Loser!"];
-    [gameOverLabel setBackgroundColor:[UIColor clearColor]];
-    [mainView addSubview:gameOverLabel];
-
-    restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [restartButton setFrame:CGRectMake((screen.width - 126.0) / 2, (screen.height - 44.0) / 2 + 50.0, 126.0, 44.0)];
-    [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [restartButton.titleLabel setFont:[UIFont fontWithName:fontName size:20]];
-    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    CGSize contentSize = [[CCDirector sharedDirector] winSize];
+    UIImage *image = [UIImage imageNamed:@"go-play"];
+    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
+    restartButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0, 114.0 * 2, 16.0 * 2)];
+    [restartButton.layer setMagnificationFilter:kCAFilterNearest];
+    [restartButton setImage:image];
+    [restartButton setUserInteractionEnabled:YES];
+    [restartButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartGame)]];
     [mainView addSubview:restartButton];
+    
+    gameOver = YES;
 
-    [mainView bringSubviewToFront:coinsLabel];
-    [mainView bringSubviewToFront:killsLabel];
-    [mainView bringSubviewToFront:pauseButton];
     [rageView setAlpha:0];
     [rageBackgroundView setAlpha:0];
     [pauseButton setAlpha:0];
@@ -1004,27 +1017,90 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gameOverLayer = [[CCLayer alloc] init];
     gameOverLayer.zOrder = 5000;
     
+    CCSprite *sprite;
+    sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-bones.png"];
+    sprite.anchorPoint = ccp(0.5, 0.5);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 120);
+    sprite.scale = [UIScreen mainScreen].scale * 2;
+    [gameOverLayer addChild:sprite];
+    
+    sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-bones2.png"];
+    sprite.anchorPoint = ccp(0.5, 0.5);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 400);
+    sprite.scale = [UIScreen mainScreen].scale * 2;
+    [gameOverLayer addChild:sprite];
+
     CCLabelBMFont *label;
-    label = [[CCLabelBMFont alloc] initWithString:@"185" fntFile:@"PixelFont.fnt"];
+    label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", [AppDelegate player].points] fntFile:@"PixelFont.fnt"];
     label.anchorPoint = ccp(0.5, 0.5);
-    label.scale = [UIScreen mainScreen].scale * 6;
-    label.position = CGPointMake([CCDirector sharedDirector].winSize.width / 2, 360.0);
+    label.scale = [UIScreen mainScreen].scale * 4;
+    label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 5, 350.0);
     [label setColor:ccc3(255, 211, 14)];
     [gameOverLayer addChild:label];
     
-    label = [[CCLabelBMFont alloc] initWithString:@"New Record" fntFile:@"PixelFont.fnt"];
-    label.anchorPoint = ccp(0.5, 0.5);
-    label.scale = [UIScreen mainScreen].scale * 2.5;
-    label.position = CGPointMake([CCDirector sharedDirector].winSize.width / 2, 305.0);
-    [label setColor:ccc3(255, 211, 14)];
-    [gameOverLayer addChild:label];
+    if ([[AppDelegate player] topScore] < [AppDelegate player].points || [AppDelegate player].points == 0) {
+        label = [[CCLabelBMFont alloc] initWithString:[AppDelegate player].points == 0 ? @"Loser!" : @"New Record" fntFile:@"PixelFont.fnt"];
+        label.anchorPoint = ccp(0.5, 0.5);
+        label.scale = [UIScreen mainScreen].scale * 2;
+        label.position = ccp([CCDirector sharedDirector].winSize.width / 2 + 3, 315.0);
+        [label setColor:ccc3(255, 211, 14)];
+        [gameOverLayer addChild:label];
+    }    
+    sprite = [[CCSprite alloc] initWithSpriteFrameName:@"go-gameover.png"];
+    sprite.anchorPoint = ccp(0.5, 0.5);
+    sprite.position = ccp([CCDirector sharedDirector].winSize.width / 2, 458);
+    sprite.scale = [UIScreen mainScreen].scale * 2;
+    [gameOverLayer addChild:sprite];
     
+    [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
+        if (!gameOver)
+            return;
+        NSMutableArray *array = [NSMutableArray array];
+        for (GKScore *score in scores)
+            [array addObject:score.playerID];
+        
+        [GKPlayer loadPlayersForIdentifiers:array withCompletionHandler:^(NSArray *players, NSError *error) {
+            CCLabelBMFont *label;
+            int i, lines = [scores count];
+            if (lines > 3) lines = 3;
+            
+            for (i = 0; i < lines; i++) {
+                GKScore *score = scores[i];
+                GKPlayer *player = players[i];
+                CGFloat offsetY = 265.0;
+                
+                label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", score.rank] fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(0.5, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(40.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+                
+                NSString *string = [player.alias uppercaseString];
+                NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+                label = [[CCLabelBMFont alloc] initWithString:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(0, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(70.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+                
+                label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%lld", score.value] fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(1, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(290.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+            }
+        }];
+    }];
     menuHeart = [[MonsterHearth alloc] init];
     menuHeart.anchorPoint = ccp(0.5, 0);
-    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    menuHeart.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, 472);
     [gameOverLayer addChild:menuHeart];
     
     [self addChild:gameOverLayer];
+    [[AppDelegate player] newGame];
 }
 
 - (void) restartGame
@@ -1032,8 +1108,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     masterControlProgram = [[MasterControlProgram alloc] init];
     masterControlProgram.mainframe = self;
     
-    [gameOverLabel removeFromSuperview];
-    gameOverLabel = nil;
     [restartButton removeFromSuperview];
     restartButton = nil;
 
@@ -1057,6 +1131,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     menuHeart = nil;
     
     [menuBackground removeFromParentAndCleanup:YES];
+    
+    coinsSprite.zOrder = 5000;
+    killSprite.zOrder = 5000;
+    
+    lastCoin = nil;
+    lastKill = nil;
 }
 
 
@@ -1252,9 +1332,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     else if (numberOfKillsInLastFrame > 5) {
         [self addScoreAddLabelWithText:@"GODLIKE!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
     }
-
-    // UI
-    [self updateUI];
+[self updateUI];
 }
 
 - (void)update:(ccTime)deltaTime {

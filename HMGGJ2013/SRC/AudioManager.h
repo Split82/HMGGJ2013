@@ -14,12 +14,22 @@
 
 - (void)preloadSounds;
 
-- (void)scream;
-
 - (void)startBackgroundMusic;
 
 - (void)stopBackgroundMusic;
 
 - (void)groundHit;
+
+- (void)enemyHit;
+
+- (void)explode;
+
+- (void)coinHit;
+
+- (void)bombSpawningStarted;
+
+- (void)bombSpawningCancelled;
+
+- (void)bombReleased;
 
 @end

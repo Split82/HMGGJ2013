@@ -14,6 +14,7 @@
 
 - (void) calc:(ccTime)deltaTime;
 
+- (NSInteger) topScore;
 @property (nonatomic, assign) NSInteger points;
 @property (nonatomic, assign) NSInteger kills;
 @property (nonatomic, assign) NSInteger coins;

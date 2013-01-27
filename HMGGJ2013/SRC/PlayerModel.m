@@ -12,11 +12,12 @@
 #define kPlayerDefCoins         10
 #define kPlayerDefHealth        100
 #define kPlayerDefRageDealy     15
-#define kPlayerDefRageMultipler 10
-#define kPlayerDefRageReduction 0.5
+#define kPlayerDefRageMultipler 8
+#define kPlayerDefRageReduction 0.7
 
 #define kPlayerSyncTimer        30
 
+#define kPlayerTopScore             @"kPlayerTopScore"
 #define kPlayerFirstKill            @"kPlayerFirstKill"
 #define kPlayerBloodBath            @"kPlayerBloodBath"
 #define kPlayerGlobalGameCount      @"kPlayerGlobalGameCount"
@@ -128,6 +129,11 @@
 
 #pragma mark -
 
+- (NSInteger) topScore
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerTopScore];
+}
+
 - (void) setPoints:(NSInteger)points
 {
     _points = points;
@@ -178,6 +184,11 @@
 
 - (void) newGame
 {
+    NSInteger topScore = [[NSUserDefaults standardUserDefaults] integerForKey:kPlayerTopScore];
+    if (topScore < _points) {
+        [[NSUserDefaults standardUserDefaults] setInteger:_points forKey:kPlayerTopScore];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     _points = 0;
     _kills = 0;
     _coins = kPlayerDefCoins;

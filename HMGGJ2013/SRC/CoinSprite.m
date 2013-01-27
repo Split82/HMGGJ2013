@@ -8,6 +8,7 @@
 
 #import "CoinSprite.h"
 #import "GameDataNameDefinitions.h"
+#import "AudioManager.h"
 
 #define GRAVITY -2000.0f
 #define INITIAL_VEL_Y 800.0f
@@ -20,7 +21,8 @@
 
 @interface CoinSprite() {
 
-    CGRect spaceBounds;    
+    CGRect spaceBounds;
+    BOOL stable;
 }
 
 @end
@@ -73,32 +75,49 @@
 
 - (void)calc:(ccTime)deltaTime {
 
-    velocity = ccpMult(velocity, FRICTION);
-    velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
-    self.position = ccpAdd(self.position, ccpMult(velocity, deltaTime));
-    
-    if (self.position.x > CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5) {
-        CGPoint pos = self.position;
-        pos.x = CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5;
-        self.position = pos;
-        velocity.x = -velocity.x;
-        velocity = ccpMult(velocity, BOUNCE_COEF);
-    }
+    if (!stable) {
 
-    if (self.position.x < CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5) {
-        CGPoint pos = self.position;
-        pos.x = CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5;
-        self.position = pos;
-        velocity.x = -velocity.x;
-        velocity = ccpMult(velocity, BOUNCE_COEF);
-    }
+        velocity = ccpMult(velocity, FRICTION);
+        velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
+        self.position = ccpAdd(self.position, ccpMult(velocity, deltaTime));
+        
+        if (self.position.x > CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5) {       
+            CGPoint pos = self.position;
+            pos.x = CGRectGetMaxX(spaceBounds) - self.boundingBox.size.width * 0.5;
+            self.position = pos;
+            velocity.x = -velocity.x;
+            velocity = ccpMult(velocity, BOUNCE_COEF);
 
-    if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5) {
-        CGPoint pos = self.position;
-        pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5;
-        self.position = pos;
-        velocity.y = -velocity.y;
-        velocity = ccpMult(velocity, BOUNCE_COEF);
+            // ccpLength(velocity)
+            [[AudioManager sharedManager] coinHit];
+        }
+
+        if (self.position.x < CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5) {
+            CGPoint pos = self.position;
+            pos.x = CGRectGetMinX(spaceBounds) + self.boundingBox.size.width * 0.5;
+            self.position = pos;
+            velocity.x = -velocity.x;
+            velocity = ccpMult(velocity, BOUNCE_COEF);
+            
+            [[AudioManager sharedManager] coinHit];
+        }
+
+        if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5) {
+
+            if (ccpLengthSQ(velocity) < fabsf(GRAVITY)) {
+                stable = YES;
+            }
+            
+            CGPoint pos = self.position;
+            pos.y = CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5;
+            self.position = pos;
+            velocity.y = -velocity.y;
+            velocity = ccpMult(velocity, BOUNCE_COEF);
+
+            if (!stable) {
+                [[AudioManager sharedManager] coinHit];
+            }
+        }
     }
 
     [self setDisplayFrame:animationFrames[animationIndexes[(animationOffset + (int)round(lifeTime / ANIMATION_SPEED)) % 14]]];
