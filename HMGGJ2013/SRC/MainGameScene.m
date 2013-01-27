@@ -1144,6 +1144,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [bombs removeObject:bomb];
         [bomb removeFromParentAndCleanup:YES];
     }
+    [killedBombs removeAllObjects];
 
     for (EnemySprite *killedEnemy in killedTapEnemies) {
 
