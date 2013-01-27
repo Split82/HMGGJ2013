@@ -26,6 +26,10 @@ const int SOUND_COIN_HIT_1 = 13;
 const int SOUND_COIN_HIT_2 = 14;
 const int SOUND_COIN_HIT_3 = 15;
 
+const int SOUND_BOMB_SPAWNER_RELEASED = 16;
+const int SOUND_BOMB_SPAWNER_CANCELLED = 17;
+const int SOUND_BOMB_SPAWNER = 18;
+
 const int BUFF_BG = kASC_Left;
 const int BUFF_EFFECTS = kASC_Right;
 
@@ -33,6 +37,7 @@ const int BUFF_EFFECTS = kASC_Right;
     CDSoundEngine* soundEngine;
     
     ALuint backgroundSound;
+    ALuint bombSpawning;
     
     RandomPicker *groundPicker;
     RandomPicker *enemyHitPicker;
@@ -69,15 +74,15 @@ const int BUFF_EFFECTS = kASC_Right;
         
         explosionPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_EXPLOSION_1], [NSNumber numberWithInt:SOUND_EXPLOSION_2], [NSNumber numberWithInt:SOUND_EXPLOSION_3]] minimumPickupInterval:0.100];
         
-        coinHitPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_COIN_HIT_1], [NSNumber numberWithInt:SOUND_COIN_HIT_2], [NSNumber numberWithInt:SOUND_COIN_HIT_3]] minimumPickupInterval:0.100];
+        coinHitPicker = [[RandomPicker alloc] initWithItems:@[[NSNumber numberWithInt:SOUND_COIN_HIT_1], [NSNumber numberWithInt:SOUND_COIN_HIT_2], [NSNumber numberWithInt:SOUND_COIN_HIT_3]] minimumPickupInterval:0.010];
     }
     
     return self;
 }
 
-- (void)playEffect:(int)soundId {
+- (ALuint)playEffect:(int)soundId {
     
-    [soundEngine playSound:soundId sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
+    return [soundEngine playSound:soundId sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:1.0f loop:NO];
 }
 
 - (void)playEffectFromPicker:(RandomPicker*)picker {
@@ -111,6 +116,10 @@ const int BUFF_EFFECTS = kASC_Right;
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_COIN_HIT_2 filePath:@"CoinHit2.wav"]];
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_COIN_HIT_3 filePath:@"CoinHit3.wav"]];
     
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BOMB_SPAWNER_RELEASED filePath:@"BombSpawnerBombReleased.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BOMB_SPAWNER_CANCELLED filePath:@"BombSpawnerCancelled.wav"]];
+    [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_BOMB_SPAWNER filePath:@"BombSpawner.wav"]];
+    
     [soundEngine loadBuffersAsynchronously:loadRequests];
 }
 
@@ -137,6 +146,20 @@ const int BUFF_EFFECTS = kASC_Right;
 
 - (void)coinHit {
     [self playEffectFromPicker:coinHitPicker];
+}
+
+- (void)bombSpawningStarted {
+    bombSpawning = [self playEffect:SOUND_BOMB_SPAWNER];
+}
+
+- (void)bombSpawningCancelled {
+    [soundEngine stopSound:bombSpawning];
+    
+    [self playEffect:SOUND_BOMB_SPAWNER_CANCELLED];
+}
+
+- (void)bombReleased {
+    [self playEffect:SOUND_BOMB_SPAWNER_RELEASED];
 }
 
 @end
