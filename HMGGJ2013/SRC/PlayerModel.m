@@ -156,12 +156,14 @@
 
 - (void) setKills:(NSInteger)kills
 {
+    NSInteger diff = kills - _kills;
     _kills = kills;
-    [self updateKillCount:kills];
+    [self updateKillCount:diff];
 }
 
 - (void) setCoins:(NSInteger)coins
 {
+    NSInteger diff = coins - _coins;
     _coins = coins;
     [self updateCoinsCount:coins];
 }
