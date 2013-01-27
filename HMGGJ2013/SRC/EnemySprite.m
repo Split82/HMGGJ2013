@@ -17,7 +17,7 @@
 
 #define WALKING_MOVEMENT_OFFSET 2.0f
 #define WALKING_ANIM_DELAY (1 / 30.0f)
-#define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 3)
+#define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 2)
 
 #define CLIMBING_MOVEMENT_OFFSET 4.0f
 #define CLIMBING_ANIM_DELAY (1 / 30.0f * 2)
@@ -119,7 +119,25 @@ static WallGrid *wallGrid = nil;
         wakingUp = NO;
         hasWallSlotAtIndex = -1;
         
-        climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * ([CCDirector sharedDirector].winSize.width - 2 * CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2);
+        if (rand() % 2) {
+            
+            direction = 1;
+            
+            spritePos = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
+            
+            climbXPos = CLIMBING_BORDER_OFFSET + (float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width  / 2;
+            
+        }
+        else {
+            
+            direction = -1;
+            self.flipX = YES;
+            
+            spritePos = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
+            
+            climbXPos = [CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2 -(float)rand() / RAND_MAX * [CCDirector sharedDirector].winSize.width / 2;
+            
+        }
 
         if (!wallGrid) {
             
@@ -238,19 +256,7 @@ static WallGrid *wallGrid = nil;
         }
         
         
-        if (rand() % 2) {
-            
-            direction = 1;
-            
-            spritePos = CGPointMake(-WALKING_BORDER_OFFSET, GROUND_Y);
-        }
-        else {
-            
-            direction = -1;
-            self.flipX = YES;
-            
-            spritePos = CGPointMake([CCDirector sharedDirector].winSize.width + WALKING_BORDER_OFFSET, GROUND_Y);
-        }
+
         
         
         if (type == kEnemyTypeSwipe) {
@@ -668,7 +674,7 @@ static WallGrid *wallGrid = nil;
 
 - (void) updateClimbPos {
     
-    climbXPos += (float)rand() / RAND_MAX * ENEMY_HALF_WIDTH * direction;
+    climbXPos += (float)rand() / RAND_MAX * ENEMY_HALF_WIDTH * direction / 2;
     
     if (climbXPos > ([CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2)) {
         
