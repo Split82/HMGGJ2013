@@ -34,6 +34,9 @@ const float ENEMY_IDLE_SPAWN_DELTA_TIME[] = {    3.000f,    3.000f,    3.000f};
 const float ENEMY_WAVE_SPAWN_TIME[]       = {    0.500f,    0.500f,    0.500f};
 const float ENEMY_WAVE_SPAWN_DELTA_TIME[] = {    1.000f,    1.000f,    1.000f};
 
+// how many seconds to wait for player to kill all the enemies / 0.0f is no wait
+const float WAVE_WAIT_FOR_USER[]          = {    5.000f,    5.000f,    NOWAIT};
+
 // after how many levels level up
 const int LEVEL_UP_WAVE_COUNT[] = {10, 20, 30};
 const int LEVEL_COUNT = 3;
