@@ -75,24 +75,7 @@ static const float kSegmentLength = 20.0f;
     glEnableVertexAttribArray(kCCVertexAttribFlag_Position);
     glEnableVertexAttribArray(kCCVertexAttribFlag_Color);
     
-    for (int i = 0; i < pointsCount; i++) {
-        
-        colors[i * 4] = (int)(255 * 0.4f + size * 0.2f);
-        colors[i * 4 + 1] = (int)(255 * 0.4f + size * 0.2f);
-        colors[i * 4 + 2] = (int)(255);
-        colors[i * 4 + 2] = (int)(255);
-        
-        points[i] = ccpAdd(points[i], ccpMult(CGPointMake((float)rand() / RAND_MAX * 2 - 1, (float)rand() / RAND_MAX * 2 - 1), 2.0f));
-    }
-    
-    if (_lightningTarget) {
-        
-        points[pointsCount - 1] = _lightningTarget.position;
-    }
-    else {
-        
-        points[pointsCount - 1] = endPos;
-    }
+
     
     glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, colors);
     glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, points);
@@ -125,6 +108,29 @@ static const float kSegmentLength = 20.0f;
     
     elapsedTime += dt;
     size = 1.0f - fabs(elapsedTime / kGenerateNewInterval * 2 - 1);
+    
+    
+    for (int i = 0; i < pointsCount; i++) {
+        
+        colors[i * 4] = (int)(255 * 0.4f + size * 0.2f);
+        colors[i * 4 + 1] = (int)(255 * 0.4f + size * 0.2f);
+        colors[i * 4 + 2] = (int)(255);
+        colors[i * 4 + 2] = (int)(255);
+        
+        if (i > 0) {
+            
+            points[i] = ccpAdd(points[i], ccpMult(CGPointMake((float)rand() / RAND_MAX * 2 - 1, (float)rand() / RAND_MAX * 2 - 1), 2.0f));
+        }
+    }
+    
+    if (_lightningTarget) {
+        
+        points[pointsCount - 1] = _lightningTarget.position;
+    }
+    else {
+        
+        points[pointsCount - 1] = endPos;
+    }
 }
 
 - (void)generate {
