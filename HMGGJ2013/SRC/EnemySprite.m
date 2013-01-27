@@ -442,7 +442,7 @@ static WallGrid *wallGrid = nil;
                 }
 
                 wakingUp = NO;
-                wakingAnimeDelayMul =  400.0f / fabs(verticalVel);
+                wakingAnimeDelayMul =  200.0f / fabs(verticalVel);
                 
                 sleepTime = MIN((fabs(verticalVel) - MIN_FALLING_SPPEED_FOR_SLEEP) * 0.006 + MIN_SLEEP_TIME_INTERVAL, 3);
                 
