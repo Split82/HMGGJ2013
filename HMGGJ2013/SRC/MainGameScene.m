@@ -135,6 +135,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCLayer *gameOverLayer;
     
     Trail *currentTrail;
+    // Leaderboard
+    GKLeaderboard *leaderboard;
+    
+    BOOL bombSpawning;
 }
 
 @end
