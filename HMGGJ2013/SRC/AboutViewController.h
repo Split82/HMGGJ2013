@@ -10,6 +10,8 @@
 
 @interface AboutViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundView;
+
 - (IBAction) closeButtonPressed:(id)sender;
 
 @end
