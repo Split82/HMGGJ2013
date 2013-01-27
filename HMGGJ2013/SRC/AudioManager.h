@@ -14,8 +14,6 @@
 
 - (void)preloadSounds;
 
-- (void)scream;
-
 - (void)startBackgroundMusic;
 
 - (void)stopBackgroundMusic;
@@ -23,5 +21,8 @@
 - (void)groundHit;
 
 - (void)enemyHit;
+
+- (void)explode;
+
 
 @end
