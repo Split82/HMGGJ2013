@@ -198,7 +198,6 @@
 		3891715816B4206C00EFAB71 /* MasterControlProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterControlProgram.h; sourceTree = "<group>"; };
 		3891715916B4206C00EFAB71 /* MasterControlProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterControlProgram.m; sourceTree = "<group>"; };
 		38CDD78416B382AC0021D96A /* 8bit-gandam.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "8bit-gandam.mp3"; sourceTree = "<group>"; };
-		38FA812616B5165500D2AA7C /* SpawnStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpawnStrategy.h; sourceTree = "<group>"; };
 		5505210E16B4B63A0006D7F7 /* MonsterHearth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonsterHearth.h; sourceTree = "<group>"; };
 		5505210F16B4B63A0006D7F7 /* MonsterHearth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonsterHearth.m; sourceTree = "<group>"; };
 		5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyingSkullSprite.h; sourceTree = "<group>"; };
@@ -570,14 +569,6 @@
 				388E061C16B356450090B788 /* brum.mp3 */,
 			);
 			path = sounds;
-			sourceTree = "<group>";
-		};
-		38FA812416B5162100D2AA7C /* Strategies */ = {
-			isa = PBXGroup;
-			children = (
-				38FA812616B5165500D2AA7C /* SpawnStrategy.h */,
-			);
-			name = Strategies;
 			sourceTree = "<group>";
 		};
 		553741A016B1F72900D860C2 = {
@@ -1080,7 +1071,6 @@
 		55B860A216B206CD00D5BA8D /* SRC */ = {
 			isa = PBXGroup;
 			children = (
-				38FA812416B5162100D2AA7C /* Strategies */,
 				55B862C516B21AA400D5BA8D /* Global */,
 				553BA19216B3148100B4E22B /* GameObjects */,
 				553BA1B616B33C8400B4E22B /* Gestures */,
