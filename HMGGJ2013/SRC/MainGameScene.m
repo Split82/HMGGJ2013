@@ -1051,6 +1051,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLayer addChild:menuHeart];
     
     [self addChild:gameOverLayer];
+    [[AppDelegate player] newGame];
 }
 
 - (void) restartGame
