@@ -34,7 +34,7 @@
 
 #define MIN_FALLING_SPPEED_FOR_SLEEP 200.0f
 
-#define ZAPPING_TIME 0.5f
+#define ZAPPING_TIME 0.4f
 
 #define ZAPPING_SKELETON_TIME 0.08f
 
@@ -98,7 +98,7 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
 
 -(id) initWithType:(EnemyType)_type {
     
-    if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
+    if (self = [self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
         self.type = _type;
@@ -582,11 +582,11 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     [self updateSpritePos];
 }
 
--(void) throwFromWall {
+-(BOOL) throwFromWall {
     
     if (state != kEnemyStateClimbing && state != kEnemyStateCrossing) {
         
-        return;
+        return NO;
     }
     
     state = kEnemyStateZapping;
@@ -602,7 +602,8 @@ static NSMutableArray *tapperZappingAnimSpriteFrames = nil;
     elapsedTime = 0;
     
     [self updateSpritePos];
-    
+ 
+    return YES;
 }
 
 - (void) updateSpritePos {

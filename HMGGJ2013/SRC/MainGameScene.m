@@ -557,6 +557,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [killedFlyingSkulls addObject:flyingSkull];
 }
 
+
+#pragma mark - LightningDelegate
+
+- (void)lightningDidFinish:(Lightning *)lightning {
+    
+    [killedLightnings addObject:lightning];
+}
+
 #pragma mark - BombSpriteDelegate
 
 - (void)bombDidDie:(BombSprite *)bombSprite {
@@ -637,6 +645,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     return [swipeEnemies count];
 }
 
+- (int)getPlayerCoins {
+    
+    return [AppDelegate player].coins;
+}
+
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
@@ -663,7 +676,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
             
-            [enemy throwFromWall];
+            if ([enemy throwFromWall]) {
+                
+                [self createLightningToEnemy:enemy];
+            }
         }
     }
 }
@@ -765,14 +781,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         /*
         if (distance < TAP_THROW_MIN_DISTANCE2) {
         
-            [enemy throwFromWall];
+             if ([enemy throwFromWall]) {
+             
+             [self createLightningToEnemy:enemy];
+             }
+
         }
         */
     }
 
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
-        [nearestEnemy throwFromWall];
+        if ([nearestEnemy throwFromWall]) {
+            
+            [self createLightningToEnemy:nearestEnemy];
+        }
 
     }
 
@@ -822,6 +845,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 #pragma mark -
+
+- (void) createLightningToEnemy:(EnemySprite*)enemy {
+    
+    CGPoint startPos = CGPointMake(0, 20);
+    Lightning *lightning = [[Lightning alloc] initWithStartPos:startPos endPos:enemy.position];
+    lightning.zOrder = 30;
+    [self addChild:lightning];
+    [lightnings addObject:lightning];
+    
+    lightning.lightningTarget = enemy;
+}
 
 - (void) enemyDidDie:(EnemySprite *)enemy
 {
@@ -989,6 +1023,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     for (FlyingSkullSprite *skull in flyingSkulls) {
         [skull calc:deltaTime];
     }
+    
+    for (Lightning *lightning in lightnings) {
+        [lightning calc:deltaTime];
+    }
+    
 
     for (BombExplosion *bombExplosion in bombExplosions) {
         [bombExplosion calc:deltaTime];
@@ -1044,6 +1083,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [skull removeFromParentAndCleanup:YES];
     }
     [killedFlyingSkulls removeAllObjects];
+    
+    for (Lightning *lightning in killedLightnings) {
+        [lightnings removeObject:lightning];
+        [lightning removeFromParentAndCleanup:YES];
+    }
+    [killedLightnings removeAllObjects];
 
     for (BombExplosion *bombExplosion in killedBombExplosions) {
         [bombExplosions removeObject:bombExplosion];
