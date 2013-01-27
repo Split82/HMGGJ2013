@@ -986,34 +986,42 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
         if (!gameOver)
             return;
-        CCLabelBMFont *label;
+        NSMutableArray *array = [NSMutableArray array];
+        for (GKScore *score in scores)
+            [array addObject:score.playerID];
         
-        int i, lines = 3;
-        for (i = 0; i < lines; i++) {
-            GKScore *score = scores[i];
-            CGFloat offsetY = 265.0;
+        [GKPlayer loadPlayersForIdentifiers:array withCompletionHandler:^(NSArray *players, NSError *error) {
+            CCLabelBMFont *label;
+            int i, lines = [scores count];
+            if (lines > 3) lines = 3;
             
-            label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", i + 1] fntFile:@"PixelFont.fnt"];
-            label.anchorPoint = ccp(0.5, 0.5);
-            label.scale = [UIScreen mainScreen].scale * 2;
-            label.position = ccp(40.0, offsetY - i * 44.0);
-            [label setColor:ccc3(145, 145, 153)];
-            [gameOverLayer addChild:label];
-            
-            label = [[CCLabelBMFont alloc] initWithString:score.playerID fntFile:@"PixelFont.fnt"];
-            label.anchorPoint = ccp(0, 0.5);
-            label.scale = [UIScreen mainScreen].scale * 2;
-            label.position = ccp(70.0, offsetY - i * 44.0);
-            [label setColor:ccc3(145, 145, 153)];
-            [gameOverLayer addChild:label];
-            
-            label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%lli", score.value] fntFile:@"PixelFont.fnt"];
-            label.anchorPoint = ccp(1, 0.5);
-            label.scale = [UIScreen mainScreen].scale * 2;
-            label.position = ccp(290.0, offsetY - i * 44.0);
-            [label setColor:ccc3(145, 145, 153)];
-            [gameOverLayer addChild:label];
-        }
+            for (i = 0; i < lines; i++) {
+                GKScore *score = scores[i];
+                GKPlayer *player = players[i];
+                CGFloat offsetY = 265.0;
+                
+                label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%i", score.rank] fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(0.5, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(40.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+                
+                label = [[CCLabelBMFont alloc] initWithString:player.displayName fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(0, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(70.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+                
+                label = [[CCLabelBMFont alloc] initWithString:[NSString stringWithFormat:@"%lld", score.value] fntFile:@"PixelFont.fnt"];
+                label.anchorPoint = ccp(1, 0.5);
+                label.scale = [UIScreen mainScreen].scale * 2;
+                label.position = ccp(290.0, offsetY - i * 44.0);
+                [label setColor:ccc3(145, 145, 153)];
+                [gameOverLayer addChild:label];
+            }
+        }];
     }];
     menuHeart = [[MonsterHearth alloc] init];
     menuHeart.anchorPoint = ccp(0.5, 0);
