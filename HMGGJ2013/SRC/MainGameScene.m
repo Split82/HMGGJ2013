@@ -16,6 +16,7 @@
 #import "MasterControlProgram.h"
 #import "ScreenShaker.h"
 #import "SlimeBubbleSprite.h"
+#import "MonsterHearth.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -37,14 +38,17 @@
 #define TAP_PICK_COIN_MIN_DISTANCE2 (50*50)
 #define SWIPE_MIN_DISTANCE2 (30*30)
 
+#define SLIME_WIDTH 280
+#define SLIME_GROUND_Y (GROUND_Y + 1)
+#define SLIME_MAX_HEIGHT 300
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
     const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
     if (l2 == 0.0) return ccpDistanceSQ(p, v);   // v == w case
-    // Consider the line extending the segment, parameterized as v + t (w - v).
-    // We find projection of point p onto the line.
-    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+                                                 // Consider the line extending the segment, parameterized as v + t (w - v).
+                                                 // We find projection of point p onto the line.
+                                                 // It falls where t = [(p-v) . (w-v)] / |w-v|^2
     const float t = ccpDot(ccpSub(p, v), ccpSub(w, v)) / l2;
     if (t < 0.0) return ccpDistanceSQ(p, v);       // Beyond the 'v' end of the segment
     else if (t > 1.0) return ccpDistanceSQ(p, w);  // Beyond the 'w' end of the segment
@@ -52,9 +56,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     return ccpDistanceSQ(p, projection);
 }
 
-#define SLIME_WIDTH 280
-#define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 300
 
 @interface MainGameScene() {
 
@@ -86,6 +87,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     SlimeSprite *slimeSprite;
     CCSprite *slimeTop;
     MonsterSprite *monsterSprite;
+    MonsterHearth *monsterHearth;
     
     MasterControlProgram *masterControlProgram;
     
@@ -194,8 +196,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     monsterSprite.zOrder = 3;
     [mainSpriteBatch addChild:monsterSprite];
 
+    // Monster hearth
+    monsterHearth = [[MonsterHearth alloc] init];
+    monsterHearth.anchorPoint = ccp(0.5, 0);
+    monsterHearth.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) - 18);
+    monsterHearth.zOrder = 4;
+    [mainSpriteBatch addChild:monsterHearth];
+
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    [slimeSprite setActualEnergy:0.5];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
@@ -269,7 +279,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     coinsSprite = [[CCSprite alloc] initWithSpriteFrameName:@"coin1.png"];
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
-    coinsSprite.zOrder = GAME_OBJECTS_Z_ORDER;
+    coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
     coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 20);
     [mainSpriteBatch addChild:coinsSprite];
@@ -531,12 +541,19 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
 
-    [self addBombAtPosX:bombSpawner.pos.x];
+    if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
-    [[AppDelegate player] updateDropBombCount:1];
+        [self addScoreAddLabelWithText:@"NOT ENOUGH COINS!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking];
+    }
+    else {
 
-    [AppDelegate player].coins -= BOMB_COINS_COST;
-    [self updateUI];
+        [self addBombAtPosX:bombSpawner.pos.x];
+
+        [[AppDelegate player] updateDropBombCount:1];
+
+        [AppDelegate player].coins -= BOMB_COINS_COST;
+        [self updateUI];
+    }
 }
 
 #pragma mark - EnemyBodyDebrisDelegate
@@ -564,9 +581,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
-    if ([AppDelegate player].coins >= BOMB_COINS_COST) {
-        [bombSpawner startSpawningAtPos:pos];
-    }
+    [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
@@ -932,7 +947,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     slimeTop.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(slimeSprite.boundingBox));    
 
+    // Monster
     [monsterSprite calc:deltaTime];
+    [monsterHearth calc:deltaTime];
 
     // Shake
     [screenShaker calc:deltaTime];

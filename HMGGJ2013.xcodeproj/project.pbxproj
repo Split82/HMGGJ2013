@@ -13,6 +13,7 @@
 		388E061E16B356450090B788 /* brum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 388E061C16B356450090B788 /* brum.mp3 */; };
 		3891715A16B4206C00EFAB71 /* MasterControlProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 3891715916B4206C00EFAB71 /* MasterControlProgram.m */; };
 		38CDD78516B382AC0021D96A /* 8bit-gandam.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 38CDD78416B382AC0021D96A /* 8bit-gandam.mp3 */; };
+		5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */ = {isa = PBXBuildFile; fileRef = 5505210F16B4B63A0006D7F7 /* MonsterHearth.m */; };
 		553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741AF16B1F72900D860C2 /* QuartzCore.framework */; };
 		553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B116B1F72900D860C2 /* OpenGLES.framework */; };
 		553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553741B316B1F72900D860C2 /* OpenAL.framework */; };
@@ -193,6 +194,8 @@
 		3891715816B4206C00EFAB71 /* MasterControlProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterControlProgram.h; sourceTree = "<group>"; };
 		3891715916B4206C00EFAB71 /* MasterControlProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterControlProgram.m; sourceTree = "<group>"; };
 		38CDD78416B382AC0021D96A /* 8bit-gandam.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "8bit-gandam.mp3"; sourceTree = "<group>"; };
+		5505210E16B4B63A0006D7F7 /* MonsterHearth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonsterHearth.h; sourceTree = "<group>"; };
+		5505210F16B4B63A0006D7F7 /* MonsterHearth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonsterHearth.m; sourceTree = "<group>"; };
 		553741AB16B1F72900D860C2 /* HMGGJ2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMGGJ2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		553741AF16B1F72900D860C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		553741B116B1F72900D860C2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -979,12 +982,14 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				5505210E16B4B63A0006D7F7 /* MonsterHearth.h */,
+				5505210F16B4B63A0006D7F7 /* MonsterHearth.m */,
+				554AD1E516B42AE600441632 /* MonsterSprite.h */,
+				554AD1E616B42AE600441632 /* MonsterSprite.m */,
 				554AD1FE16B462C900441632 /* SlimeBubbleSprite.h */,
 				554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */,
 				554AD1E816B43AF600441632 /* EnemyBodyDebris.h */,
 				554AD1E916B43AF600441632 /* EnemyBodyDebris.m */,
-				554AD1E516B42AE600441632 /* MonsterSprite.h */,
-				554AD1E616B42AE600441632 /* MonsterSprite.m */,
 				554AD1E216B4277000441632 /* SlimeSprite.h */,
 				554AD1E316B4277000441632 /* SlimeSprite.m */,
 				55CDD44316B3708100704F3B /* BombSpawner.h */,
@@ -1001,6 +1006,8 @@
 				E619264516B31E4A00904535 /* EnemySprite.m */,
 				E6A61C7716B33AD8000912CA /* WallGrid.h */,
 				E6A61C7816B33AD8000912CA /* WallGrid.m */,
+				554AD21916B49B9D00441632 /* ScoreAddLabel.h */,
+				554AD21A16B49B9D00441632 /* ScoreAddLabel.m */,
 				3891715816B4206C00EFAB71 /* MasterControlProgram.h */,
 				3891715916B4206C00EFAB71 /* MasterControlProgram.m */,
 			);
@@ -1031,8 +1038,6 @@
 			children = (
 				554AD1FB16B45D1800441632 /* ScreenShaker.h */,
 				554AD1FC16B45D1800441632 /* ScreenShaker.m */,
-				554AD21916B49B9D00441632 /* ScoreAddLabel.h */,
-				554AD21A16B49B9D00441632 /* ScoreAddLabel.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -1360,6 +1365,7 @@
 				6529AEDF16B47BBB00E83114 /* MainMenuGameScene.m in Sources */,
 				650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */,
 				554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */,
+				5505211016B4B63A0006D7F7 /* MonsterHearth.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

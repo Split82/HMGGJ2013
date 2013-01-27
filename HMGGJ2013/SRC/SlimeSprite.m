@@ -45,6 +45,14 @@
     destinationEnergy = energy;
 }
 
+- (void)setActualEnergy:(CGFloat)energy {
+
+    destinationEnergy = energy;
+    actualEnergy = energy;
+
+    self.scaleY = actualEnergy * maxHeight/ self.contentSize.height;    
+}
+
 - (void)calc:(ccTime)deltaTime {
 
     if (destinationEnergy < actualEnergy) {

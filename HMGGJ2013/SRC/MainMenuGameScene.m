@@ -33,7 +33,7 @@
 
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y (GROUND_Y + 1)
-#define SLIME_MAX_HEIGHT 135
+#define SLIME_MAX_HEIGHT 300
 
 
 @interface MainMenuGameScene () <GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
@@ -109,6 +109,7 @@
     
     // Slime
     slimeSprite = [[SlimeSprite alloc] initWithWidth:SLIME_WIDTH maxHeight:SLIME_MAX_HEIGHT];
+    [slimeSprite setActualEnergy:0.5];
     slimeSprite.anchorPoint = ccp(0.5, 0);
     slimeSprite.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, SLIME_GROUND_Y);
     slimeSprite.zOrder = 10;
@@ -268,8 +269,7 @@
         [bubble removeFromParentAndCleanup:YES];
     }
     [killedBubbles removeAllObjects];
-    
-    [slimeSprite setEnergy:[AppDelegate player].health * 0.01];
+
     [slimeSprite calc:deltaTime];
     
     [monsterSprite calc:deltaTime];
