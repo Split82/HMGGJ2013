@@ -31,4 +31,6 @@
 
 - (void)addCoinAtPos:(CGPoint)pos;
 
+- (int)getPlayerCoins;
+
 @end

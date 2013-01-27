@@ -13,7 +13,7 @@
 - (id) initWithFrameName:(NSString*)frameName offset:(CGPoint)offset;
 + (id) createWithFrameName:(NSString*)frameName offset:(CGPoint)offset;
 
-@property (nonatomic, retain) CCSpriteFrame* frame;
+@property (nonatomic, strong) CCSpriteFrame* frame;
 @property (nonatomic, assign) CGPoint offset;
 
 @end

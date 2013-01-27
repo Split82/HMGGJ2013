@@ -19,6 +19,7 @@
 - (id)init;
 - (void)startSpawningAtPos:(CGPoint)pos;
 - (void)cancelSpawning;
+- (void)startEndAnimation;
 - (void)calc:(ccTime)deltaTime;
 
 @end

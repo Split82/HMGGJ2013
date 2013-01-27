@@ -9,12 +9,18 @@
 #import "BombSpawner.h"
 
 #define SPEED 1.7f
+#define END_ANIMATION_TIME_INTERVAL 0.3
+#define END_ANIMATION_ROTATION 30
+#define END_ANIMATION_SCALE 0
 
 @interface BombSpawner() {
 
     float progress;
     BOOL spawning;
-    NSArray *animationFrames;    
+    NSArray *animationFrames;
+
+    float defaultScale;
+    float endAnimationCountDown;
 }
 
 @end
@@ -28,6 +34,7 @@
     if (self) {
         self.anchorPoint = ccp(0.5, 0.5);
         self.scale = [UIScreen mainScreen].scale * 2;
+        defaultScale = self.scale;
         self.visible = NO;
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
@@ -53,13 +60,25 @@
     self.position = pos;
 
     self.visible = YES;
+
+    self.rotation = 0;
+    self.scale = defaultScale;
 }
 
 - (void)cancelSpawning {
 
-    spawning = NO;
+    if (spawning) {
+        spawning = NO;
 
-    self.visible = NO;
+        self.visible = NO;
+    }
+}
+
+- (void)startEndAnimation {
+
+    spawning = NO;
+    progress = 1.0f;
+    endAnimationCountDown = END_ANIMATION_TIME_INTERVAL;
 }
 
 - (void)calc:(ccTime)deltaTime {
@@ -68,13 +87,20 @@
         progress += deltaTime * SPEED;
 
         if (progress >= 1) {
-            spawning = NO;
-            progress = 1;
-            self.visible = NO;
             [_delegate bombSpawnerWantsBombToSpawn:self];
         }
 
         [self setDisplayFrame:animationFrames[(int)roundf(progress * ([animationFrames count] - 1))]];
+    }
+    else if (endAnimationCountDown > 0) {
+
+        self.rotation = (1 - endAnimationCountDown / END_ANIMATION_TIME_INTERVAL) * END_ANIMATION_ROTATION;
+        self.scale = defaultScale + (END_ANIMATION_SCALE - defaultScale) * (1 - endAnimationCountDown / END_ANIMATION_TIME_INTERVAL);
+        endAnimationCountDown -= deltaTime;
+
+        if (endAnimationCountDown < 0) {
+            self.visible = NO;
+        }
     }
 }
 
