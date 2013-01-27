@@ -628,6 +628,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     return [swipeEnemies count];
 }
 
+- (int)getPlayerCoins {
+    
+    return [AppDelegate player].coins;
+}
+
 #pragma mark - Gestures
 
 - (void)longPressStarted:(CGPoint)pos {
