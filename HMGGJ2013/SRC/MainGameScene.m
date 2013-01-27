@@ -926,4 +926,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
 }
 
+-(float) slimeSurfacePosY {
+    
+    return CGRectGetMaxY(slimeSprite.boundingBox);
+}
+
+
 @end

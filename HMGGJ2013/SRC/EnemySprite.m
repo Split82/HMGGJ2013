@@ -11,9 +11,12 @@
 #import "MainGameScene.h"
 #import "SpriteTextureFrameInfo.h"
 
+
+#define ENEMY_HALF_WIDTH 20.0f
+
 #define WALKING_MOVEMENT_OFFSET 2.0f
 #define WALKING_ANIM_DELAY (1 / 30.0f)
-#define WALKING_BORDER_OFFSET 5.0f
+#define WALKING_BORDER_OFFSET (ENEMY_HALF_WIDTH * 3)
 
 #define CLIMBING_MOVEMENT_OFFSET 4.0f
 #define CLIMBING_ANIM_DELAY (1 / 30.0f * 4)
@@ -25,10 +28,9 @@
 
 #define SLEEPING_ANIM_DELAY (1 / 30.0f)
 
+#define CROSSING_ANIM_DELAY (1 / 30.0f * 4)
 
-#define ENEMY_HALF_WIDTH 20.0f
-
-#define WALL_HEIGHT 350.0f
+#define WALL_HEIGHT 356.0f
 
 #define MIN_FALLING_SPPEED_FOR_SLEEP 200.0f
 
@@ -84,7 +86,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     if ([self initWithSpriteFrameName:kPlaceholderTextureFrameName]) {
         
         self.anchorPoint = ccp(0.5, 0.5);
-        self.type = _type;
+        self.type = 0;//_type;
         self.state = kEnemyStateWalking;
         self.scale = [UIScreen mainScreen].scale * 2;
         animFrameIndex = 0;
@@ -131,6 +133,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             tapperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
 
             [tapperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"bigFront.png" offset:CGPointMake(0, 0)]];
+            [tapperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"bigWaterFall.png" offset:CGPointMake(0, 0)]];
             
             // sleep
             tapperSleepingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
@@ -140,6 +143,13 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             [tapperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"bigFall2.png" offset:CGPointMake(0, 0)]];
             [tapperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"bigFall3.png" offset:CGPointMake(0, 0)]];
             [tapperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"bigFall4.png" offset:CGPointMake(0, 0)]];
+
+            // cross
+            tapperCrossingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
+            
+            [tapperCrossingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbTop.png" offset:CGPointMake(0, 5)]];
+            [tapperCrossingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbTop2.png" offset:CGPointMake(0, 8)]];
+            
             
             //swiper
             
@@ -169,6 +179,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             swiperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
             
             [swiperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"tallFront.png" offset:CGPointMake(0, 0)]];
+            [swiperFallingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"tallWaterFall.png" offset:CGPointMake(0, 0)]];
             
             // sleep
             swiperSleepingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
@@ -178,6 +189,12 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             [swiperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"tallFall2.png" offset:CGPointMake(0, 0)]];
             [swiperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"tallFall3.png" offset:CGPointMake(0, 0)]];
             [swiperSleepingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"tallFall4.png" offset:CGPointMake(0, 0)]];
+            
+            // cross
+            swiperCrossingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
+            
+            [swiperCrossingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallClimbTop.png" offset:CGPointMake(0, 2)]];
+            [swiperCrossingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"TallClimbTop2.png" offset:CGPointMake(0, 8)]];
         }
         
         
@@ -245,7 +262,6 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
 
             if (animTime > WALKING_ANIM_DELAY) {
                 
-                
                 CGPoint newSpritePos = spritePos;
                 newSpritePos.x += (int)(animTime / WALKING_ANIM_DELAY) * direction * WALKING_MOVEMENT_OFFSET;
                 
@@ -254,6 +270,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
                     state = kEnemyStateClimbing;
                     animFrameIndex = 0;
                     moveTime = 0;
+                    animTime = 0;
                     
                     [self updateSpritePos];
                     
@@ -276,7 +293,13 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             
             if (spritePos.y > WALL_HEIGHT + GROUND_Y) {
                 
-                [_delegate enemyDidClimbWall:self];
+                animFrameIndex = 0;
+                moveTime = 0;
+                animTime = 0;
+                
+                state = kEnemyStateCrossing;
+                
+                [self updateSpritePos];
                 return;
             }
             if (animTime > CLIMBING_ANIM_DELAY) {
@@ -298,9 +321,10 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             
             break;
         }
+        case kEnemyStateFallingInto:
         case kEnemyStateFalling: {
             
-            if (spritePos.y < GROUND_Y) {
+            if ((state == kEnemyStateFalling) && (spritePos.y < GROUND_Y)) {
                 
                 spritePos.y = GROUND_Y;
 
@@ -317,10 +341,16 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
                 
                 animFrameIndex = 1; // skip first front facing frame
                 moveTime = 0;
+                animTime = 0;
                 
                 state = kEnemyStateSleeping;
                 
                 [self updateSpritePos];
+                return;
+            }
+            else if ((state == kEnemyStateFallingInto) && (spritePos.y < [_delegate slimeSurfacePosY])) {
+                
+                [_delegate enemyDidClimbWall:self];
                 return;
             }
             
@@ -336,7 +366,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
             
             if (animTime > FALLING_ANIM_DELAY) {
                 
-                animFrameIndex += (int)(animTime / FALLING_ANIM_DELAY);
+                animFrameIndex += (int)(animTime / FALLING_ANIM_DELAY) * 2; // frames are interlaced (outer/inner falling)
                 animFrameIndex = animFrameIndex % [fallingAnimSpriteFrames count];
                 
                 animTime = animTime - (int)(animTime / FALLING_ANIM_DELAY) * FALLING_ANIM_DELAY;
@@ -419,9 +449,31 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
         }
         case kEnemyStateCrossing: {
             
-            break;
-        }
-        case kEnemyStateFallingInto: {
+            if (animTime > CROSSING_ANIM_DELAY) {
+                
+                animFrameIndex += (int)(animTime / CROSSING_ANIM_DELAY);
+                
+                if (animFrameIndex >= [crossingAnimSpriteFrames count]) {
+                    
+                    animTime = 0;
+                    moveTime = 0;
+                    animFrameIndex = 1; // odd frames
+
+                    verticalVel = 0;
+                    horizontalVel = 0;
+                    
+                    state = kEnemyStateFallingInto;
+                    
+                    [[self parent] reorderChild:self z:19];
+                    
+                    [self updateSpritePos];
+                    return;
+                }
+                
+                animTime = animTime - (int)(animTime / CROSSING_ANIM_DELAY) * CROSSING_ANIM_DELAY;
+                
+                [self updateSpritePos];
+            }
             
             break;
         }
@@ -431,7 +483,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
 
 -(void) throwFromWall {
     
-    if (state != kEnemyStateClimbing) {
+    if (state != kEnemyStateClimbing && state != kEnemyStateCrossing) {
         
         return;
     }
@@ -439,6 +491,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
     state = kEnemyStateFalling;
     animFrameIndex = 0;
     moveTime = 0;
+    animTime = 0;
     verticalVel = 100;
     horizontalVel = (float)rand() / RAND_MAX * 50 + 50;
     
@@ -458,7 +511,7 @@ static NSMutableArray *tapperSleepingAnimSpriteFrames = nil;
         
         frames = climbingAnimSpriteFrames;
     }
-    else if (state == kEnemyStateFalling) {
+    else if (state == kEnemyStateFalling || state == kEnemyStateFallingInto) {
         
         frames = fallingAnimSpriteFrames;
     }
