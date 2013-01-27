@@ -166,6 +166,9 @@
 		55F18D8A16B51FFB0034650D /* GroundHit2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8716B51FFB0034650D /* GroundHit2.wav */; };
 		55F18D8B16B51FFB0034650D /* GroundHit3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D8816B51FFB0034650D /* GroundHit3.wav */; };
 		55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F18D8E16B5234D0034650D /* RandomPicker.m */; };
+		55F18D9416B52A3C0034650D /* ElHit1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D9116B52A3C0034650D /* ElHit1.wav */; };
+		55F18D9516B52A3C0034650D /* ElHit2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D9216B52A3C0034650D /* ElHit2.wav */; };
+		55F18D9616B52A3C0034650D /* ElHit3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 55F18D9316B52A3C0034650D /* ElHit3.wav */; };
 		650CCB7A16B494AB004F0241 /* MenuCoinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 650CCB7916B494AB004F0241 /* MenuCoinSprite.m */; };
 		650CCBA816B4AE52004F0241 /* menu-resume.png in Resources */ = {isa = PBXBuildFile; fileRef = 650CCBA716B4AE52004F0241 /* menu-resume.png */; };
 		65259BCF16B337690012B735 /* GameDataNameDefinitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65259BCE16B337690012B735 /* GameDataNameDefinitions.m */; };
@@ -190,6 +193,7 @@
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
 		E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A9C16B4E18E002F86CA /* Lightning.m */; };
+		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -505,6 +509,9 @@
 		55F18D8816B51FFB0034650D /* GroundHit3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundHit3.wav; sourceTree = "<group>"; };
 		55F18D8E16B5234D0034650D /* RandomPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomPicker.m; sourceTree = "<group>"; };
 		55F18D9016B5243F0034650D /* RandomPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomPicker.h; sourceTree = "<group>"; };
+		55F18D9116B52A3C0034650D /* ElHit1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ElHit1.wav; sourceTree = "<group>"; };
+		55F18D9216B52A3C0034650D /* ElHit2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ElHit2.wav; sourceTree = "<group>"; };
+		55F18D9316B52A3C0034650D /* ElHit3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ElHit3.wav; sourceTree = "<group>"; };
 		650CCB7816B494AB004F0241 /* MenuCoinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCoinSprite.h; sourceTree = "<group>"; };
 		650CCB7916B494AB004F0241 /* MenuCoinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCoinSprite.m; sourceTree = "<group>"; };
 		650CCBA716B4AE52004F0241 /* menu-resume.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-resume.png"; sourceTree = "<group>"; };
@@ -538,6 +545,8 @@
 		E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteTextureFrameInfo.m; sourceTree = "<group>"; };
 		E6213A9B16B4E18E002F86CA /* Lightning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lightning.h; sourceTree = "<group>"; };
 		E6213A9C16B4E18E002F86CA /* Lightning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lightning.m; sourceTree = "<group>"; };
+		E6213AAB16B52304002F86CA /* WaterSplash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterSplash.h; sourceTree = "<group>"; };
+		E6213AAC16B52305002F86CA /* WaterSplash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaterSplash.m; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -573,6 +582,9 @@
 		388E061B16B356450090B788 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				55F18D9116B52A3C0034650D /* ElHit1.wav */,
+				55F18D9216B52A3C0034650D /* ElHit2.wav */,
+				55F18D9316B52A3C0034650D /* ElHit3.wav */,
 				55F18D8616B51FFB0034650D /* GroundHit1.wav */,
 				55F18D8716B51FFB0034650D /* GroundHit2.wav */,
 				55F18D8816B51FFB0034650D /* GroundHit3.wav */,
@@ -1007,6 +1019,8 @@
 			children = (
 				5505212416B4F4BF0006D7F7 /* BombExplosion.h */,
 				5505212516B4F4C00006D7F7 /* BombExplosion.m */,
+				E6213AAB16B52304002F86CA /* WaterSplash.h */,
+				E6213AAC16B52305002F86CA /* WaterSplash.m */,
 				E6213A9B16B4E18E002F86CA /* Lightning.h */,
 				E6213A9C16B4E18E002F86CA /* Lightning.m */,
 				5505211A16B4C58A0006D7F7 /* FlyingSkullSprite.h */,
@@ -1267,6 +1281,9 @@
 				55F18D8916B51FFB0034650D /* GroundHit1.wav in Resources */,
 				55F18D8A16B51FFB0034650D /* GroundHit2.wav in Resources */,
 				55F18D8B16B51FFB0034650D /* GroundHit3.wav in Resources */,
+				55F18D9416B52A3C0034650D /* ElHit1.wav in Resources */,
+				55F18D9516B52A3C0034650D /* ElHit2.wav in Resources */,
+				55F18D9616B52A3C0034650D /* ElHit3.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,6 +1423,7 @@
 				5505212616B4F4C10006D7F7 /* BombExplosion.m in Sources */,
 				E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */,
 				55F18D8F16B5234D0034650D /* RandomPicker.m in Sources */,
+				E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
