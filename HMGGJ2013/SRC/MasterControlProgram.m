@@ -120,8 +120,7 @@ float frand() {
     self = [super init];
     
     if (self) {
-        level = 3;
-        waveNumber = 9;
+        level = 0;
         
         [self initLevel];
     }
