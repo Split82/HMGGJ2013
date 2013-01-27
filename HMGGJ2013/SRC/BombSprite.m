@@ -8,20 +8,22 @@
 
 #import "BombSprite.h"
 
-#define START_BLINKING_TIME 2.0f
+#define START_BLINKING_TIME 0.0f
 #define LIFE_TIME 3.0f
-#define FRICTION 0.99f
-#define GRAVITY -1000.0f
+#define FRICTION 0.97f
+#define GRAVITY -2000.0f
 #define BLINKING_SPEED 0.12f
-#define BOUNCE_COEF 0.5f
+#define BOUNCE_COEF 0.8f
+#define GROW_SPEED 0.1
 
 @interface BombSprite() {
 
     float groundY;
     CGPoint velocity;
-    NSTimeInterval lifeTime;
+    NSTimeInterval elapsedTime;
     NSArray *animationFrames;
     BOOL scaleChange;
+    float blinkingOffset;
 }
 
 @end
@@ -36,6 +38,7 @@
         self.position = startPos;
         self.scale = [UIScreen mainScreen].scale * 2;
         groundY = initGroundY;
+        blinkingOffset = rand() / (float)RAND_MAX;
 
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
         animationFrames = @[
@@ -58,17 +61,19 @@
         velocity = ccp(velocity.x, - velocity.y * BOUNCE_COEF);
     }
 
-    if (lifeTime > START_BLINKING_TIME) {
-        [self setDisplayFrame:animationFrames[(int)round(lifeTime / BLINKING_SPEED) % 2]];
-        [self setScale:self.scale + 0.015];
+    if (elapsedTime > START_BLINKING_TIME) {
+        
+        [self setDisplayFrame:animationFrames[(int)round(blinkingOffset + elapsedTime / BLINKING_SPEED) % 2]];
+        
+        [self setScale:self.scale + GROW_SPEED * deltaTime];
         scaleChange = !scaleChange;
     }
 
-    if (lifeTime > LIFE_TIME) {
+    if (elapsedTime > LIFE_TIME) {
         [_delegate bombDidDie:self];
     }
 
-    lifeTime += deltaTime;
+    elapsedTime += deltaTime;
 }
 
 @end

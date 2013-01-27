@@ -11,12 +11,12 @@
 
 #define GRAVITY -2000.0f
 #define INITIAL_VEL_Y 800.0f
-#define FRICTION 0.91f
+#define FRICTION 0.97f
 #define ANIMATION_SPEED 0.08
 #define BLINKING_SPEED 0.12
 #define START_BLINKING_TIME 4.5
 #define LIFE_TIME 6.0
-#define BOUNCE_COEF 1.0f
+#define BOUNCE_COEF 0.8f
 
 @interface CoinSprite() {
 

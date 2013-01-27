@@ -296,7 +296,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 20);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26);
     [self addChild:coinsSprite];
     
     coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelWidth + 5, 17.0, labelWidth - 30.0, 21.0)];
@@ -484,7 +484,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (kills > 0) {
         [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
     }
-    else if (kills == 2) {
+
+    if (kills == 2) {
         [self addScoreAddLabelWithText:@"DOUBLE KILL!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
     }
     else if (kills == 3) {
@@ -590,13 +591,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
         [self addScoreAddLabelWithText:@"NOT ENOUGH COINS!" pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+
+        [_bombSpawner cancelSpawning];
     }
     else {
-
-        CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BombEmitParticleSystem.plist"];
-        explosionParticleSystem.autoRemoveOnFinish = YES;
-        explosionParticleSystem.position = _bombSpawner.pos;
-        [particleBatchNode addChild:explosionParticleSystem];
 
         [self addBombAtPosX:bombSpawner.pos.x];
 
@@ -604,6 +602,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
         [AppDelegate player].coins -= BOMB_COINS_COST;
         [self updateUI];
+
+        [_bombSpawner startEndAnimation];
     }
 }
 
