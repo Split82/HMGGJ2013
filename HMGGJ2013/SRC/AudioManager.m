@@ -141,7 +141,7 @@ const int BUFF_EFFECTS = kASC_Right;
     };
     
     [self stopBackgroundMusic];
-    backgroundSound = [soundEngine playSound:SOUND_MENU_MUSIC sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:0.6f loop:NO];
+    backgroundSound = [soundEngine playSound:SOUND_MENU_MUSIC sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }
 
 - (void)stopBackgroundMusic {
