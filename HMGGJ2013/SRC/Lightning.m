@@ -97,7 +97,7 @@ static const float kSegmentLength = 20.0f;
     glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, colors);
     glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, points);
     
-    glLineWidth(MAX(size * 20, 1.0f));
+    glLineWidth(MAX(size * 20, 1.0f) * [UIScreen mainScreen].scale);
     
     glDrawArrays(GL_LINE_STRIP, 0, pointsCount);
     
@@ -106,7 +106,7 @@ static const float kSegmentLength = 20.0f;
     memset(colors, 255, pointsCount * 4);
     glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, colors);
     
-    glLineWidth(1.0f);
+    glLineWidth(1.0f * [UIScreen mainScreen].scale);
     
     glDrawArrays(GL_LINE_STRIP, 0, pointsCount);
     
