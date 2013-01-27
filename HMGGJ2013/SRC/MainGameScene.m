@@ -33,7 +33,9 @@
 #define GAME_OBJECTS_Z_ORDER 30
 
 #define TAP_MIN_DISTANCE2 (60*60)
-#define SWIPE_MIN_DISTANCE2 (20*20)
+#define TAP_THROW_MIN_DISTANCE2 (60*60)
+#define TAP_PICK_COIN_MIN_DISTANCE2 (50*50)
+#define SWIPE_MIN_DISTANCE2 (30*30)
 
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
@@ -255,7 +257,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
     killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 15.0);
-    [mainSpriteBatch addChild:killSprite];
+    killSprite.zOrder = 5000;
+    [self addChild:killSprite];
     
     killsLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 17.0, labelWidth - 28.0, 21.0)];
     [killsLabel setTextAlignment:NSTextAlignmentLeft];
@@ -331,7 +334,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [healthLabel setText:[NSString stringWithFormat:@"%i", [AppDelegate player].health]];
 
     CGSize contentSize = [CCDirector sharedDirector].winSize;
-    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - 22.0, 272.0 * [AppDelegate player].rage, 8.0)];
+    CGFloat offset = 0.0;
+    if (contentSize.height == 480.0)
+        offset = 2.0;
+    else
+        offset = 22.0;
+    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
@@ -604,16 +612,18 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
     
+    NSMutableArray *pickedCoins = [[NSMutableArray alloc] initWithCapacity:10];
+    
     for (CoinSprite *coin in coins) {
+        
+        float distance = ccpDistanceSQ(coin.position, pos);
         
         if (nearestDistance < 0) {
             
-            nearestDistance = ccpDistanceSQ(coin.position, pos);
+            nearestDistance = distance;
             nearestCoin = coin;
         }
         else {
-            
-            float distance = ccpDistanceSQ(coin.position, pos);
             
             if (distance < nearestDistance) {
                 
@@ -621,9 +631,17 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestCoin = coin;
             }
         }
+        
+        if (distance < TAP_PICK_COIN_MIN_DISTANCE2) {
+            
+            [pickedCoins addObject:coin];
+        }
     }
     
+    // only the nearest coin will be picked
+    /*
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
+        
         [coins removeObject:nearestCoin];
 
         CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
@@ -633,17 +651,34 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self coinWasAdded];
         return;
     }
+    */
+    
+    // multiple coins can be picked
+    if ([pickedCoins count]) {
+        
+        for (CoinSprite * coin in pickedCoins) {
+            
+            [coins removeObject:coin];
+            
+            CCAction *action = [CCEaseOut actionWithAction:[CCSequence actions:[CCMoveTo actionWithDuration:1.0f position:coinsSprite.position],
+                                                            [CCCallFuncN actionWithTarget:self selector:@selector(coinEndedCashingAnimation:)], nil] rate:2.0f];
+            
+            [coin runAction:action];
+            [self coinWasAdded];
+        }
+        
+        return;
+    }
     
     for (EnemySprite *enemy in tapEnemies) {
         
+        float distance = ccpDistanceSQ(enemy.position, pos);
         if (nearestDistance < 0) {
             
-            nearestDistance = ccpDistanceSQ(enemy.position, pos);
+            nearestDistance = distance;
             nearestEnemy = enemy;
         }
         else {
-            
-            float distance = ccpDistanceSQ(enemy.position, pos);
             
             if (distance < nearestDistance) {
                 
@@ -651,16 +686,27 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestEnemy = enemy;
             }
         }
+        // multiple enemies will be thrown
+        /*
+        if (distance < TAP_THROW_MIN_DISTANCE2) {
+        
+            [enemy throwFromWall];
+        }
+        */
     }
-    
+
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [nearestEnemy throwFromWall];
+
     }
-    
+
 }
 
 - (void) dismissToMenu {
+    if (!gameOver) {
+        [[AppDelegate player] storeScore:[AppDelegate player].points];
+    }
     [[CCDirector sharedDirector] popScene];
     
     [UIView animateWithDuration:0.25 animations:^{
@@ -723,6 +769,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     gestureRecognizer.delegate = nil;
     masterControlProgram = nil;
     
+    CCLayer *layer = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
+    layer.contentSize = [[CCDirector sharedDirector] winSize];
+    layer.zOrder = 2000;
+    [self addChild:layer];
+    
     gameOver = YES;
     CGSize screen = [CCDirector sharedDirector].winSize;
     gameOverLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, screen.width, screen.height)];
@@ -730,7 +781,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [gameOverLabel setTextAlignment:NSTextAlignmentCenter];
     [gameOverLabel setFont:[UIFont fontWithName:fontName size:30]];
     [gameOverLabel setText:@"Game Over, Loser!"];
-    [gameOverLabel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+    [gameOverLabel setBackgroundColor:[UIColor clearColor]];
     [mainView addSubview:gameOverLabel];
 
     restartButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -741,10 +792,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainView addSubview:restartButton];
 
     [mainView bringSubviewToFront:coinsLabel];
-    [coinsSprite setZOrder:10000];
     [mainView bringSubviewToFront:killsLabel];
-    [killSprite setZOrder:10000];
     [mainView bringSubviewToFront:pauseButton];
+    [rageView setAlpha:0];
+    [rageBackgroundView setAlpha:0];
+    
+    [[AppDelegate player] storeScore:[AppDelegate player].points];
 }
 
 - (void) restartGame
@@ -767,6 +820,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[AppDelegate player] newGame];
     [self updateUI];
     gameOver = NO;
+
+    [rageView setAlpha:1];
+    [rageBackgroundView setAlpha:1];
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AudioManager.h"
 #import "MainMenuGameScene.h"
 #import <GameKit/GameKit.h>
 
@@ -41,6 +42,8 @@
 
 	// Create the main window
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [[AudioManager sharedManager] preloadSounds];
     
     // Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
     CCGLView *glView = [CCGLView viewWithFrame:window.bounds
