@@ -131,7 +131,7 @@
     
     monsterHearth = [[MonsterHearth alloc] init];
     monsterHearth.anchorPoint = ccp(0.5, 0);
-    monsterHearth.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 120.0);
+    monsterHearth.position = ccp([CCDirector sharedDirector].winSize.width * 0.5, CGRectGetMaxY(monsterSprite.boundingBox) + 123.0);
     monsterHearth.zOrder = 5000;
     [self addChild:monsterHearth];
     
