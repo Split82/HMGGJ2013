@@ -132,6 +132,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     // Leaderboard
     GKLeaderboard *leaderboard;
+    
+    BOOL bombSpawning;
 }
 
 @end
@@ -280,6 +282,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self scheduleUpdate];
     
     //[[AudioManager sharedManager] startBackgroundTrack];
+    bombSpawning = NO;
 
     [self initUI];
 }
@@ -615,6 +618,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 #pragma mark - BombSpawnerDelegate
 
 - (void)bombSpawnerWantsBombToSpawn:(BombSpawner *)_bombSpawner {
+    
+    bombSpawning = NO;
 
     if ([AppDelegate player].coins < BOMB_COINS_COST) {
 
@@ -624,6 +629,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     else {
 
+        [[AudioManager sharedManager] bombReleased];
         [self addBombAtPosX:bombSpawner.pos.x];
 
         [[AppDelegate player] updateDropBombCount:1];
@@ -665,12 +671,21 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)longPressStarted:(CGPoint)pos {
 
+    [[AudioManager sharedManager] bombSpawningStarted];
+    bombSpawning = YES;
+    
     [bombSpawner startSpawningAtPos:pos];
 }
 
 - (void)longPressEnded {
 
     //NSLog(@"LongPress end");
+    
+    if (bombSpawning) {
+        [[AudioManager sharedManager] bombSpawningCancelled];
+    }
+    
+    bombSpawning = NO;
     [bombSpawner cancelSpawning];
 }
 

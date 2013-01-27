@@ -26,4 +26,10 @@
 
 - (void)coinHit;
 
+- (void)bombSpawningStarted;
+
+- (void)bombSpawningCancelled;
+
+- (void)bombReleased;
+
 @end
