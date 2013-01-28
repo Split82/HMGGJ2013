@@ -10,6 +10,8 @@
 
 @interface MonsterHearth : CCSprite
 
+@property (nonatomic, assign) float infarkt;
+
 - (void)calc:(ccTime)deltaTime;
 
 @end

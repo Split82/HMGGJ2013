@@ -25,6 +25,7 @@
 #import "MenuCoinSprite.h"
 #import "MonsterHearth.h"
 #import <GameKit/GameKit.h>
+#import "AudioManager.h"
 
 
 #define GAME_OBJECTS_Z_ORDER 30
@@ -156,10 +157,10 @@
     layer.zOrder = 2000;
     [self addChild:layer];
     
+    [[AudioManager sharedManager] startMenuMusic];
+    
     // Update
     [self scheduleUpdate];
-    
-    //[[AudioManager sharedManager] startBackgroundTrack];
     
     [self initUI];
 }

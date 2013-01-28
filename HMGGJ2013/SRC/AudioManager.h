@@ -18,6 +18,8 @@
 
 - (void)stopBackgroundMusic;
 
+- (void)startMenuMusic;
+
 - (void)groundHit;
 
 - (void)enemyHit;
