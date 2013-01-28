@@ -218,7 +218,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self addChild:mainSpriteBatch];
 
     // Particle batch
-    particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10];
+    particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10000];
     particleBatchNode.zOrder = 20;
     [self addChild:particleBatchNode];
 
@@ -1006,6 +1006,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     [coinsLabel removeFromParentAndCleanup:YES];
     [coinsSprite setZOrder:0];
+
+    [bombSpawner cancelSpawning];
     
     menuBackground = [[CCLayerColor alloc] initWithColor:ccc4(0, 0, 0, 0.6 * 255)];
     menuBackground.contentSize = [[CCDirector sharedDirector] winSize];
