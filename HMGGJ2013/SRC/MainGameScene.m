@@ -19,6 +19,7 @@
 #import "MonsterHearth.h"
 #import "MainMenuGameScene.h"
 #import "MenuCoinSprite.h"
+#import "MenuButton.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -125,8 +126,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCSprite *coinsSprite;
     CCLabelBMFont *coinsLabel;
     
-    UIImageView *pauseButton;
-    UIImageView *restartButton;
+    MenuButton *pauseButton;
+    MenuButton *restartButton;
     
     UIView *rageView;
     UIImageView *rageBackgroundView;
@@ -343,14 +344,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     if (contentSize.height > 480.0)
         offset = 16.0;
-    
-    image = [UIImage imageNamed:@"pause"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    pauseButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2, 13.0 + offset, 24.0, 28.0)];
-    [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
-    [pauseButton setImage:image];
-    [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pauseGame)]];
+    pauseButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2 - 10.0, 13.0 + offset - 10.0, 44.0, 48.0)];
+    [pauseButton setImage:[UIImage imageNamed:@"pause"]];
+    [pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:pauseButton];
     [self updateUI];
 }
@@ -1020,13 +1016,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (contentSize.height == 480.0)
         offset = 34.0;
     
-    UIImage *image = [UIImage imageNamed:@"go-play"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    restartButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0 - offset * 2, 114.0 * 2, 16.0 * 2)];
-    [restartButton.layer setMagnificationFilter:kCAFilterNearest];
-    [restartButton setImage:image];
-    [restartButton setUserInteractionEnabled:YES];
-    [restartButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartGame)]];
+    restartButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0 - offset * 2 - 10.0, 114.0 * 2, 16.0 * 2 + 20.0)];
+    [restartButton setImage:[UIImage imageNamed:@"go-play"]];
+    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:restartButton];
     
     gameOver = YES;
