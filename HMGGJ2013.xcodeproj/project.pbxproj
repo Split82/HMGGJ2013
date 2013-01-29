@@ -218,6 +218,7 @@
 		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
 		E6213AB916B531A4002F86CA /* Trail.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AB816B531A4002F86CA /* Trail.m */; };
 		E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AC816B5595E002F86CA /* TeslaCoil.m */; };
+		E62E84F416B88EBC002CC58F /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = E62E84F316B88EBC002CC58F /* todo.txt */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -597,6 +598,7 @@
 		E6213AB816B531A4002F86CA /* Trail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trail.m; sourceTree = "<group>"; };
 		E6213AC716B5595E002F86CA /* TeslaCoil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeslaCoil.h; sourceTree = "<group>"; };
 		E6213AC816B5595E002F86CA /* TeslaCoil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeslaCoil.m; sourceTree = "<group>"; };
+		E62E84F316B88EBC002CC58F /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -836,6 +838,7 @@
 		5537433516B1F72C00D860C2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E62E84F316B88EBC002CC58F /* todo.txt */,
 				5537433616B1F72C00D860C2 /* Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -1381,6 +1384,7 @@
 				55F18DF016B568AA0034650D /* CoinHit3.wav in Resources */,
 				55F18DF116B568AA0034650D /* CoinHit1.wav in Resources */,
 				65A4C05816B811CF00515885 /* menu-resume-h.png in Resources */,
+				E62E84F416B88EBC002CC58F /* todo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

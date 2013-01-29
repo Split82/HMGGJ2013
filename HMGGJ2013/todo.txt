@@ -1,0 +1,25 @@
+
+
+prioritne todo/bugy:
+-chyba restart
+-tutorial
+-opravit naimplementovat achievementy - teraz to velmi nefunguje
+-pridat IAPy
+-menu items / buttony by mali poradne klikatelne
+-nacacheovat particles nech to nesekne
+-opravit bugu ze ked sa vatim do hry z backgroundu tak mam nejake blbo vykreslene menu a dva srdcia a potom ked dam remusme game, resp play again tak mam cierny priesvitny overlay aj pocas gameplay
+
+
+
+napady:
+-ked uz zrusit rage tak nieco nechat na automatiku - prekvapenie hraca je fajn!
+-bonusivy panacik co doplni vodu
+-ked uz to srdce mat vo vnutri tak ono predsa samo vie davat elektriku tak to nejak napojit kablami na tu teslu
+-viac druhov bobmy - ked raz prejde progress tak zakladna a ked 2x druha atd - daco na styl nabijania toho meca v DMC4
+-rozne uberanie slime podla typu nepriatela
+-tlusty typekc co sa rozpadne na viacero malych
+-kuzelnik zo stitom
+-typkovia s helmou co maju kym chodia dole a na nich bomba nefunguje
+-dropy rozne - nielen mince - HPcka, bonusy addony
+-priserka/srdce v nadobe poskoci a spravi take zemetrasenie a oni popadaju vsetci dole
+-ten swipe bude v default stave davat dole iba jedneho a az upgrade ich moze dat dole viacerych
