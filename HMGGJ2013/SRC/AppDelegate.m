@@ -164,7 +164,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     MainGameScene *scene = (id)[[CCDirector sharedDirector] runningScene];
-    if ([scene isKindOfClass:[MainGameScene class]] && ![scene pause]) {
+    if ([scene isKindOfClass:[MainGameScene class]] && ![scene pause] && ![scene gameOver]) {
         [scene performSelector:@selector(pauseGame)];
     }
     [[CCDirector sharedDirector] stopAnimation];

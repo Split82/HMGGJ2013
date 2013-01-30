@@ -119,7 +119,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     // State vars
     BOOL sceneInitWasPerformed;
-    BOOL gameOver;
     
     // UI vars
     UIView *mainView;
@@ -155,6 +154,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 @synthesize menuBackground;
 @synthesize mainView;
+@synthesize gameOver;
 
 - (void)onEnter {
 
