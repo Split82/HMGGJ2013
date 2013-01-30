@@ -6,12 +6,13 @@ prioritne todo/bugy:
 -opravit naimplementovat achievementy - teraz to velmi nefunguje
 -pridat IAPy
 -menu items / buttony by mali poradne klikatelne
--nacacheovat particles nech to nesekne
 -opravit bugu ze ked sa vatim do hry z backgroundu tak mam nejake blbo vykreslene menu a dva srdcia a potom ked dam remusme game, resp play again tak mam cierny priesvitny overlay aj pocas gameplay
 
 
 
 napady:
+-upgrade typu coin magnet jak uz vlastne teraz mame ze ti to zbiera viacero naraz a potom jeho dalsi level ze to zbiera samo automaticky
+-pasivny upgrade typu 2x coins ako v Temple Run
 -ked uz zrusit rage tak nieco nechat na automatiku - prekvapenie hraca je fajn!
 -bonusivy panacik co doplni vodu
 -ked uz to srdce mat vo vnutri tak ono predsa samo vie davat elektriku tak to nejak napojit kablami na tu teslu
@@ -23,3 +24,4 @@ napady:
 -dropy rozne - nielen mince - HPcka, bonusy addony
 -priserka/srdce v nadobe poskoci a spravi take zemetrasenie a oni popadaju vsetci dole
 -ten swipe bude v default stave davat dole iba jedneho a az upgrade ich moze dat dole viacerych
+-teraz ked tapnes na swipera tak mu to nic nerobi/a ani to neni nijak vizualne zdoraznene.  ono to moze znamenat ze na neho elektrika neposobi ale potom bude treba pridat novy attack. ale kludne nechat aj tak len nejak povedat ze na neho treba swipeovat

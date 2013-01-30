@@ -31,7 +31,7 @@ typedef enum {
 
 -(id) initWithType:(EnemyType)type;
 -(void) calc:(ccTime)time;
--(BOOL) throwFromWall;
+-(void) throwFromWall;
 +(void) resetWallGrid;
 
 @property (nonatomic, weak) NSObject <EnemySpriteDelegate> *delegate;

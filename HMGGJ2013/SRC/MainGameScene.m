@@ -45,6 +45,9 @@
 #define SLIME_GROUND_Y (GROUND_Y + 1)
 #define SLIME_MAX_HEIGHT 300
 
+#define MAX_BODY_DEBRIS_COUNT 300
+#define BLOODY_MARY_BODY_DEBRIS_COUNT 150
+
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
     const float l2 = ccpDistanceSQ(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
@@ -95,6 +98,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedLightnings;
     NSMutableArray *killedWaterSplashes;
     NSMutableArray *killedTrails;
+    
+    NSMutableArray *unusedBloodParticleSystems;
+
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -219,7 +225,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self addChild:mainSpriteBatch];
 
     // Particle batch
-    particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10];
+    particleBatchNode = [[CCParticleBatchNode alloc] initWithFile:kSimpleParticleTextureFileName capacity:10000];
     particleBatchNode.zOrder = 20;
     [self addChild:particleBatchNode];
 
@@ -292,6 +298,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[AudioManager sharedManager] startBackgroundMusic];
     bombSpawning = NO;
 
+    
+    for (int i = 0; i < MAX_BODY_DEBRIS_COUNT; i++) {
+        
+        [unusedBloodParticleSystems addObject:[self createBloodParticleSystem:NO]];
+    }
+    
     [self initUI];
 }
 
@@ -455,24 +467,44 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coin removeFromParentAndCleanup:YES];
 }
 
+- (CCParticleSystemQuad*)createBloodParticleSystem:(BOOL)getFromUnusedSystems{
+    
+    if ([unusedBloodParticleSystems count] && getFromUnusedSystems == YES) {
+        
+        CCParticleSystemQuad *bloodParticleSystem = [unusedBloodParticleSystems lastObject];
+        [unusedBloodParticleSystems removeLastObject];
+        
+        [bloodParticleSystem resetSystem];
+        return bloodParticleSystem;
+    }
+    
+    CCParticleSystemQuad *bloodParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BloodParticleSystem.plist"];
+    
+    return bloodParticleSystem;
+}
+
 - (void)createEnemyBodyExplosionAtPos:(CGPoint)pos enemyType:(EnemyType)enemyType {
 
     int numberOfBodyPars = rand() % 3 + 3;
 
     for (int i = 0; i < numberOfBodyPars; i++) {
 
-        // Particle system
-        CCParticleSystemQuad *bloodParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BloodParticleSystem.plist"];
-        bloodParticleSystem.position = pos;
-        [particleBatchNode addChild:bloodParticleSystem];
-
+        if ([enemyBodyDebrises count] >= MAX_BODY_DEBRIS_COUNT) {
+            
+            break;
+        }
+        
         // Debris
         float angle = M_PI * (rand() / (float)RAND_MAX) - M_PI_2;
         CGPoint randVelocity;
         randVelocity.x = sinf(angle) * 1500.0f;
         randVelocity.y = cosf(angle) * 1500.0f;
         EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:enemyType velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
-        enemyBodyDebris.bloodParticleSystem = bloodParticleSystem;
+        enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
+        
+        enemyBodyDebris.bloodParticleSystem.position = pos;
+        [particleBatchNode addChild:enemyBodyDebris.bloodParticleSystem];
+        
         enemyBodyDebris.position = pos;
         enemyBodyDebris.delegate = self;
         enemyBodyDebris.zOrder = GAME_OBJECTS_Z_ORDER - 1;
@@ -510,6 +542,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         }
     }
 
+    if ([enemyBodyDebrises count] > BLOODY_MARY_BODY_DEBRIS_COUNT) {
+        
+        [[AppDelegate player] filledFloorWithBlood];
+    }
+    
     if (kills > 0) {
         [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
     }
@@ -644,7 +681,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainSpriteBatch addChild:waterSplash];
     [waterSplashes addObject:waterSplash];
     
-    if ([AppDelegate player].health == 0) {
+    if ([AppDelegate player].health <= 0) {
         [self showGameOver];
     }
     [self updateUI];
@@ -687,6 +724,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)enemyBodyDebrisDidDie:(EnemyBodyDebris *)enemyBodyDebris {
 
+    [unusedBloodParticleSystems addObject:enemyBodyDebris.bloodParticleSystem];
     [enemyBodyDebris.bloodParticleSystem removeFromParentAndCleanup:YES];
 
     [killedEnemyBodyDebrises addObject:enemyBodyDebris];
@@ -744,10 +782,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
             
-            if ([enemy throwFromWall]) {
-                
-                [self createLightningToEnemy:enemy];
-            }
+            [self throwEnemyFromWall:enemy];
         }
     }
     
@@ -857,10 +892,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         /*
         if (distance < TAP_THROW_MIN_DISTANCE2) {
         
-             if ([enemy throwFromWall]) {
-             
-             [self createLightningToEnemy:enemy];
-             }
+         [self enemy];
+
 
         }
         */
@@ -868,13 +901,26 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
-        if ([nearestEnemy throwFromWall]) {
-            
-            [self createLightningToEnemy:nearestEnemy];
-        }
 
+        [self throwEnemyFromWall:nearestEnemy];
     }
 
+}
+
+- (void) throwEnemyFromWall:(EnemySprite*)enemy {
+    
+    if (enemy.state != kEnemyStateClimbing && enemy.state != kEnemyStateCrossing) {
+        
+        return;
+    }
+    
+    if (enemy.state == kEnemyStateCrossing && [AppDelegate player].health <= ENEMY_ATTACK_FORCE) {
+        
+        [[AppDelegate player] closeCall];
+    }
+    
+    [enemy throwFromWall];
+    [self createLightningToEnemy:enemy];
 }
 
 - (void) setPause:(BOOL)pause
