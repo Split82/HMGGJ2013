@@ -29,5 +29,6 @@
 @property (nonatomic, strong) UIView *mainView;
 
 @property (nonatomic, assign) BOOL pause;
+@property (nonatomic, assign) BOOL gameOver;
 
 @end
