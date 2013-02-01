@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Hyperbolic Magnetism. All rights reserved.
 //
 
-#import "CoinSprite.h"
+@interface MenuCoinSprite : CCSprite
 
-@interface MenuCoinSprite : CoinSprite
+- (void)calc:(ccTime)deltaTime;
 
 @end

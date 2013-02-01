@@ -19,10 +19,20 @@
 #define LIFE_TIME 6.0
 #define BOUNCE_COEF 0.8f
 
+#define NUMBER_OF_ANIMATION_FRAMES 16
+
 @interface CoinSprite() {
 
     CGRect spaceBounds;
     BOOL stable;
+
+    float elapsedTime;
+    float groundY;
+    CGPoint velocity;
+
+    NSArray *animationFrames;
+    int animationIndexes[NUMBER_OF_ANIMATION_FRAMES];
+    int animationOffset;
 }
 
 @end
@@ -41,7 +51,7 @@
         spaceBounds = initSpaceBounds;
         velocity = ccp(1000 - 2000 * (rand() / (float)RAND_MAX), INITIAL_VEL_Y);
 
-        animationOffset = rand() % 14;
+        animationOffset = rand() % NUMBER_OF_ANIMATION_FRAMES;
         
         CCSpriteFrameCache *spriteFrameCache = [CCSpriteFrameCache sharedSpriteFrameCache];
         animationFrames = @[
@@ -53,22 +63,25 @@
         [spriteFrameCache spriteFrameByName:@"coin6.png"],
         [spriteFrameCache spriteFrameByName:@"coin7.png"],
         [spriteFrameCache spriteFrameByName:@"coin8.png"],
+        [spriteFrameCache spriteFrameByName:@"coin9.png"],        
         ];
 
         animationIndexes[0] = 0;
         animationIndexes[1] = 1;
         animationIndexes[2] = 2;
         animationIndexes[3] = 3;
-        animationIndexes[4] = 7;
-        animationIndexes[5] = 6;
-        animationIndexes[6] = 5;
-        animationIndexes[7] = 4;
-        animationIndexes[8] = 5;
-        animationIndexes[9] = 6;
-        animationIndexes[10] = 7;
-        animationIndexes[11] = 3;
-        animationIndexes[12] = 2;
-        animationIndexes[13] = 1;
+        animationIndexes[4] = 8;
+        animationIndexes[5] = 7;
+        animationIndexes[6] = 6;
+        animationIndexes[7] = 5;
+        animationIndexes[8] = 4;
+        animationIndexes[9] = 5;
+        animationIndexes[10] = 6;
+        animationIndexes[11] = 7;
+        animationIndexes[12] = 8;
+        animationIndexes[13] = 3;
+        animationIndexes[14] = 2;
+        animationIndexes[15] = 1;
     }
     return self;
 }
@@ -120,17 +133,17 @@
         }
     }
 
-    [self setDisplayFrame:animationFrames[animationIndexes[(animationOffset + (int)round(lifeTime / ANIMATION_SPEED)) % 14]]];
+    [self setDisplayFrame:animationFrames[animationIndexes[(animationOffset + (int)round(elapsedTime / ANIMATION_SPEED)) % NUMBER_OF_ANIMATION_FRAMES]]];
 
-    if (lifeTime > START_BLINKING_TIME) {
-        self.visible = ((int)round(lifeTime / BLINKING_SPEED) % 2) == 0;
+    if (elapsedTime > START_BLINKING_TIME) {
+        self.visible = ((int)round(elapsedTime / BLINKING_SPEED) % 2) == 0;
     }
 
-    if (lifeTime > LIFE_TIME) {
+    if (elapsedTime > LIFE_TIME) {
         [_delegate coinDidDie:self];
     }
 
-    lifeTime += deltaTime;
+    elapsedTime += deltaTime;
 }
 
 @end

@@ -23,7 +23,12 @@
     
     if (self) {
         _backgroundLayer = [CALayer layer];
-        [_backgroundLayer setMagnificationFilter:kCAFilterNearest];
+        _backgroundLayer.magnificationFilter = kCAFilterNearest;
+        _backgroundLayer.actions = @{ @"onOrderIn":[NSNull null],
+        @"onOrderOut":[NSNull null],
+        @"sublayers":[NSNull null],
+        @"contents":[NSNull null],
+        @"bounds":[NSNull null]};
         [self.layer addSublayer:_backgroundLayer];
     }
     return self;

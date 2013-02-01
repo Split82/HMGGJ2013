@@ -339,7 +339,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     pauseButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2 - 10.0, 1.0 + offsetY, 44.0, 48.0)];
     [pauseButton setImage:[UIImage imageNamed:@"pause"]];
-    [pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchUpInside];
+    [pauseButton addTarget:self action:@selector(pauseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:pauseButton];
 
     if (contentSize.height == 480.0) {
@@ -431,9 +431,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void)addMenuCoinAtPos:(CGPoint)pos {
-    CoinSprite *newCoin = [[MenuCoinSprite alloc] initWithStartPos:pos spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+    
+    MenuCoinSprite *newCoin = [[MenuCoinSprite alloc] init];
+    newCoin.anchorPoint = ccp(0.5f, 0.5f);
+    newCoin.position = pos;
     newCoin.zOrder = 4000;
-    newCoin.delegate = self;
     [menuCoins addObject:newCoin];
     [self addChild:newCoin];
 }
@@ -1022,8 +1024,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
 }
 
-- (void) setPause:(BOOL)pause
-{
+- (void)setPause:(BOOL)pause {
+
     _pause = pause;
     if (_pause == NO) {
         for (MenuCoinSprite *coin in menuCoins) {
@@ -1037,7 +1039,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
 }
 
-- (void) pauseGame {
+- (void)pauseButtonPressed {
+    
     [self setPause:YES];
     
     gestureRecognizer.delegate = nil;
