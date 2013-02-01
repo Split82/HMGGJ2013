@@ -16,6 +16,9 @@
 @interface MasterControlProgram : NSObject
 
 @property (nonatomic, weak) id <MainframeDelegate> mainframe;
+@property (nonatomic, assign) BOOL tutorialFinished;
+@property (nonatomic, assign) BOOL tapperKilled;
+@property (nonatomic, assign) BOOL swiperKilled;
 
 - (void)calc:(ccTime)deltaTime;
 

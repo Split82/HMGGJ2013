@@ -18,6 +18,8 @@
 // wait for user to kill all the wave?
 #define NOWAIT 0.0f
 
+#define TUTORIAL_FINISHED_KEY  @"tutorial"
+
 const float START_ENEMIES_PER_WAVE[]      = {    1.000f,    1.000f,    5.000f,    8.000f};
 const float END_ENEMIES_PER_WAVE[]        = {   16.000f,   10.000f,   20.000f,   15.000f};
 
@@ -129,6 +131,18 @@ float frand() {
 }
 
 - (void)initLevel {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * res = [defaults objectForKey:TUTORIAL_FINISHED_KEY];
+    if (res) {
+        
+        _tutorialFinished = [res boolValue];
+    }
+    else {
+        
+        _tutorialFinished = NO;
+    }
+    
     int levelLength = level == 0 ? LEVEL_UP_WAVE_COUNT[0] : LEVEL_UP_WAVE_COUNT[level] - LEVEL_UP_WAVE_COUNT[level-1];
     
     // calculate deltas
@@ -158,6 +172,26 @@ float frand() {
     
     [self scheduleNewEnemySpawn];
     [self sheduleNewCoinSpawn];
+    
+
+    _tutorialFinished = YES;
+    _tapperKilled = NO;
+    _swiperKilled = NO;
+    
+    if (!_tutorialFinished) {
+        
+        nextEnemySpawnTime = 2;
+    }
+    
+}
+
+- (void)setTutorialFinished:(BOOL)tutorialFinished {
+    
+    _tutorialFinished = tutorialFinished;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults setObject:[NSNumber numberWithBool:tutorialFinished] forKey:TUTORIAL_FINISHED_KEY];
+    [defaults synchronize];
 }
 
 - (void)levelUp {
@@ -169,24 +203,49 @@ float frand() {
 }
 
 - (void)calc:(ccTime)deltaTime; {
-    nextWaveTime -= deltaTime;
-    nextEnemySpawnTime -= deltaTime;
+    
+
     nextRandomCoinTime -= deltaTime;
 
     if (nextRandomCoinTime < 0) {
         [self spawnCoin];
     }
-    
-    if (nextWaveTime < 0) {
-        [self startWave];
-    }
-    
-    if (nextEnemySpawnTime < 0) {
-        [self spawnEnemy];
-    }
 
+    if (_tutorialFinished) {
+        
+        nextWaveTime -= deltaTime;
+        nextEnemySpawnTime -= deltaTime;
+        
+        if (nextWaveTime < 0) {
+            
+            [self startWave];
+        }
+        
+        if (nextEnemySpawnTime < 0) {
+            
+            [self spawnEnemy];
+        }
+    }
+    else {
+
+        if ((!_tapperKilled && ([_mainframe countTapEnemies] == 0)) || (_tapperKilled && !_swiperKilled && ([_mainframe countSwipeEnemies] == 0))) {
+            
+            nextEnemySpawnTime -= deltaTime;
+            
+            if (nextEnemySpawnTime < 0) {
+                
+                [_mainframe addEnemy:_tapperKilled ? kEnemyTypeSwipe : kEnemyTypeTap];
+                nextEnemySpawnTime = 1;
+            }
+        }
+        
+        if (_swiperKilled && [_mainframe countTapEnemies] == 0 && [_mainframe countSwipeEnemies] == 0) {
+            
+            self.tutorialFinished = YES;
+            [self scheduleNewEnemySpawn];
+        }
+    }
 }
-
 
 - (void)scheduleNewEnemySpawn {
     
