@@ -127,19 +127,18 @@ const int BUFF_EFFECTS = kASC_Right;
     [loadRequests addObject:[[CDBufferLoadRequest alloc] init:SOUND_AMBIENT filePath:@"Ambient.mp3"]];
     
     [soundEngine loadBuffersAsynchronously:loadRequests];
+
+    // TODO loading progress
 }
 
 - (void)startBackgroundMusic {
     
     [self stopBackgroundMusic];
-    backgroundSound = [soundEngine playSound:SOUND_AMBIENT sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.6f loop:YES];
+    backgroundSound = [soundEngine playSound:SOUND_AMBIENT sourceGroupId:BUFF_BG pitch:1.0f pan:0.0f gain:0.2f loop:YES];
 }
 
 - (void)startMenuMusic {
-    if (soundEngine.asynchLoadProgress < 1.0f) {
-        [self performSelector:@selector(startMenuMusic) withObject:nil afterDelay:1.0f];
-    };
-    
+
     [self stopBackgroundMusic];
     backgroundSound = [soundEngine playSound:SOUND_MENU_MUSIC sourceGroupId:BUFF_EFFECTS pitch:1.0f pan:0.0f gain:0.6f loop:YES];
 }

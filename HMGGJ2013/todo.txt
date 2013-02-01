@@ -7,6 +7,7 @@ prioritne todo/bugy:
 -pridat IAPy
 -menu items / buttony by mali poradne klikatelne
 -opravit bugu ze ked sa vatim do hry z backgroundu tak mam nejake blbo vykreslene menu a dva srdcia a potom ked dam remusme game, resp play again tak mam cierny priesvitny overlay aj pocas gameplay
+-close button v about
 
 
 
