@@ -1384,16 +1384,16 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         calcTime -= FRAME_TIME_INTERVAL;
     }
 
-    /*UIImage *image = [self captureScreen];
+    UIImage *image = [self captureScreen];
     static int frameNum = 0;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT , 0), ^{
-        NSString *fileName = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.png", frameNum]];
-        [UIImagePNGRepresentation(image) writeToFile:fileName atomically:YES];
+        NSString *fileName = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", frameNum]];
+        [UIImageJPEGRepresentation(image, 0.8) writeToFile:fileName atomically:YES];
     });
 
-    frameNum++;*/
+    frameNum++;
 }
 
 - (float)slimeSurfacePosY {
