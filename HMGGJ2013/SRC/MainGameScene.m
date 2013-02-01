@@ -955,7 +955,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [[AppDelegate player] closeCall];
     }
 
-     
+    masterControlProgram.swiperKilled = YES;
     // Debris
     CGPoint pos;
     pos = ccpAdd(enemy.position, ccpMult(ccpNormalize(CGPointMake(direction.y, -direction.x)), 10));
@@ -1100,6 +1100,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void) enemyDidDie:(EnemySprite *)enemy
 {
+    if (enemy.type == kEnemyTypeTap) {
+        
+        masterControlProgram.tapperKilled = YES;
+    }
+    
     [AppDelegate player].kills++;
     [self addCoinAtPos:enemy.position];
     [self updateUI];
