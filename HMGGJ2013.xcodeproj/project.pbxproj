@@ -218,7 +218,6 @@
 		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
 		E6213AB916B531A4002F86CA /* Trail.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AB816B531A4002F86CA /* Trail.m */; };
 		E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AC816B5595E002F86CA /* TeslaCoil.m */; };
-		E62E84F416B88EBC002CC58F /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = E62E84F316B88EBC002CC58F /* todo.txt */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -1384,7 +1383,6 @@
 				55F18DF016B568AA0034650D /* CoinHit3.wav in Resources */,
 				55F18DF116B568AA0034650D /* CoinHit1.wav in Resources */,
 				65A4C05816B811CF00515885 /* menu-resume-h.png in Resources */,
-				E62E84F416B88EBC002CC58F /* todo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
