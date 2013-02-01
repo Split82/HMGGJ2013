@@ -528,21 +528,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
 
             [killedTapEnemies addObject:enemy];
+            [enemy removeFromParentAndCleanup:YES];
 
             [self createEnemyBodyExplosionAtPos:enemy.position enemyType:enemy.type];
             [self enemyDidDie:enemy];
 
-            kills++;
-        }
-    }
-
-    for (EnemySprite *enemy in swipeEnemies) {
-        if (ccpLengthSQ(ccpSub(enemy.position, pos)) < BOMB_KILL_PERIMETER * BOMB_KILL_PERIMETER) {
-
-            [killedSwipeEnemies addObject:enemy];
-
-            [self createEnemyBodyExplosionAtPos:enemy.position enemyType:enemy.type];
-            [self enemyDidDie:enemy];
             kills++;
         }
     }
@@ -606,6 +596,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)scoreAddLabelDidFinish:(ScoreAddLabel *)label {
 
     [killedLabels addObject:label];
+    [label removeFromParentAndCleanup:YES];
 }
 
 #pragma mark - CoinSpriteDelegate
@@ -613,6 +604,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)coinDidDie:(CoinSprite *)coinSprite {
 
     [killedCoins addObject:coinSprite];
+    [coinSprite removeFromParentAndCleanup:YES];
 }
 
 #pragma mark - FlyingSkullSpriteDelegate
@@ -620,6 +612,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)flyingSkullSpriteDidFinish:(FlyingSkullSprite *)flyingSkull {
 
     [killedFlyingSkulls addObject:flyingSkull];
+    [flyingSkull removeFromParentAndCleanup:YES];
+    
 }
 
 
@@ -628,6 +622,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)lightningDidFinish:(Lightning *)lightning {
     
     [killedLightnings addObject:lightning];
+    [lightning removeFromParentAndCleanup:YES];
 }
 
 #pragma mark - WaterSplashDelegate
@@ -635,6 +630,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)waterSplashDidFinish:(WaterSplash *)waterSplash {
     
     [killedWaterSplashes addObject:waterSplash];
+    [waterSplash removeFromParentAndCleanup:YES];
 }
 
 #pragma mark - TrailDelegate
@@ -647,6 +643,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     
     [killedTrails addObject:trail];
+    [trail removeFromParentAndCleanup:YES];
 }
 
 
@@ -655,6 +652,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)bombDidDie:(BombSprite *)bombSprite {
 
     [killedBombs addObject:bombSprite];
+    [bombSprite removeFromParentAndCleanup:YES];
+    
     [self makeBombExplosionAtPos:bombSprite.position];
     [screenShaker shake];
 }
@@ -671,6 +670,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
         [killedSwipeEnemies addObject:enemy];
     }
+    [enemy removeFromParentAndCleanup:YES];
+    
     [AppDelegate player].health -= ENEMY_ATTACK_FORCE;
     int diff = (100 - [AppDelegate player].health);
     monsterHearth.infarkt = (float)diff / 100;
@@ -697,6 +698,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 - (void)bombExplosionDidFinish:(BombExplosion *)bombExplosion {
 
     [killedBombExplosions addObject:bombExplosion];
+    [bombExplosion removeFromParentAndCleanup:YES];
+    
 }
 
 #pragma mark - BombSpawnerDelegate
@@ -733,7 +736,20 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [enemyBodyDebris.bloodParticleSystem removeFromParentAndCleanup:YES];
 
     [killedEnemyBodyDebrises addObject:enemyBodyDebris];
+    [enemyBodyDebris removeFromParentAndCleanup:YES];
 }
+
+- (void)enemyBodyDebrisDidDieAndSpawnTapEnemy:(EnemyBodyDebris *)enemyBodyDebris {
+    
+    [self enemyBodyDebrisDidDie:enemyBodyDebris];
+    
+    EnemySprite *enemy = [[EnemySprite alloc] initWithWakingTapperWithPos:enemyBodyDebris.position];
+    [tapEnemies addObject:enemy];
+    enemy.zOrder = GAME_OBJECTS_Z_ORDER;
+    [mainSpriteBatch addChild:enemy];
+    enemy.delegate = self;
+}
+
 
 #pragma mark - MainframeDelegate
 
@@ -787,7 +803,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
             
-            [self throwEnemyFromWall:enemy];
+            [self sliceEnemyFromWall:enemy direction:(pos.x - gestureRecognizer.lastPos.x)];
         }
     }
     
@@ -815,7 +831,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)tapRecognized:(CGPoint)pos {
 
-    EnemySprite *nearestEnemy = nil;
     CoinSprite *nearestCoin = nil;
     float nearestDistance = -1;
     
@@ -846,7 +861,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     }
     
     // only the nearest coin will be picked
-    /*
+    
     if (nearestCoin && nearestDistance < TAP_MIN_DISTANCE2) {
         
         [coins removeObject:nearestCoin];
@@ -858,9 +873,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [self coinWasAdded];
         return;
     }
-    */
+    
     
     // multiple coins can be picked
+    /*
     if ([pickedCoins count]) {
         
         for (CoinSprite * coin in pickedCoins) {
@@ -876,7 +892,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         return;
     }
+    */
     
+    EnemySprite *nearestEnemy = nil;
+    
+    nearestDistance = -1;
     for (EnemySprite *enemy in tapEnemies) {
         
         float distance = ccpDistanceSQ(enemy.position, pos);
@@ -893,26 +913,43 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
                 nearestEnemy = enemy;
             }
         }
-        // multiple enemies will be thrown
-        /*
-        if (distance < TAP_THROW_MIN_DISTANCE2) {
-        
-         [self enemy];
-
-
-        }
-        */
     }
 
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
 
         [self throwEnemyFromWall:nearestEnemy];
+        return;
     }
 
+    nearestDistance = - 1;
+    for (EnemySprite *enemy in swipeEnemies) {
+        
+        float distance = ccpDistanceSQ(enemy.position, pos);
+        if (nearestDistance < 0) {
+            
+            nearestDistance = distance;
+            nearestEnemy = enemy;
+        }
+        else {
+            
+            if (distance < nearestDistance) {
+                
+                nearestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+    
+    if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
+        
+        
+        [self throwEnemyFromWall:nearestEnemy];
+        return;
+    }
 }
 
-- (void) throwEnemyFromWall:(EnemySprite*)enemy {
+- (void) sliceEnemyFromWall:(EnemySprite*)enemy direction:(float)direction {
     
     if (enemy.state != kEnemyStateClimbing && enemy.state != kEnemyStateCrossing) {
         
@@ -923,9 +960,72 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         [[AppDelegate player] closeCall];
     }
+
+     
+    // Debris
+    CGPoint pos = enemy.position;
+    pos.y += 10;
     
-    [enemy throwFromWall];
-    [self createLightningToEnemy:enemy];
+    float angle = -M_PI * (rand() / (float)RAND_MAX) / 4 - M_PI / 8;
+    CGPoint randVelocity;
+    randVelocity.x = cosf(angle) * 30.0f * direction;
+    randVelocity.y = sinf(angle) * 30.0f;
+    EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:kEnemyTypeSwipe velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+    enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
+    enemyBodyDebris.bloodParticleSystem.position = pos;
+    [particleBatchNode addChild:enemyBodyDebris.bloodParticleSystem];
+    
+    enemyBodyDebris.swipeEnemyPart = YES;
+    enemyBodyDebris.position = pos;
+    enemyBodyDebris.delegate = self;
+    enemyBodyDebris.zOrder = GAME_OBJECTS_Z_ORDER - 1;
+    [enemyBodyDebrises addObject:enemyBodyDebris];
+    [mainSpriteBatch addChild:enemyBodyDebris];
+    
+    pos.y += 20;
+    
+    angle = M_PI * (rand() / (float)RAND_MAX) / 4 + M_PI / 8;
+    randVelocity.x = cosf(angle) * 30.0f * direction;
+    randVelocity.y = sinf(angle) * 30.0f;
+    enemyBodyDebris = [[EnemyBodyDebris alloc] init:kEnemyTypeSwipe velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
+    enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
+    enemyBodyDebris.bloodParticleSystem.position = pos;
+    [particleBatchNode addChild:enemyBodyDebris.bloodParticleSystem];
+    
+    enemyBodyDebris.swipeEnemyPart = YES;
+    enemyBodyDebris.position = pos;
+    enemyBodyDebris.delegate = self;
+    enemyBodyDebris.zOrder = GAME_OBJECTS_Z_ORDER - 1;
+    [enemyBodyDebrises addObject:enemyBodyDebris];
+    [mainSpriteBatch addChild:enemyBodyDebris];
+    
+    [killedSwipeEnemies addObject:enemy];
+    [enemy removeFromParentAndCleanup:YES];
+}
+
+
+- (void) throwEnemyFromWall:(EnemySprite*)enemy {
+    
+    if (enemy.state != kEnemyStateClimbing && enemy.state != kEnemyStateCrossing) {
+        
+        return;
+    }
+    
+    
+    if (enemy.type == kEnemyTypeSwipe) {
+     
+        [self createLightningToEnemy:enemy];
+    }
+    else {
+        
+        if (enemy.state == kEnemyStateCrossing && [AppDelegate player].health <= ENEMY_ATTACK_FORCE) {
+            
+            [[AppDelegate player] closeCall];
+        }
+        
+        [enemy throwFromWall];
+        [self createLightningToEnemy:enemy];
+    }
 }
 
 - (void) setPause:(BOOL)pause
@@ -1253,6 +1353,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         [bubble calc:deltaTime];
         if (bubble.position.y > CGRectGetMaxY(slimeSprite.boundingBox) - bubble.boundingBox.size.height) {
             [killedBubbles addObject:bubble];
+            [bubble removeFromParentAndCleanup:YES];
         }
     }
 
@@ -1283,76 +1384,62 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Killed
     for (CoinSprite *coin in killedCoins) {
         [coins removeObject:coin];
-        [coin removeFromParentAndCleanup:YES];
     }
     [killedCoins removeAllObjects];
 
+
     for (BombSprite *bomb in killedBombs) {
         [bombs removeObject:bomb];
-        [bomb removeFromParentAndCleanup:YES];
     }
     [killedBombs removeAllObjects];
 
     for (EnemySprite *killedEnemy in killedTapEnemies) {
-
         [tapEnemies removeObject:killedEnemy];
-        [killedEnemy removeFromParentAndCleanup:YES];
     }
     [killedTapEnemies removeAllObjects];
 
     for (EnemySprite *killedEnemy in killedSwipeEnemies) {
-
         [swipeEnemies removeObject:killedEnemy];
-        [killedEnemy removeFromParentAndCleanup:YES];
     }
     [killedSwipeEnemies removeAllObjects];
 
     for (EnemyBodyDebris *enemyBodyDebris in killedEnemyBodyDebrises) {
-
         [enemyBodyDebrises removeObject:enemyBodyDebris];
-        [enemyBodyDebris removeFromParentAndCleanup:YES];
     }
     [killedEnemyBodyDebrises removeAllObjects];
 
     for (SlimeBubbleSprite *bubble in killedBubbles) {
         [bubbles removeObject:bubble];
-        [bubble removeFromParentAndCleanup:YES];
     }
     [killedBubbles removeAllObjects];
 
     for (ScoreAddLabel *label in killedLabels) {
         [labels removeObject:label];
-        [label removeFromParentAndCleanup:YES];
     }
     [killedLabels removeAllObjects];
 
     for (FlyingSkullSprite *skull in killedFlyingSkulls) {
         [flyingSkulls removeObject:skull];
-        [skull removeFromParentAndCleanup:YES];
     }
     [killedFlyingSkulls removeAllObjects];
     
     for (Lightning *lightning in killedLightnings) {
         [lightnings removeObject:lightning];
-        [lightning removeFromParentAndCleanup:YES];
     }
     [killedLightnings removeAllObjects];
 
     for (WaterSplash *waterSplash in killedWaterSplashes) {
         [waterSplashes removeObject:waterSplash];
-        [waterSplash removeFromParentAndCleanup:YES];
     }
     [killedWaterSplashes removeAllObjects];
     
     for (Trail *trail in killedTrails) {
         [trails removeObject:trail];
-        [trail removeFromParentAndCleanup:YES];
     }
     [killedTrails removeAllObjects];
     
     for (BombExplosion *bombExplosion in killedBombExplosions) {
         [bombExplosions removeObject:bombExplosion];
-        [bombExplosion removeFromParentAndCleanup:YES];
     }
     [killedBombExplosions removeAllObjects];
 

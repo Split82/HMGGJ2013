@@ -17,6 +17,8 @@
 
 @property (nonatomic, weak) CCParticleSystem *bloodParticleSystem;
 @property (nonatomic, weak) id <EnemyBodyDebrisDelegate> delegate;
+@property (nonatomic, assign) BOOL swipeEnemyPart;
+
 
 - (id)init:(EnemyType)enemyType velocity:(CGPoint)initVelocity spaceBounds:(CGRect)initSpaceBounds;
 - (void)calc:(ccTime)deltaTime;
@@ -27,5 +29,6 @@
 @protocol EnemyBodyDebrisDelegate <NSObject>
 
 - (void)enemyBodyDebrisDidDie:(EnemyBodyDebris*)enemyBodyDebris;
+- (void)enemyBodyDebrisDidDieAndSpawnTapEnemy:(EnemyBodyDebris *)enemyBodyDebris;
 
 @end

@@ -9,6 +9,7 @@
 #import "EnemyBodyDebris.h"
 
 #define GRAVITY -2000.0f
+#define GRAVITY2 -400.0f
 #define FRICTION 0.97f
 #define BOUNCE_COEF 0.8f
 #define LIFE_TIME 3
@@ -65,6 +66,7 @@
         velocity = initVelocity;
         spaceBounds = initSpaceBounds;
         self.scale = [UIScreen mainScreen].scale * 2;
+        _swipeEnemyPart = NO;
     }
     return self;
 }
@@ -73,7 +75,14 @@
 
     if (!stable) {
         velocity = ccpMult(velocity, FRICTION);
-        velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
+        if (_swipeEnemyPart) {
+            
+            velocity = ccpAdd(velocity, ccp(0, GRAVITY2 * deltaTime));
+        }
+        else {
+            
+            velocity = ccpAdd(velocity, ccp(0, GRAVITY * deltaTime));
+        }
 
         self.rotation += velocity.x * deltaTime;
         self.position = ccpAdd(self.position, ccpMult(velocity, deltaTime));
@@ -96,6 +105,12 @@
 
         if (self.position.y < CGRectGetMinY(spaceBounds) + self.boundingBox.size.height * 0.5 + GROUND_Y_OFFSET) {
 
+            if (_swipeEnemyPart) {
+                
+                [_delegate enemyBodyDebrisDidDieAndSpawnTapEnemy:self];
+                return;
+            }
+            
             if (ccpLengthSQ(velocity) < fabsf(GRAVITY)) {
                 stable = YES;
             }

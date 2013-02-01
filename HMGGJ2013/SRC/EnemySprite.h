@@ -30,6 +30,8 @@ typedef enum {
 
 
 -(id) initWithType:(EnemyType)type;
+-(id) initWithWakingTapperWithPos:(CGPoint)pos;
+
 -(void) calc:(ccTime)time;
 -(void) throwFromWall;
 +(void) resetWallGrid;

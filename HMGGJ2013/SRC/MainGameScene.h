@@ -21,7 +21,7 @@
 #import "Trail.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
-#define GROUND_Y (IS_WIDESCREEN ? 89 : 45)
+#define GROUND_Y (IS_WIDESCREEN ? 89 : 60)
 
 @interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate, FlyingSkullSpriteDelegate, BombExplosionDelegate,LightningDelegate, WaterSplashDelegate, TrailDelegate>
 
