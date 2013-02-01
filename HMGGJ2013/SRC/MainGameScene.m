@@ -167,6 +167,10 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self initScene];
 }
 
+- (void)onExit {
+
+}
+
 - (void)initScene {
 
     if (sceneInitWasPerformed) {
@@ -308,6 +312,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 }
 
 - (void) initUI {
+    
     UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
     [view setBackgroundColor:[UIColor clearColor]];
     [[CCDirector sharedDirector].view addSubview:view];
