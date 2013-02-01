@@ -101,7 +101,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     NSMutableArray *unusedBloodParticleSystems;
 
-
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
     CCSprite *slimeTop;
@@ -134,7 +133,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     MenuButton *pauseButton;
     MenuButton *restartButton;
     
-    UIView *rageView;
+    UIView *rageProgressView;
     UIImageView *rageBackgroundView;
     CCLayer *menuBackground;
     
@@ -311,23 +310,23 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self initUI];
 }
 
-- (void) initUI {
-    
-    UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
-    [view setBackgroundColor:[UIColor clearColor]];
-    [[CCDirector sharedDirector].view addSubview:view];
-    mainView = view;
+- (void)initUI {
+
+    // Main UI container
+    mainView = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
+    [mainView setBackgroundColor:[UIColor clearColor]];
+    [[CCDirector sharedDirector].view addSubview:mainView];
 
     CGSize contentSize = [CCDirector sharedDirector].winSize;
-    UIImage *image;
-    CGFloat offset = 0.0;
-    if (contentSize.height > 480.0)
-        offset = 18.0;
+    CGFloat offsetY = 0.0;
+    if (contentSize.height > 480.0) {
+        offsetY = 18.0;
+    }
 
     killSprite = [[CCSprite alloc] initWithSpriteFrameName:@"skull.png"];
     killSprite.anchorPoint = ccp(0, 0);
     killSprite.scale = [UIScreen mainScreen].scale * 2;
-    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 13.0 - offset);
+    killSprite.position = ccp(5.0, contentSize.height - killSprite.contentSize.height * killSprite.scale - 13.0 - offsetY);
     killSprite.zOrder = 5000;
     [self addChild:killSprite];
     
@@ -335,40 +334,41 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     coinsSprite.anchorPoint = ccp(0.5, 0.5);
     coinsSprite.zOrder = 5000;
     coinsSprite.scale = [UIScreen mainScreen].scale * 2;
-    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26 - offset);
+    coinsSprite.position = ccp(contentSize.width - 20.0, contentSize.height - 26 - offsetY);
     [self addChild:coinsSprite];
-    
-    if (contentSize.height == 480.0)
-        offset = 2.0;
-    else
-        offset = 22.0;
-    image = [UIImage imageNamed:@"progressBarBack"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offset, 288.0, 24.0)];
-    [rageBackgroundView setImage:image];
-    [rageBackgroundView.layer setMagnificationFilter:kCAFilterNearest];
-    [mainView addSubview:rageBackgroundView];
-    
-    image = [UIImage imageNamed:@"progressBar"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 272.0, 8.0)];
-    [imageView setImage:image];
-    [imageView.layer setMagnificationFilter:kCAFilterNearest];
-    rageView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 0.0, 8.0)];
-    [rageView setClipsToBounds:YES];
-    [rageView addSubview:imageView];
-    [mainView addSubview:rageView];
-    
-    if (contentSize.height > 480.0)
-        offset = 16.0;
-    pauseButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2 - 10.0, 13.0 + offset - 10.0, 44.0, 48.0)];
+
+    pauseButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2 - 10.0, 1.0 + offsetY, 44.0, 48.0)];
     [pauseButton setImage:[UIImage imageNamed:@"pause"]];
     [pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:pauseButton];
+
+    if (contentSize.height == 480.0) {
+        offsetY = 2.0;
+    }
+    else {
+        offsetY = 22.0;
+    }
+    
+    rageBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, contentSize.height - 24.0 - 8.0 - offsetY, 288.0, 24.0)];
+    rageBackgroundView.image = [UIImage imageNamed:@"progressBarBack"];
+    rageBackgroundView.layer.contentsScale = [UIScreen mainScreen].scale * 2;
+    rageBackgroundView.layer.magnificationFilter = kCAFilterNearest;
+    [mainView addSubview:rageBackgroundView];
+
+    rageProgressView = [[UIView alloc] initWithFrame:CGRectMake(24.0, contentSize.height - 24.0 - offsetY, 0.0, 8.0)];
+    rageProgressView.clipsToBounds = YES;
+    [mainView addSubview:rageProgressView];
+
+    UIImageView *rageProgressImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 272, 8.0)];
+    rageProgressImageView.image = [UIImage imageNamed:@"progressBar"];
+    rageProgressImageView.layer.contentsScale = [UIScreen mainScreen].scale * 2;
+    rageProgressImageView.layer.magnificationFilter = kCAFilterNearest;
+    [rageProgressView addSubview:rageProgressImageView];
+    
     [self updateUI];
 }
 
-- (void) updateUI {
+- (void)updateUI {
     
     if (gameOver) {
         return;
@@ -408,7 +408,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         offset = 2.0;
     else
         offset = 22.0;
-    [rageView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
+    [rageProgressView setFrame:CGRectMake(24.0, contentSize.height - 24.0 - offset, 272.0 * [AppDelegate player].rage, 8.0)];
 }
 
 #pragma mark - Objects
@@ -549,11 +549,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     numberOfKillsInLastFrame += kills;
 
-    /*CCParticleSystemQuad *explosionParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:kExplosionParticleSystemFileName];
-    explosionParticleSystem.autoRemoveOnFinish = YES;
-    explosionParticleSystem.position = pos;
-    [particleBatchNode addChild:explosionParticleSystem];*/
-
     BombExplosion *newBombExplosion = [[BombExplosion alloc] init];
     newBombExplosion.zOrder = GAME_OBJECTS_Z_ORDER - 1;
     newBombExplosion.scale = [UIScreen mainScreen].scale * 2;
@@ -615,7 +610,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [flyingSkull removeFromParentAndCleanup:YES];
     
 }
-
 
 #pragma mark - LightningDelegate
 
@@ -1176,7 +1170,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     gameOver = YES;
 
-    [rageView setAlpha:0];
+    [rageProgressView setAlpha:0];
     [rageBackgroundView setAlpha:0];
     [pauseButton setAlpha:0];
     
@@ -1291,7 +1285,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [self updateUI];
     gameOver = NO;
 
-    [rageView setAlpha:1];
+    [rageProgressView setAlpha:1];
     [rageBackgroundView setAlpha:1];
     [pauseButton setAlpha:1];
     
@@ -1514,6 +1508,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         calcTime -= FRAME_TIME_INTERVAL;
     }
 
+    /*
     UIImage *image = [self captureScreen];
     static int frameNum = 0;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -1524,6 +1519,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     });
 
     frameNum++;
+     */
 }
 
 - (float)slimeSurfacePosY {
