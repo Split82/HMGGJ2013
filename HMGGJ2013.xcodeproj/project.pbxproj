@@ -218,6 +218,8 @@
 		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
 		E6213AB916B531A4002F86CA /* Trail.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AB816B531A4002F86CA /* Trail.m */; };
 		E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AC816B5595E002F86CA /* TeslaCoil.m */; };
+		E62E84F716BC5806002CC58F /* IAPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E62E84F616BC5806002CC58F /* IAPModel.m */; };
+		E62E84F916BC599F002CC58F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62E84F816BC599F002CC58F /* StoreKit.framework */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -598,6 +600,9 @@
 		E6213AC716B5595E002F86CA /* TeslaCoil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeslaCoil.h; sourceTree = "<group>"; };
 		E6213AC816B5595E002F86CA /* TeslaCoil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeslaCoil.m; sourceTree = "<group>"; };
 		E62E84F316B88EBC002CC58F /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		E62E84F516BC5806002CC58F /* IAPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPModel.h; sourceTree = "<group>"; };
+		E62E84F616BC5806002CC58F /* IAPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPModel.m; sourceTree = "<group>"; };
+		E62E84F816BC599F002CC58F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -607,6 +612,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62E84F916BC599F002CC58F /* StoreKit.framework in Frameworks */,
 				553741B016B1F72900D860C2 /* QuartzCore.framework in Frameworks */,
 				553741B216B1F72900D860C2 /* OpenGLES.framework in Frameworks */,
 				553741B416B1F72900D860C2 /* OpenAL.framework in Frameworks */,
@@ -669,6 +675,7 @@
 		553741A016B1F72900D860C2 = {
 			isa = PBXGroup;
 			children = (
+				E62E84F816BC599F002CC58F /* StoreKit.framework */,
 				553741C116B1F72900D860C2 /* HMGGJ2013 */,
 				553741AE16B1F72900D860C2 /* Frameworks */,
 				553741AC16B1F72900D860C2 /* Products */,
@@ -1256,6 +1263,8 @@
 		653B145816B3131600E2FD0F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E62E84F516BC5806002CC58F /* IAPModel.h */,
+				E62E84F616BC5806002CC58F /* IAPModel.m */,
 				653B145A16B3133F00E2FD0F /* PlayerModel.h */,
 				653B145B16B3133F00E2FD0F /* PlayerModel.m */,
 			);
@@ -1526,6 +1535,7 @@
 				E6213AB916B531A4002F86CA /* Trail.m in Sources */,
 				E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */,
 				65A4C05616B80AD900515885 /* MenuButton.m in Sources */,
+				E62E84F716BC5806002CC58F /* IAPModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
