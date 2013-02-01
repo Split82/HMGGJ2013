@@ -167,21 +167,19 @@
 }
 
 - (void)initUI {
-    UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
-    [view setBackgroundColor:[UIColor clearColor]];
-    [[CCDirector sharedDirector].view addSubview:view];
-    mainView = view;
     
-    CGSize imageSize;
+    mainView = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
+    mainView.backgroundColor = [UIColor clearColor];
+    [[CCDirector sharedDirector].view addSubview:mainView];
+    
     CGFloat offset = 0.0;
     if (!IS_WIDESCREEN) {
         offset = 44.0;   
     }
-    imageSize = CGSizeMake(80, 39);
     UIImageView *nameView = [[UIImageView alloc] initWithImage:[MenuButton rasterizedImage:@"menu-logo"]];
-    [nameView setFrame:[MenuButton rectWithSize:imageSize originY:128.0 - offset]];
+    [nameView setFrame:[MenuButton rectWithSize:CGSizeMake(80, 39) originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
-    [view addSubview:nameView];
+    [mainView addSubview:nameView];
     
     CGFloat offsetY = 270.0 - offset - 6.0;
     CGRect frame = CGRectMake(60.0, offsetY, 200.0, 48.0);
@@ -189,28 +187,28 @@
     [newgame setImage:[UIImage imageNamed:@"menu-newgame"]];
     [newgame setHighlightedImage:[UIImage imageNamed:@"menu-newgame-h"]];
     [newgame addTarget:self action:@selector(startGameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:newgame];
+    [mainView addSubview:newgame];
     
     frame.origin.y += frame.size.height + 5.0;
     MenuButton *leaderboard = [[MenuButton alloc] initWithFrame:frame];
     [leaderboard setImage:[UIImage imageNamed:@"menu-topscore"]];
     [leaderboard setHighlightedImage:[UIImage imageNamed:@"menu-topscore-h"]];
     [leaderboard addTarget:self action:@selector(showLeaderboardButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:leaderboard];
+    [mainView addSubview:leaderboard];
     
     frame.origin.y += frame.size.height + 5.0;
     MenuButton *achievements = [[MenuButton alloc] initWithFrame:frame];
     [achievements setImage:[UIImage imageNamed:@"menu-achievements"]];
     [achievements setHighlightedImage:[UIImage imageNamed:@"menu-achievements-h"]];
     [achievements addTarget:self action:@selector(showAchievementsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:achievements];
+    [mainView addSubview:achievements];
     
    frame.origin.y += frame.size.height + 5.0;
     MenuButton *aboutView = [[MenuButton alloc] initWithFrame:frame];
     [aboutView setImage:[UIImage imageNamed:@"menu-about"]];
     [aboutView setHighlightedImage:[UIImage imageNamed:@"menu-about-h"]];
     [aboutView addTarget:self action:@selector(showAboutButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:aboutView];
+    [mainView addSubview:aboutView];
     
     [self addCoinAtPos:CGPointMake(60.0, 400.0 - offset)];
     [self addCoinAtPos:CGPointMake(260.0, 400.0 - offset)];
