@@ -24,6 +24,7 @@
 #import "MainGameScene.h"
 #import "MenuCoinSprite.h"
 #import "MonsterHearth.h"
+#import "MenuButton.h"
 #import <GameKit/GameKit.h>
 #import "AudioManager.h"
 
@@ -47,7 +48,7 @@
     NSMutableArray *bubbles;
     NSMutableArray *killedBubbles;
     
-    UIImageView *newgame;
+    MenuButton *newgame;
     
     CCSpriteBatchNode *mainSpriteBatch;
     SlimeSprite *slimeSprite;
@@ -165,21 +166,6 @@
     [self initUI];
 }
 
-- (UIImage *)rasterizedImage:(NSString *)name {
-    UIImage *image = [UIImage imageNamed:name];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    return image;
-}
-
-- (CGRect)rectWithSize:(CGSize)size originY:(CGFloat)originY {
-    CGFloat scale = 2;
-    size.width *= scale;
-    size.height *= scale;
-    CGSize contentSize = [CCDirector sharedDirector].winSize;
-    return CGRectMake((contentSize.width - size.width) / 2, originY,
-                      size.width, size.height);
-}
-
 - (void)initUI {
     UIView *view = [[UIView alloc] initWithFrame:[CCDirector sharedDirector].view.bounds];
     [view setBackgroundColor:[UIColor clearColor]];
@@ -192,41 +178,38 @@
         offset = 44.0;   
     }
     imageSize = CGSizeMake(80, 39);
-    UIImageView *nameView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-logo"]];
-    [nameView setFrame:[self rectWithSize:imageSize originY:128.0 - offset]];
+    UIImageView *nameView = [[UIImageView alloc] initWithImage:[MenuButton rasterizedImage:@"menu-logo"]];
+    [nameView setFrame:[MenuButton rectWithSize:imageSize originY:128.0 - offset]];
     [nameView.layer setMagnificationFilter:kCAFilterNearest];
     [view addSubview:nameView];
     
-    imageSize = CGSizeMake(62, 12);
-    newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-newgame"]];
-    [newgame setUserInteractionEnabled:YES];
-    [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
-    [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
-    [newgame.layer setMagnificationFilter:kCAFilterNearest];
+    CGFloat offsetY = 270.0 - offset - 6.0;
+    CGRect frame = CGRectMake(60.0, offsetY, 200.0, 48.0);
+    newgame = [[MenuButton alloc] initWithFrame:frame];
+    [newgame setImage:[UIImage imageNamed:@"menu-newgame"]];
+    [newgame setHighlightedImage:[UIImage imageNamed:@"menu-newgame-h"]];
+    [newgame addTarget:self action:@selector(startGameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:newgame];
     
-    imageSize = CGSizeMake(82, 12);
-    UIImageView *leaderboard = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-topscore"]];
-    [leaderboard setUserInteractionEnabled:YES];
-    [leaderboard addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLeaderboardButtonPressed:)]];
-    [leaderboard setFrame:[self rectWithSize:imageSize originY:330.0 - offset]];
-    [leaderboard.layer setMagnificationFilter:kCAFilterNearest];
+    frame.origin.y += frame.size.height + 5.0;
+    MenuButton *leaderboard = [[MenuButton alloc] initWithFrame:frame];
+    [leaderboard setImage:[UIImage imageNamed:@"menu-topscore"]];
+    [leaderboard setHighlightedImage:[UIImage imageNamed:@"menu-topscore-h"]];
+    [leaderboard addTarget:self action:@selector(showLeaderboardButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:leaderboard];
     
-    imageSize = CGSizeMake(90, 12);
-    UIImageView *achievements = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-achievements"]];
-    [achievements setUserInteractionEnabled:YES];
-    [achievements addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAchievementsButtonPressed:)]];
-    [achievements setFrame:[self rectWithSize:imageSize originY:390.0 - offset]];
-    [achievements.layer setMagnificationFilter:kCAFilterNearest];
+    frame.origin.y += frame.size.height + 5.0;
+    MenuButton *achievements = [[MenuButton alloc] initWithFrame:frame];
+    [achievements setImage:[UIImage imageNamed:@"menu-achievements"]];
+    [achievements setHighlightedImage:[UIImage imageNamed:@"menu-achievements-h"]];
+    [achievements addTarget:self action:@selector(showAchievementsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:achievements];
     
-    imageSize = CGSizeMake(40, 12);
-    UIImageView *aboutView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-about"]];
-    [aboutView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAboutButtonPressed:)]];
-    [aboutView setUserInteractionEnabled:YES];
-    [aboutView setFrame:[self rectWithSize:imageSize originY:450.0 - offset]];
-    [aboutView.layer setMagnificationFilter:kCAFilterNearest];
+   frame.origin.y += frame.size.height + 5.0;
+    MenuButton *aboutView = [[MenuButton alloc] initWithFrame:frame];
+    [aboutView setImage:[UIImage imageNamed:@"menu-about"]];
+    [aboutView setHighlightedImage:[UIImage imageNamed:@"menu-about-h"]];
+    [aboutView addTarget:self action:@selector(showAboutButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:aboutView];
     
     [self addCoinAtPos:CGPointMake(60.0, 400.0 - offset)];
@@ -236,18 +219,8 @@
 - (void) setGame:(BOOL)game
 {
     if (!_game && game) {
-        CGFloat offset = 0.0;
-        if (!IS_WIDESCREEN) {
-            offset = 44.0;
-        }
-        [newgame removeFromSuperview];
-        CGSize imageSize = CGSizeMake(82, 12);
-        newgame = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"menu-resume"]];
-        [newgame setUserInteractionEnabled:YES];
-        [newgame addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startGameButtonPressed:)]];
-        [newgame setFrame:[self rectWithSize:imageSize originY:270.0 - offset]];
-        [newgame.layer setMagnificationFilter:kCAFilterNearest];
-        [mainView addSubview:newgame];
+        [newgame setImage:[UIImage imageNamed:@"menu-resume"]];
+        [newgame setHighlightedImage:[UIImage imageNamed:@"menu-resume-h"]];
     }
     _game = game;
 }

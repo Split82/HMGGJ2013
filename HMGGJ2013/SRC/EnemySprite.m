@@ -645,13 +645,7 @@ static WallGrid *wallGrid = nil;
 }
 
 
--(BOOL) throwFromWall {
-    
-    if (state != kEnemyStateClimbing && state != kEnemyStateCrossing) {
-        
-        return NO;
-    }
-    
+-(void) throwFromWall {
     
     if ((state == kEnemyStateClimbing) && (hasWallSlotAtIndex >= 0)) {
         
@@ -665,6 +659,14 @@ static WallGrid *wallGrid = nil;
     animTime = 0;
     verticalVel = 100;
     horizontalVel = (float)rand() / RAND_MAX * 50 + 50;
+    if (rand() % 2) {
+        
+        direction = 1;
+    }
+    else {
+        
+        direction = -1;
+    }
     
     zappingTime = ZAPPING_TIME;
     zappingDelay = ZAPPING_SKELETON_TIME;
@@ -672,13 +674,11 @@ static WallGrid *wallGrid = nil;
     elapsedTime = 0;
     
     [self updateSpritePos];
- 
-    return YES;
 }
 
 - (void) updateClimbPos {
     
-    climbXPos += (float)rand() / RAND_MAX * ENEMY_HALF_WIDTH * direction / 2;
+    climbXPos += (float)rand() / RAND_MAX * ENEMY_HALF_WIDTH * direction / 4;
     
     if (climbXPos > ([CCDirector sharedDirector].winSize.width - CLIMBING_BORDER_OFFSET - ENEMY_HALF_WIDTH * 2)) {
         

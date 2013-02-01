@@ -210,12 +210,15 @@
 		65708CE516B556B8003C181A /* about-bg-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CE416B556B8003C181A /* about-bg-2.png */; };
 		65708CE716B55767003C181A /* about-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 65708CE616B55767003C181A /* about-twitter.png */; };
 		659A0A5416B4690B00D3B1A8 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 659A0A5316B4690B00D3B1A8 /* pause.png */; };
+		65A4C05616B80AD900515885 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A4C05516B80AD900515885 /* MenuButton.m */; };
+		65A4C05816B811CF00515885 /* menu-resume-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 65A4C05716B811CF00515885 /* menu-resume-h.png */; };
 		E619264616B31E4A00904535 /* EnemySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E619264516B31E4A00904535 /* EnemySprite.m */; };
 		E6213A8116B43D2E002F86CA /* SpriteTextureFrameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A8016B43D2E002F86CA /* SpriteTextureFrameInfo.m */; };
 		E6213A9D16B4E18E002F86CA /* Lightning.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213A9C16B4E18E002F86CA /* Lightning.m */; };
 		E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AAC16B52305002F86CA /* WaterSplash.m */; };
 		E6213AB916B531A4002F86CA /* Trail.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AB816B531A4002F86CA /* Trail.m */; };
 		E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */ = {isa = PBXBuildFile; fileRef = E6213AC816B5595E002F86CA /* TeslaCoil.m */; };
+		E62E84F416B88EBC002CC58F /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = E62E84F316B88EBC002CC58F /* todo.txt */; };
 		E6A61C7916B33AD8000912CA /* WallGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A61C7816B33AD8000912CA /* WallGrid.m */; };
 /* End PBXBuildFile section */
 
@@ -580,6 +583,9 @@
 		65708CE416B556B8003C181A /* about-bg-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about-bg-2.png"; sourceTree = "<group>"; };
 		65708CE616B55767003C181A /* about-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about-twitter.png"; sourceTree = "<group>"; };
 		659A0A5316B4690B00D3B1A8 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
+		65A4C05416B80AD900515885 /* MenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButton.h; sourceTree = "<group>"; };
+		65A4C05516B80AD900515885 /* MenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuButton.m; sourceTree = "<group>"; };
+		65A4C05716B811CF00515885 /* menu-resume-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-resume-h.png"; sourceTree = "<group>"; };
 		E619264416B31E4A00904535 /* EnemySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemySprite.h; sourceTree = "<group>"; };
 		E619264516B31E4A00904535 /* EnemySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemySprite.m; sourceTree = "<group>"; };
 		E6213A7F16B43D2E002F86CA /* SpriteTextureFrameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteTextureFrameInfo.h; sourceTree = "<group>"; };
@@ -592,6 +598,7 @@
 		E6213AB816B531A4002F86CA /* Trail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trail.m; sourceTree = "<group>"; };
 		E6213AC716B5595E002F86CA /* TeslaCoil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeslaCoil.h; sourceTree = "<group>"; };
 		E6213AC816B5595E002F86CA /* TeslaCoil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeslaCoil.m; sourceTree = "<group>"; };
+		E62E84F316B88EBC002CC58F /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		E6A61C7716B33AD8000912CA /* WallGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallGrid.h; sourceTree = "<group>"; };
 		E6A61C7816B33AD8000912CA /* WallGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -831,6 +838,7 @@
 		5537433516B1F72C00D860C2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E62E84F316B88EBC002CC58F /* todo.txt */,
 				5537433616B1F72C00D860C2 /* Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -1148,6 +1156,8 @@
 				554AD1FC16B45D1800441632 /* ScreenShaker.m */,
 				55F18D9016B5243F0034650D /* RandomPicker.h */,
 				55F18D8E16B5234D0034650D /* RandomPicker.m */,
+				65A4C05416B80AD900515885 /* MenuButton.h */,
+				65A4C05516B80AD900515885 /* MenuButton.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -1219,6 +1229,7 @@
 				6529B0C916B4892600E83114 /* menu-topscore-h.png */,
 				6529B0CA16B4892600E83114 /* menu-topscore.png */,
 				650CCBA716B4AE52004F0241 /* menu-resume.png */,
+				65A4C05716B811CF00515885 /* menu-resume-h.png */,
 				659A0A5316B4690B00D3B1A8 /* pause.png */,
 				554AD1EB16B4469900441632 /* progress.png */,
 				554AD1EC16B4469900441632 /* progressBack.png */,
@@ -1372,6 +1383,8 @@
 				55F18DEF16B568AA0034650D /* CoinHit2.wav in Resources */,
 				55F18DF016B568AA0034650D /* CoinHit3.wav in Resources */,
 				55F18DF116B568AA0034650D /* CoinHit1.wav in Resources */,
+				65A4C05816B811CF00515885 /* menu-resume-h.png in Resources */,
+				E62E84F416B88EBC002CC58F /* todo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1514,6 +1527,7 @@
 				E6213AAD16B52306002F86CA /* WaterSplash.m in Sources */,
 				E6213AB916B531A4002F86CA /* Trail.m in Sources */,
 				E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */,
+				65A4C05616B80AD900515885 /* MenuButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

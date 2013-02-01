@@ -19,6 +19,7 @@
 #import "MonsterHearth.h"
 #import "MainMenuGameScene.h"
 #import "MenuCoinSprite.h"
+#import "MenuButton.h"
 
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
 
@@ -43,6 +44,9 @@
 #define SLIME_WIDTH 280
 #define SLIME_GROUND_Y (GROUND_Y + 1)
 #define SLIME_MAX_HEIGHT 300
+
+#define MAX_BODY_DEBRIS_COUNT 300
+#define BLOODY_MARY_BODY_DEBRIS_COUNT 150
 
 float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     // Return minimum distance between line segment vw and point p
@@ -94,6 +98,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     NSMutableArray *killedLightnings;
     NSMutableArray *killedWaterSplashes;
     NSMutableArray *killedTrails;
+    
+    NSMutableArray *unusedBloodParticleSystems;
+
 
     BombSpawner *bombSpawner;
     SlimeSprite *slimeSprite;
@@ -112,7 +119,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     // State vars
     BOOL sceneInitWasPerformed;
-    BOOL gameOver;
     
     // UI vars
     UIView *mainView;
@@ -125,8 +131,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     CCSprite *coinsSprite;
     CCLabelBMFont *coinsLabel;
     
-    UIImageView *pauseButton;
-    UIImageView *restartButton;
+    MenuButton *pauseButton;
+    MenuButton *restartButton;
     
     UIView *rageView;
     UIImageView *rageBackgroundView;
@@ -148,6 +154,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 @synthesize menuBackground;
 @synthesize mainView;
+@synthesize gameOver;
 
 - (void)onEnter {
 
@@ -291,6 +298,12 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [[AudioManager sharedManager] startBackgroundMusic];
     bombSpawning = NO;
 
+    
+    for (int i = 0; i < MAX_BODY_DEBRIS_COUNT; i++) {
+        
+        [unusedBloodParticleSystems addObject:[self createBloodParticleSystem:NO]];
+    }
+    
     [self initUI];
 }
 
@@ -343,14 +356,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     
     if (contentSize.height > 480.0)
         offset = 16.0;
-    
-    image = [UIImage imageNamed:@"pause"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    pauseButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2, 13.0 + offset, 24.0, 28.0)];
-    [pauseButton.layer setMagnificationFilter:kCAFilterNearest];
-    [pauseButton setImage:image];
-    [pauseButton setUserInteractionEnabled:YES];
-    [pauseButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pauseGame)]];
+    pauseButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 24.0) / 2 - 10.0, 13.0 + offset - 10.0, 44.0, 48.0)];
+    [pauseButton setImage:[UIImage imageNamed:@"pause"]];
+    [pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:pauseButton];
     [self updateUI];
 }
@@ -459,24 +467,44 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [coin removeFromParentAndCleanup:YES];
 }
 
+- (CCParticleSystemQuad*)createBloodParticleSystem:(BOOL)getFromUnusedSystems{
+    
+    if ([unusedBloodParticleSystems count] && getFromUnusedSystems == YES) {
+        
+        CCParticleSystemQuad *bloodParticleSystem = [unusedBloodParticleSystems lastObject];
+        [unusedBloodParticleSystems removeLastObject];
+        
+        [bloodParticleSystem resetSystem];
+        return bloodParticleSystem;
+    }
+    
+    CCParticleSystemQuad *bloodParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BloodParticleSystem.plist"];
+    
+    return bloodParticleSystem;
+}
+
 - (void)createEnemyBodyExplosionAtPos:(CGPoint)pos enemyType:(EnemyType)enemyType {
 
     int numberOfBodyPars = rand() % 3 + 3;
 
     for (int i = 0; i < numberOfBodyPars; i++) {
 
-        // Particle system
-        CCParticleSystemQuad *bloodParticleSystem = [[CCParticleSystemQuad alloc] initWithFile:@"BloodParticleSystem.plist"];
-        bloodParticleSystem.position = pos;
-        [particleBatchNode addChild:bloodParticleSystem];
-
+        if ([enemyBodyDebrises count] >= MAX_BODY_DEBRIS_COUNT) {
+            
+            break;
+        }
+        
         // Debris
         float angle = M_PI * (rand() / (float)RAND_MAX) - M_PI_2;
         CGPoint randVelocity;
         randVelocity.x = sinf(angle) * 1500.0f;
         randVelocity.y = cosf(angle) * 1500.0f;
         EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:enemyType velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
-        enemyBodyDebris.bloodParticleSystem = bloodParticleSystem;
+        enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
+        
+        enemyBodyDebris.bloodParticleSystem.position = pos;
+        [particleBatchNode addChild:enemyBodyDebris.bloodParticleSystem];
+        
         enemyBodyDebris.position = pos;
         enemyBodyDebris.delegate = self;
         enemyBodyDebris.zOrder = GAME_OBJECTS_Z_ORDER - 1;
@@ -514,6 +542,11 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         }
     }
 
+    if ([enemyBodyDebrises count] > BLOODY_MARY_BODY_DEBRIS_COUNT) {
+        
+        [[AppDelegate player] filledFloorWithBlood];
+    }
+    
     if (kills > 0) {
         [self addScoreAddLabelWithText:[NSString stringWithFormat:@"+%d", kills * kills] pos:ccpAdd(pos, ccp(0, 20)) type:ScoreAddLabelTypeRising addSkull:YES];
     }
@@ -648,7 +681,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [mainSpriteBatch addChild:waterSplash];
     [waterSplashes addObject:waterSplash];
     
-    if ([AppDelegate player].health == 0) {
+    if ([AppDelegate player].health <= 0) {
         [self showGameOver];
     }
     [self updateUI];
@@ -691,6 +724,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
 - (void)enemyBodyDebrisDidDie:(EnemyBodyDebris *)enemyBodyDebris {
 
+    [unusedBloodParticleSystems addObject:enemyBodyDebris.bloodParticleSystem];
     [enemyBodyDebris.bloodParticleSystem removeFromParentAndCleanup:YES];
 
     [killedEnemyBodyDebrises addObject:enemyBodyDebris];
@@ -748,10 +782,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         
         if (lineSegmentPointDistance2(gestureRecognizer.lastPos, pos, enemy.position) < SWIPE_MIN_DISTANCE2) {
             
-            if ([enemy throwFromWall]) {
-                
-                [self createLightningToEnemy:enemy];
-            }
+            [self throwEnemyFromWall:enemy];
         }
     }
     
@@ -861,10 +892,8 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         /*
         if (distance < TAP_THROW_MIN_DISTANCE2) {
         
-             if ([enemy throwFromWall]) {
-             
-             [self createLightningToEnemy:enemy];
-             }
+         [self enemy];
+
 
         }
         */
@@ -872,13 +901,26 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
 
     if (nearestEnemy && nearestDistance < TAP_MIN_DISTANCE2) {
         
-        if ([nearestEnemy throwFromWall]) {
-            
-            [self createLightningToEnemy:nearestEnemy];
-        }
 
+        [self throwEnemyFromWall:nearestEnemy];
     }
 
+}
+
+- (void) throwEnemyFromWall:(EnemySprite*)enemy {
+    
+    if (enemy.state != kEnemyStateClimbing && enemy.state != kEnemyStateCrossing) {
+        
+        return;
+    }
+    
+    if (enemy.state == kEnemyStateCrossing && [AppDelegate player].health <= ENEMY_ATTACK_FORCE) {
+        
+        [[AppDelegate player] closeCall];
+    }
+    
+    [enemy throwFromWall];
+    [self createLightningToEnemy:enemy];
 }
 
 - (void) setPause:(BOOL)pause
@@ -1022,13 +1064,9 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     if (contentSize.height == 480.0)
         offset = 34.0;
     
-    UIImage *image = [UIImage imageNamed:@"go-play"];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    restartButton = [[UIImageView alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0 - offset * 2, 114.0 * 2, 16.0 * 2)];
-    [restartButton.layer setMagnificationFilter:kCAFilterNearest];
-    [restartButton setImage:image];
-    [restartButton setUserInteractionEnabled:YES];
-    [restartButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartGame)]];
+    restartButton = [[MenuButton alloc] initWithFrame:CGRectMake((contentSize.width - 114.0 * 2) / 2, 490.0 - offset * 2 - 10.0, 114.0 * 2, 16.0 * 2 + 20.0)];
+    [restartButton setImage:[UIImage imageNamed:@"go-play"]];
+    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
     [mainView addSubview:restartButton];
     
     gameOver = YES;

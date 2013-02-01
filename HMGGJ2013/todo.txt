@@ -1,0 +1,28 @@
+
+
+prioritne todo/bugy:
+-chyba restart
+-tutorial
+-opravit naimplementovat achievementy - teraz to velmi nefunguje
+-pridat IAPy
+-menu items / buttony by mali poradne klikatelne
+-opravit bugu ze ked sa vatim do hry z backgroundu tak mam nejake blbo vykreslene menu a dva srdcia a potom ked dam remusme game, resp play again tak mam cierny priesvitny overlay aj pocas gameplay
+
+
+
+napady:
+-upgrade typu coin magnet jak uz vlastne teraz mame ze ti to zbiera viacero naraz a potom jeho dalsi level ze to zbiera samo automaticky, resp cim vyssie upgrade tym vacsi perimeter
+-pasivny upgrade typu 2x coins ako v Temple Run, resp neco na styl ze pada viac koinov z enemakov a kludne aj na zaklade otoh kolko ich "naraz" odpalis
+-ked uz zrusit rage tak nieco nechat na automatiku - prekvapenie hraca je fajn!
+-bonusivy panacik co doplni vodu
+-ked uz to srdce mat vo vnutri tak ono predsa samo vie davat elektriku tak to nejak napojit kablami na tu teslu
+-viac druhov bobmy - ked raz prejde progress tak zakladna a ked 2x druha atd - daco na styl nabijania toho meca v DMC4
+-rozne uberanie slime podla typu nepriatela
+-tlusty typekc co sa rozpadne na viacero malych
+-kuzelnik zo stitom
+-typkovia s helmou co maju kym chodia dole (alebo kym nespadnu z istej vysky) a na nich bomba nefunguje
+-upgrade na bombu co prave zabije aj typkov s helmou
+-dropy rozne - nielen mince - HPcka, bonusy addony
+-priserka/srdce v nadobe poskoci a spravi take zemetrasenie a oni popadaju vsetci dole
+-ten swipe bude v default stave davat dole iba jedneho a az upgrade ich moze dat dole viacerych
+-teraz ked tapnes na swipera tak mu to nic nerobi/a ani to neni nijak vizualne zdoraznene.  ono to moze znamenat ze na neho elektrika neposobi ale potom bude treba pridat novy attack. ale kludne nechat aj tak len nejak povedat ze na neho treba swipeovat
