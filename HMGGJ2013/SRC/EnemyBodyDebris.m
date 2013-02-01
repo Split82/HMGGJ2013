@@ -126,12 +126,12 @@
     _bloodParticleSystem.position = self.position;
 
     elapsedTime += deltaTime;
-    if (elapsedTime > lifeTime) {
+    if (elapsedTime > lifeTime && _swipeEnemyPart == NO) {
         self.bloodParticleSystem.emissionRate = 0;
         [_delegate enemyBodyDebrisDidDie:self];
     }
     else {
-        self.bloodParticleSystem.emissionRate = START_BLOOD_EMISSION_RATE * (1 - elapsedTime / lifeTime);
+        self.bloodParticleSystem.emissionRate = START_BLOOD_EMISSION_RATE * (1 - MIN(1, elapsedTime / lifeTime));
     }
 }
 

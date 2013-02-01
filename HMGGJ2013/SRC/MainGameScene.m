@@ -889,7 +889,6 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     */
     
     EnemySprite *nearestEnemy = nil;
-    
     nearestDistance = -1;
     for (EnemySprite *enemy in tapEnemies) {
         
@@ -916,6 +915,7 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
         return;
     }
 
+    nearestEnemy = nil;
     nearestDistance = - 1;
     for (EnemySprite *enemy in swipeEnemies) {
         
@@ -958,14 +958,14 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
      
     // Debris
     CGPoint pos;
-    pos = ccpAdd(enemy.position, ccpMult(ccpNormalize(CGPointMake(direction.y, -direction.x)), 20));
+    pos = ccpAdd(enemy.position, ccpMult(ccpNormalize(CGPointMake(direction.y, -direction.x)), 10));
     
     float directionAngle = atan2f(direction.y, direction.x);
-    float angle = -M_PI * (rand() / (float)RAND_MAX) / 4 - M_PI / 8 + directionAngle;
+    float angle = directionAngle - M_PI / 8 * (rand() / (float)RAND_MAX);
     CGPoint randVelocity;
     randVelocity.x = cosf(angle);
     randVelocity.y = sinf(angle);
-    randVelocity = ccpMult(randVelocity, 30.0f * ccpLength(direction));
+    randVelocity = ccpMult(randVelocity, 10.0f * ccpLength(direction));
     EnemyBodyDebris *enemyBodyDebris = [[EnemyBodyDebris alloc] init:kEnemyTypeSwipe velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
     enemyBodyDebris.bloodParticleSystem.position = pos;
@@ -978,13 +978,13 @@ float lineSegmentPointDistance2(CGPoint v, CGPoint w, CGPoint p) {
     [enemyBodyDebrises addObject:enemyBodyDebris];
     [mainSpriteBatch addChild:enemyBodyDebris];
     
-    pos = ccpSub(enemy.position, ccpMult(ccpNormalize(CGPointMake(direction.y, -direction.x)), 20));
+    pos = ccpSub(enemy.position, ccpMult(ccpNormalize(CGPointMake(direction.y, -direction.x)), 10));
     
     directionAngle = atan2f(direction.y, direction.x);
-    angle = -M_PI * (rand() / (float)RAND_MAX) / 4 - M_PI / 8 + directionAngle;
+    angle = directionAngle + M_PI / 8 * (rand() / (float)RAND_MAX);
     randVelocity.x = cosf(angle);
     randVelocity.y = sinf(angle);
-    randVelocity = ccpMult(randVelocity, 30.0f * ccpLength(direction));
+    randVelocity = ccpMult(randVelocity, 10.0f * ccpLength(direction));
     enemyBodyDebris = [[EnemyBodyDebris alloc] init:kEnemyTypeSwipe velocity:randVelocity spaceBounds:CGRectMake(0, GROUND_Y, [CCDirector sharedDirector].winSize.width, [CCDirector sharedDirector].winSize.height - GROUND_Y)];
     enemyBodyDebris.bloodParticleSystem = [self createBloodParticleSystem:YES];
     enemyBodyDebris.bloodParticleSystem.position = pos;
