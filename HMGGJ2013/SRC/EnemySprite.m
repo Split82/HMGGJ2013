@@ -91,7 +91,6 @@ static WallGrid *wallGrid = nil;
     
     float elapsedTime;
     float zappingTime;
-    float zappingDelay;
     
     
     int hasWallSlotAtIndex;
@@ -176,6 +175,13 @@ static WallGrid *wallGrid = nil;
             [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb5.png" offset:CGPointMake(0, 0)]];
             [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb6.png" offset:CGPointMake(0, 0)]];
             [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimb7.png" offset:CGPointMake(1, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl1.png" offset:CGPointMake(1, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl2.png" offset:CGPointMake(0, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl3.png" offset:CGPointMake(0, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl4.png" offset:CGPointMake(0, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl5.png" offset:CGPointMake(0, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl6.png" offset:CGPointMake(0, 0)]];
+            [swiperClimbingAnimSpriteFrames addObject:[SpriteTextureFrameInfo createWithFrameName:@"BigClimbEl7.png" offset:CGPointMake(1, 0)]];
             
             // fall
             swiperFallingAnimSpriteFrames = [[NSMutableArray alloc] initWithCapacity:12];
@@ -305,9 +311,16 @@ static WallGrid *wallGrid = nil;
     if (self) {
         
         state = kEnemyStateSleeping;
-        wakingUp = true;
         spritePos = pos;
         spritePos.y = GROUND_Y;
+        
+        animFrameIndex = [sleepingAnimSpriteFrames count] - 1;
+        for (CCSprite *star in stars) {
+            
+            star.visible = YES;
+        }
+        sleepTime = 0.5f;
+        
         [self updateSpritePos];
     }
     return self;
@@ -375,6 +388,7 @@ static WallGrid *wallGrid = nil;
                     }
                     else {
                         
+                        zappingTime = 0;
                         state = kEnemyStateClimbing;
                         hasWallSlotAtIndex = [wallGrid takeSlot:position_.x];
                         
@@ -418,14 +432,12 @@ static WallGrid *wallGrid = nil;
                 
                 
                 animFrameIndex += (int)(animTime / CLIMBING_ANIM_DELAY);
-                animFrameIndex = animFrameIndex % [climbingAnimSpriteFrames count];
+                animFrameIndex = animFrameIndex % ([climbingAnimSpriteFrames count] / 2);
                 
                 animTime = animTime - (int)(animTime / CLIMBING_ANIM_DELAY) * CLIMBING_ANIM_DELAY;
 
                 
                 spritePos = newSpritePos;
-                
-                [self updateSpritePos];
                 
                 if ((spritePos.y > (WALL_GRID_SLOT_HEIGHT + GROUND_Y)) && (hasWallSlotAtIndex >= 0)) {
                     
@@ -434,7 +446,11 @@ static WallGrid *wallGrid = nil;
                 }
                 
             }
-            
+            if (zappingTime > 0) {
+                
+                zappingTime -= time;
+            }
+            [self updateSpritePos];
             break;
         }
         case kEnemyStateZapping:
@@ -485,7 +501,7 @@ static WallGrid *wallGrid = nil;
             //zapping
             if (state == kEnemyStateZapping) {
                 
-                animFrameIndex = (int)roundf(animTime / zappingDelay) % [zappingAnimSpriteFrames count];
+                animFrameIndex = (int)roundf(zappingTime / ZAPPING_SKELETON_TIME) % [zappingAnimSpriteFrames count];
                 
                 if (zappingTime < 0) {
                     
@@ -622,6 +638,7 @@ static WallGrid *wallGrid = nil;
         }
         else {
         
+            zappingTime = 0;
             state = kEnemyStateClimbing;
             hasWallSlotAtIndex = [wallGrid takeSlot:position_.x];
         }
@@ -637,6 +654,12 @@ static WallGrid *wallGrid = nil;
     
     
 }
+
+-(void) elecrify {
+ 
+    zappingTime = ZAPPING_TIME;
+}
+
 
 -(void) throwFromWall {
     
@@ -661,7 +684,6 @@ static WallGrid *wallGrid = nil;
     }
     
     zappingTime = ZAPPING_TIME;
-    zappingDelay = ZAPPING_SKELETON_TIME;
     
     elapsedTime = 0;
     
@@ -685,6 +707,9 @@ static WallGrid *wallGrid = nil;
 - (void) updateSpritePos {
     
 
+    int realAnimFrameIndex = animFrameIndex;
+    CGPoint realSpritePos = spritePos;
+    
     NSArray *frames;
     if (state == kEnemyStateWalking) {
         
@@ -693,6 +718,17 @@ static WallGrid *wallGrid = nil;
     else if (state == kEnemyStateClimbing) {
         
         frames = climbingAnimSpriteFrames;
+        if (zappingTime > 0) {
+            
+            realSpritePos.x += sinf(ZAPPING_TIME - zappingTime) * zappingTime / ZAPPING_TIME * 10;
+            
+            int isZapping = (int)roundf(zappingTime / ZAPPING_SKELETON_TIME) % 2;
+            
+            if (isZapping) {
+                
+                realAnimFrameIndex += [climbingAnimSpriteFrames count] / 2;
+            }
+        }
     }
     else if (state == kEnemyStateFalling || state == kEnemyStateFallingInto) {
         
@@ -711,12 +747,13 @@ static WallGrid *wallGrid = nil;
         frames = zappingAnimSpriteFrames;
     }
 
-    [self setDisplayFrame:((SpriteTextureFrameInfo*)frames[animFrameIndex]).frame];
+    [self setDisplayFrame:((SpriteTextureFrameInfo*)frames[realAnimFrameIndex]).frame];
     
-    CGSize spriteSize = ((SpriteTextureFrameInfo*)frames[animFrameIndex]).frame.rectInPixels.size;
+    CGSize spriteSize = ((SpriteTextureFrameInfo*)frames[realAnimFrameIndex]).frame.rectInPixels.size;
     CGPoint halfSize = CGPointMake(spriteSize.width / 2, spriteSize.height / 2);
     
-    self.position = ccpAdd(spritePos, ccpMult(ccpAdd(((SpriteTextureFrameInfo*)frames[animFrameIndex]).offset, halfSize), 2));
+    self.position = ccpAdd(realSpritePos, ccpMult(ccpAdd(((SpriteTextureFrameInfo*)frames[realAnimFrameIndex]).offset, halfSize), 2));
+
     
 }
 
