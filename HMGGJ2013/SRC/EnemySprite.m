@@ -432,7 +432,14 @@ static WallGrid *wallGrid = nil;
                 
                 
                 animFrameIndex += (int)(animTime / CLIMBING_ANIM_DELAY);
-                animFrameIndex = animFrameIndex % ([climbingAnimSpriteFrames count] / 2);
+                if (type == kEnemyTypeSwipe) {
+                    
+                    animFrameIndex = animFrameIndex % ([climbingAnimSpriteFrames count] / 2);
+                }
+                else {
+                    
+                    animFrameIndex = animFrameIndex % [climbingAnimSpriteFrames count];
+                }
                 
                 animTime = animTime - (int)(animTime / CLIMBING_ANIM_DELAY) * CLIMBING_ANIM_DELAY;
 
@@ -677,10 +684,12 @@ static WallGrid *wallGrid = nil;
     if (rand() % 2) {
         
         direction = 1;
+        self.flipX = NO;
     }
     else {
         
         direction = -1;
+        self.flipX = YES;
     }
     
     zappingTime = ZAPPING_TIME;
