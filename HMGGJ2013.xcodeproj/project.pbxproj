@@ -151,6 +151,7 @@
 		5571D5D616BC884B00E979BB /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5D516BC884B00E979BB /* MainMenu.m */; };
 		5571D5DF16BCAA7300E979BB /* ScreenCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5DE16BCAA7300E979BB /* ScreenCapture.m */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
+		557DE87316BD7F3F008ABA7B /* GameHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 557DE87116BD7F3F008ABA7B /* GameHUD.m */; };
 		558C008116BD481900E4B96F /* pause-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008016BD481900E4B96F /* pause-h.png */; };
 		558C009016BD51E900E4B96F /* RemoveAdsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008616BD51E900E4B96F /* RemoveAdsButtonHL.png */; };
 		558C009116BD51E900E4B96F /* AchievementsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008716BD51E900E4B96F /* AchievementsButtonHL.png */; };
@@ -532,6 +533,8 @@
 		5571D5DD16BCAA7300E979BB /* ScreenCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenCapture.h; sourceTree = "<group>"; };
 		5571D5DE16BCAA7300E979BB /* ScreenCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenCapture.m; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
+		557DE87116BD7F3F008ABA7B /* GameHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameHUD.m; sourceTree = "<group>"; };
+		557DE87216BD7F3F008ABA7B /* GameHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameHUD.h; sourceTree = "<group>"; };
 		558C008016BD481900E4B96F /* pause-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause-h.png"; sourceTree = "<group>"; };
 		558C008216BD4D7400E4B96F /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Menu.h; sourceTree = "<group>"; };
 		558C008616BD51E900E4B96F /* RemoveAdsButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoveAdsButtonHL.png; sourceTree = "<group>"; };
@@ -1188,6 +1191,8 @@
 				558C008216BD4D7400E4B96F /* Menu.h */,
 				5571D5D416BC884B00E979BB /* MainMenu.h */,
 				5571D5D516BC884B00E979BB /* MainMenu.m */,
+				557DE87116BD7F3F008ABA7B /* GameHUD.m */,
+				557DE87216BD7F3F008ABA7B /* GameHUD.h */,
 			);
 			name = "Menu & HUD";
 			sourceTree = "<group>";
@@ -1630,6 +1635,7 @@
 				5571D5D616BC884B00E979BB /* MainMenu.m in Sources */,
 				5571D5DF16BCAA7300E979BB /* ScreenCapture.m in Sources */,
 				558C009D16BD697700E4B96F /* GameObjectManager.m in Sources */,
+				557DE87316BD7F3F008ABA7B /* GameHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
