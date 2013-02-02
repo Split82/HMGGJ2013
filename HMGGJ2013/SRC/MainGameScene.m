@@ -205,6 +205,7 @@
 
     // Game object manager
     gameObjectManager = [[GameObjectManager alloc] initWithParentNode:self spriteBatchNode:mainSpriteBatch particleBatchNode:particleBatchNode];
+    gameObjectManager.delegate = self;
     gameObjectManager.zOrder = GAME_OBJECTS_Z_ORDER;
     gameObjectManager.groundY = GROUND_Y;
     gameObjectManager.coinPickupAnimationDestinationPos = gameHUD.coinsSpritePosition;
