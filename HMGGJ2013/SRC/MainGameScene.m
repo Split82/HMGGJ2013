@@ -554,8 +554,8 @@
     }
 
     // Killing texts
-    if (gameObjectManager.numberOfKillsInLastCalc < [killingStreakTexts count] && [killingStreakTexts[gameObjectManager.numberOfKillsInLastCalc] length] > 0) {
-        [gameObjectManager addScoreAddLabelWithText:killingStreakTexts[gameObjectManager.numberOfKillsInLastCalc] pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
+    if (gameObjectManager.numberOfKillsInLastCalc > 0 && gameObjectManager.numberOfKillsInLastCalc - 1 < [killingStreakTexts count] && [killingStreakTexts[gameObjectManager.numberOfKillsInLastCalc - 1] length] > 0) {
+        [gameObjectManager addScoreAddLabelWithText:killingStreakTexts[gameObjectManager.numberOfKillsInLastCalc - 1] pos:ccp([CCDirector sharedDirector].winSize.width * 0.5f, [CCDirector sharedDirector].winSize.height * 0.5) type:ScoreAddLabelTypeBlinking addSkull:NO];
     }
 
     // Menu
