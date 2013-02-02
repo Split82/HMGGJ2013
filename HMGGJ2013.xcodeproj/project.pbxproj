@@ -163,7 +163,6 @@
 		558C009816BD51E900E4B96F /* LeaderboardsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008E16BD51E900E4B96F /* LeaderboardsButtonHL.png */; };
 		558C009916BD51E900E4B96F /* LeaderboardsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008F16BD51E900E4B96F /* LeaderboardsButton.png */; };
 		558C009D16BD697700E4B96F /* GameObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 558C009C16BD697700E4B96F /* GameObjectManager.m */; };
-		558C00A016BD7E6E00E4B96F /* GameHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 558C009E16BD7E6E00E4B96F /* GameHUD.m */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -547,8 +546,6 @@
 		558C008F16BD51E900E4B96F /* LeaderboardsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeaderboardsButton.png; sourceTree = "<group>"; };
 		558C009B16BD697700E4B96F /* GameObjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameObjectManager.h; sourceTree = "<group>"; };
 		558C009C16BD697700E4B96F /* GameObjectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameObjectManager.m; sourceTree = "<group>"; };
-		558C009E16BD7E6E00E4B96F /* GameHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameHUD.m; sourceTree = "<group>"; };
-		558C009F16BD7E6E00E4B96F /* GameHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameHUD.h; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1191,8 +1188,6 @@
 				558C008216BD4D7400E4B96F /* Menu.h */,
 				5571D5D416BC884B00E979BB /* MainMenu.h */,
 				5571D5D516BC884B00E979BB /* MainMenu.m */,
-				558C009E16BD7E6E00E4B96F /* GameHUD.m */,
-				558C009F16BD7E6E00E4B96F /* GameHUD.h */,
 			);
 			name = "Menu & HUD";
 			sourceTree = "<group>";
@@ -1635,7 +1630,6 @@
 				5571D5D616BC884B00E979BB /* MainMenu.m in Sources */,
 				5571D5DF16BCAA7300E979BB /* ScreenCapture.m in Sources */,
 				558C009D16BD697700E4B96F /* GameObjectManager.m in Sources */,
-				558C00A016BD7E6E00E4B96F /* GameHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
