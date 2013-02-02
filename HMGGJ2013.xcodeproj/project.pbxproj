@@ -713,7 +713,6 @@
 		553741A016B1F72900D860C2 = {
 			isa = PBXGroup;
 			children = (
-				E62E84F816BC599F002CC58F /* StoreKit.framework */,
 				553741C116B1F72900D860C2 /* HMGGJ2013 */,
 				553741AE16B1F72900D860C2 /* Frameworks */,
 				553741AC16B1F72900D860C2 /* Products */,
@@ -731,6 +730,7 @@
 		553741AE16B1F72900D860C2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E62E84F816BC599F002CC58F /* StoreKit.framework */,
 				553741AF16B1F72900D860C2 /* QuartzCore.framework */,
 				553741B116B1F72900D860C2 /* OpenGLES.framework */,
 				553741B316B1F72900D860C2 /* OpenAL.framework */,
