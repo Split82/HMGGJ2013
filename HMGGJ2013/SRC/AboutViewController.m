@@ -9,22 +9,7 @@
 #import "AboutViewController.h"
 
 
-#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
-
-
-@interface AboutViewController ()
-
-@property (nonatomic, strong) UIView *padView;
-
-@end
-
 @implementation AboutViewController
-
-- (UIImage *)rasterizedImage:(NSString *)name {
-    UIImage *image = [UIImage imageNamed:name];
-    image = [UIImage imageWithCGImage:[image CGImage] scale:[[UIScreen mainScreen] scale] * 2 orientation:image.imageOrientation];
-    return image;
-}
 
 - (CGRect)rectWithSize:(CGSize)size originY:(CGFloat)originY {
     CGFloat scale = 2;
@@ -35,17 +20,22 @@
                       size.width, size.height);
 }
 
-- (void) viewDidLoad
-{
+- (void)viewDidLoad {
+
     [super viewDidLoad];
 
-    [self.backgroundView setImage:[self rasterizedImage:IS_WIDESCREEN ? @"about-bg" : @"about-bg-2"]];
-    [self.backgroundView.layer setMagnificationFilter:kCAFilterNearest];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    backgroundImageView.layer.contentsScale = [UIScreen mainScreen].scale * 2;
+    backgroundImageView.layer.magnificationFilter = kCAFilterNearest;
+    backgroundImageView.image = [UIImage imageNamed:IS_568H ? @"about-bg" : @"about-bg-2"];
+    [self.view addSubview:backgroundImageView];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[self rasterizedImage:@"about-twitter"]];
-    [imageView setFrame:[self rectWithSize:CGSizeMake(82.0, 92.0) originY:118 - (IS_WIDESCREEN ? 0 : 42.0)]];
-    [imageView.layer setMagnificationFilter:kCAFilterNearest];
-    [imageView setUserInteractionEnabled:YES];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"about-twitter"]];
+    imageView.frame = [self rectWithSize:CGSizeMake(82.0, 92.0) originY:118 - (IS_568H ? 0 : 42.0)];
+    imageView.layer.contentsScale = [UIScreen mainScreen].scale * 2;    
+    imageView.layer.magnificationFilter = kCAFilterNearest;
+    imageView.userInteractionEnabled = YES;
     [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twitterPressed:)]];
     [self.view addSubview:imageView];
 }
@@ -57,21 +47,21 @@
     CGPoint location = [sender locationInView:[sender view]];
     NSInteger p = floorf(location.y / 37);
     
-    if (p == 0)
+    if (p == 0) {
         [self openTwitterAppForFollowingUser:@"augard"];
-    else if (p == 1)
+    }
+    else if (p == 1) {
         [self openTwitterAppForFollowingUser:@"hladomorko"];
-    else if (p == 2)
+    }
+    else if (p == 2) {
         [self openTwitterAppForFollowingUser:@"karimartin"];
-    else if (p == 3)
+    }
+    else if (p == 3) {
         [self openTwitterAppForFollowingUser:@"lokimansk"];
-    else if (p == 4)
+    }
+    else if (p == 4) {
         [self openTwitterAppForFollowingUser:@"split82"];
-}
-
-- (IBAction) closeButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    }
 }
 
 - (void) openTwitterAppForFollowingUser:(NSString *)twitterUserName
@@ -152,6 +142,11 @@
 	// --- Fallback: Mobile Twitter in Safari
 	NSURL *safariURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://mobile.twitter.com/%@", twitterUserName]];
 	[app openURL:safariURL];
+}
+
+- (IBAction)closeButtonPressed:(id)sender {
+    
+    [_delegate aboutViewControllerDidFinish:self];
 }
 
 @end

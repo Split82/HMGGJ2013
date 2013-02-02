@@ -228,18 +228,18 @@ float frand() {
     }
     else {
 
-        if ((!_tapperKilled && ([_mainframe countTapEnemies] == 0)) || (_tapperKilled && !_swiperKilled && ([_mainframe countSwipeEnemies] == 0))) {
+        if ((!_tapperKilled && ([_mainframe masterControlProgramNumberOfTapEnemies:self] == 0)) || (_tapperKilled && !_swiperKilled && ([_mainframe masterControlProgramNumberOfSwipeEnemies:self] == 0))) {
             
             nextEnemySpawnTime -= deltaTime;
             
             if (nextEnemySpawnTime < 0) {
                 
-                [_mainframe addEnemy:_tapperKilled ? kEnemyTypeSwipe : kEnemyTypeTap];
+                [_mainframe masterControlProgram:self addEnemy:_tapperKilled ? kEnemyTypeSwipe : kEnemyTypeTap];
                 nextEnemySpawnTime = 1;
             }
         }
         
-        if (_swiperKilled && [_mainframe countTapEnemies] == 0 && [_mainframe countSwipeEnemies] == 0) {
+        if (_swiperKilled && [_mainframe masterControlProgramNumberOfTapEnemies:self] == 0 && [_mainframe masterControlProgramNumberOfSwipeEnemies:self] == 0) {
             
             self.tutorialFinished = YES;
             [self scheduleNewEnemySpawn];
@@ -262,7 +262,7 @@ float frand() {
     
     if (waitForUserProgress) {
         // wait for player to kill the previous wave
-        if ([self.mainframe countTapEnemies] + [self.mainframe countSwipeEnemies] > 1) {
+        if ([_mainframe masterControlProgramNumberOfTapEnemies:self] + [_mainframe masterControlProgramNumberOfSwipeEnemies:self] > 1) {
             
             nextWaveTime = WAVE_WAIT_FOR_USER[level];
             return;
@@ -296,10 +296,10 @@ float frand() {
 - (void)spawnEnemy {
     
     if (frand() <= swipeEnemiesRatio) {
-        [self.mainframe addEnemy:kEnemyTypeSwipe];
+        [_mainframe masterControlProgram:self addEnemy:kEnemyTypeSwipe];
     
     } else {
-        [self.mainframe addEnemy:kEnemyTypeTap];
+        [_mainframe masterControlProgram:self addEnemy:kEnemyTypeTap];
     }
     
     // in a wave
@@ -319,10 +319,10 @@ float frand() {
 
 - (void)spawnCoin {
     
-    if ([self.mainframe getPlayerCoins] <= MIN_PLAYER_COINS_TO_SPAWN_A_COIN) {
+    if ([_mainframe masterControlProgramNumberOfPlayerCoins:self] <= MIN_PLAYER_COINS_TO_SPAWN_A_COIN) {
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         
-        [self.mainframe addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
+        [_mainframe masterControlProgram:self addCoinAtPos:ccp(winSize.width * frand(), 600 /* randomly chosen by Jail */)];
     }
     
     [self sheduleNewCoinSpawn];

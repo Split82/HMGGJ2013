@@ -173,7 +173,7 @@
     [[CCDirector sharedDirector].view addSubview:mainView];
     
     CGFloat offset = 0.0;
-    if (!IS_WIDESCREEN) {
+    if (!IS_568H) {
         offset = 44.0;   
     }
     UIImageView *nameView = [[UIImageView alloc] initWithImage:[MenuButton rasterizedImage:@"menu-logo"]];
@@ -309,6 +309,7 @@
 }
 
 - (IBAction)startGameButtonPressed:(id)sender {
+    /*
     if ([self game]) {
         MainGameScene *scene = (MainGameScene *)[[CCDirector sharedDirector] runningScene];
         [scene.menuBackground removeFromParentAndCleanup:YES];
@@ -337,6 +338,7 @@
         
         [[AppDelegate player] gameStarted];
     }
+     */
 }
 
 - (IBAction)showLeaderboardButtonPressed:(id)sender {

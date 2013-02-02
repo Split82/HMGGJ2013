@@ -6,16 +6,15 @@
 //  Copyright (c) 2013 Hyperbolic Magnetism. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "EnemySprite.h"
 
-// the one who runs the game
-@protocol MainframeDelegate;
+@protocol MainFrame;
+
 
 // the necessary evil
 @interface MasterControlProgram : NSObject
 
-@property (nonatomic, weak) id <MainframeDelegate> mainframe;
+@property (nonatomic, weak) id <MainFrame> mainframe;
 @property (nonatomic, assign) BOOL tutorialFinished;
 @property (nonatomic, assign) BOOL tapperKilled;
 @property (nonatomic, assign) BOOL swiperKilled;
@@ -24,16 +23,13 @@
 
 @end
 
-@protocol MainframeDelegate <NSObject>
 
-- (void)addEnemy:(EnemyType)type;
+@protocol MainFrame <NSObject>
 
-- (int)countTapEnemies;
-
-- (int)countSwipeEnemies;
-
-- (void)addCoinAtPos:(CGPoint)pos;
-
-- (int)getPlayerCoins;
+- (void)masterControlProgram:(MasterControlProgram*)masterControlProgram addEnemy:(EnemyType)type;
+- (int)masterControlProgramNumberOfTapEnemies:(MasterControlProgram*)masterControlProgram;
+- (int)masterControlProgramNumberOfSwipeEnemies:(MasterControlProgram*)masterControlProgram;
+- (void)masterControlProgram:(MasterControlProgram*)masterControlProgram addCoinAtPos:(CGPoint)pos;
+- (int)masterControlProgramNumberOfPlayerCoins:(MasterControlProgram*)masterControlProgram;
 
 @end

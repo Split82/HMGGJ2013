@@ -6,12 +6,19 @@
 //  Copyright (c) 2013 Hyperbolic Magnetism. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+
+@protocol AboutViewControllerDelegate;
+
 
 @interface AboutViewController : UIViewController
 
-@property (nonatomic, strong) IBOutlet UIImageView *backgroundView;
+@property (nonatomic, weak) id <AboutViewControllerDelegate> delegate;
 
-- (IBAction) closeButtonPressed:(id)sender;
+@end
+
+
+@protocol AboutViewControllerDelegate <NSObject>
+
+- (void)aboutViewControllerDidFinish:(AboutViewController*)viewController;
 
 @end

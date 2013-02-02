@@ -147,7 +147,23 @@
 		554AD1FD16B45D1800441632 /* ScreenShaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FC16B45D1800441632 /* ScreenShaker.m */; };
 		554AD20016B462CA00441632 /* SlimeBubbleSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */; };
 		554AD21B16B49B9D00441632 /* ScoreAddLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AD21A16B49B9D00441632 /* ScoreAddLabel.m */; };
+		5571D5D016BC86D600E979BB /* Geom.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5CF16BC86D600E979BB /* Geom.m */; };
+		5571D5D616BC884B00E979BB /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5D516BC884B00E979BB /* MainMenu.m */; };
+		5571D5DC16BC9B2800E979BB /* GameHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5DB16BC9B2800E979BB /* GameHUD.m */; };
+		5571D5DF16BCAA7300E979BB /* ScreenCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5571D5DE16BCAA7300E979BB /* ScreenCapture.m */; };
 		55722C5216B391C9002D63D4 /* ExplosionParticleSystem.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */; };
+		558C008116BD481900E4B96F /* pause-h.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008016BD481900E4B96F /* pause-h.png */; };
+		558C009016BD51E900E4B96F /* RemoveAdsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008616BD51E900E4B96F /* RemoveAdsButtonHL.png */; };
+		558C009116BD51E900E4B96F /* AchievementsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008716BD51E900E4B96F /* AchievementsButtonHL.png */; };
+		558C009216BD51E900E4B96F /* RemoveAdsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008816BD51E900E4B96F /* RemoveAdsButton.png */; };
+		558C009316BD51E900E4B96F /* AchievementsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008916BD51E900E4B96F /* AchievementsButton.png */; };
+		558C009416BD51E900E4B96F /* SoundButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008A16BD51E900E4B96F /* SoundButtonHL.png */; };
+		558C009516BD51E900E4B96F /* SoundButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008B16BD51E900E4B96F /* SoundButton.png */; };
+		558C009616BD51E900E4B96F /* CreditsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008C16BD51E900E4B96F /* CreditsButton.png */; };
+		558C009716BD51E900E4B96F /* CreditsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008D16BD51E900E4B96F /* CreditsButtonHL.png */; };
+		558C009816BD51E900E4B96F /* LeaderboardsButtonHL.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008E16BD51E900E4B96F /* LeaderboardsButtonHL.png */; };
+		558C009916BD51E900E4B96F /* LeaderboardsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 558C008F16BD51E900E4B96F /* LeaderboardsButton.png */; };
+		558C009D16BD697700E4B96F /* GameObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 558C009C16BD697700E4B96F /* GameObjectManager.m */; };
 		55B860A816B206CD00D5BA8D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A416B206CD00D5BA8D /* AppDelegate.m */; };
 		55B860AA16B206CD00D5BA8D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860A716B206CD00D5BA8D /* main.m */; };
 		55B860AF16B206F800D5BA8D /* MainGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B860AE16B206F800D5BA8D /* MainGameScene.m */; };
@@ -510,7 +526,29 @@
 		554AD1FF16B462C900441632 /* SlimeBubbleSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlimeBubbleSprite.m; sourceTree = "<group>"; };
 		554AD21916B49B9D00441632 /* ScoreAddLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreAddLabel.h; sourceTree = "<group>"; };
 		554AD21A16B49B9D00441632 /* ScoreAddLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreAddLabel.m; sourceTree = "<group>"; };
+		5571D5CF16BC86D600E979BB /* Geom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Geom.m; sourceTree = "<group>"; };
+		5571D5D216BC86E000E979BB /* Geom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geom.h; sourceTree = "<group>"; };
+		5571D5D416BC884B00E979BB /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
+		5571D5D516BC884B00E979BB /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
+		5571D5DA16BC9B2700E979BB /* GameHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameHUD.h; sourceTree = "<group>"; };
+		5571D5DB16BC9B2800E979BB /* GameHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameHUD.m; sourceTree = "<group>"; };
+		5571D5DD16BCAA7300E979BB /* ScreenCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenCapture.h; sourceTree = "<group>"; };
+		5571D5DE16BCAA7300E979BB /* ScreenCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenCapture.m; sourceTree = "<group>"; };
 		55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExplosionParticleSystem.plist; sourceTree = "<group>"; };
+		558C008016BD481900E4B96F /* pause-h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause-h.png"; sourceTree = "<group>"; };
+		558C008216BD4D7400E4B96F /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Menu.h; sourceTree = "<group>"; };
+		558C008616BD51E900E4B96F /* RemoveAdsButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoveAdsButtonHL.png; sourceTree = "<group>"; };
+		558C008716BD51E900E4B96F /* AchievementsButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AchievementsButtonHL.png; sourceTree = "<group>"; };
+		558C008816BD51E900E4B96F /* RemoveAdsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoveAdsButton.png; sourceTree = "<group>"; };
+		558C008916BD51E900E4B96F /* AchievementsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AchievementsButton.png; sourceTree = "<group>"; };
+		558C008A16BD51E900E4B96F /* SoundButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SoundButtonHL.png; sourceTree = "<group>"; };
+		558C008B16BD51E900E4B96F /* SoundButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SoundButton.png; sourceTree = "<group>"; };
+		558C008C16BD51E900E4B96F /* CreditsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CreditsButton.png; sourceTree = "<group>"; };
+		558C008D16BD51E900E4B96F /* CreditsButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CreditsButtonHL.png; sourceTree = "<group>"; };
+		558C008E16BD51E900E4B96F /* LeaderboardsButtonHL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeaderboardsButtonHL.png; sourceTree = "<group>"; };
+		558C008F16BD51E900E4B96F /* LeaderboardsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeaderboardsButton.png; sourceTree = "<group>"; };
+		558C009B16BD697700E4B96F /* GameObjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameObjectManager.h; sourceTree = "<group>"; };
+		558C009C16BD697700E4B96F /* GameObjectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameObjectManager.m; sourceTree = "<group>"; };
 		55B860A316B206CD00D5BA8D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55B860A416B206CD00D5BA8D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		55B860A716B206CD00D5BA8D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -721,6 +759,7 @@
 		553741C216B1F72900D860C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				558C008516BD51DF00E4B96F /* Images */,
 				65708CD316B53E3A003C181A /* Default-568h@2x.png */,
 				65708CD416B53E3A003C181A /* Default.png */,
 				65708CD516B53E3A003C181A /* Default@2x.png */,
@@ -1092,6 +1131,92 @@
 		553BA19216B3148100B4E22B /* GameObjects */ = {
 			isa = PBXGroup;
 			children = (
+				558C009A16BD695100E4B96F /* Objects */,
+				558C009B16BD697700E4B96F /* GameObjectManager.h */,
+				558C009C16BD697700E4B96F /* GameObjectManager.m */,
+			);
+			name = GameObjects;
+			sourceTree = "<group>";
+		};
+		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
+			isa = PBXGroup;
+			children = (
+				554AD1F716B450AB00441632 /* BloodParticleSystem.plist */,
+				55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */,
+				55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */,
+			);
+			name = ParticleSystems;
+			sourceTree = "<group>";
+		};
+		553BA1B616B33C8400B4E22B /* Gestures */ = {
+			isa = PBXGroup;
+			children = (
+				553BA1B716B33CA000B4E22B /* GestureRecognizer.h */,
+				553BA1B816B33CA000B4E22B /* GestureRecognizer.m */,
+			);
+			name = Gestures;
+			sourceTree = "<group>";
+		};
+		554AD1FA16B45C5900441632 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				3891715816B4206C00EFAB71 /* MasterControlProgram.h */,
+				3891715916B4206C00EFAB71 /* MasterControlProgram.m */,
+				554AD1FB16B45D1800441632 /* ScreenShaker.h */,
+				554AD1FC16B45D1800441632 /* ScreenShaker.m */,
+				55F18D9016B5243F0034650D /* RandomPicker.h */,
+				55F18D8E16B5234D0034650D /* RandomPicker.m */,
+				65A4C05416B80AD900515885 /* MenuButton.h */,
+				65A4C05516B80AD900515885 /* MenuButton.m */,
+				5571D5D216BC86E000E979BB /* Geom.h */,
+				5571D5CF16BC86D600E979BB /* Geom.m */,
+				5571D5DD16BCAA7300E979BB /* ScreenCapture.h */,
+				5571D5DE16BCAA7300E979BB /* ScreenCapture.m */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
+		554AD20A16B4818200441632 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				5505212016B4CE740006D7F7 /* PixelFont.png */,
+				5505212116B4CE740006D7F7 /* PixelFont.fnt */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		5571D5D316BC882900E979BB /* Menu & HUD */ = {
+			isa = PBXGroup;
+			children = (
+				558C008216BD4D7400E4B96F /* Menu.h */,
+				5571D5D416BC884B00E979BB /* MainMenu.h */,
+				5571D5D516BC884B00E979BB /* MainMenu.m */,
+				5571D5DA16BC9B2700E979BB /* GameHUD.h */,
+				5571D5DB16BC9B2800E979BB /* GameHUD.m */,
+			);
+			name = "Menu & HUD";
+			sourceTree = "<group>";
+		};
+		558C008516BD51DF00E4B96F /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				558C008616BD51E900E4B96F /* RemoveAdsButtonHL.png */,
+				558C008716BD51E900E4B96F /* AchievementsButtonHL.png */,
+				558C008816BD51E900E4B96F /* RemoveAdsButton.png */,
+				558C008916BD51E900E4B96F /* AchievementsButton.png */,
+				558C008A16BD51E900E4B96F /* SoundButtonHL.png */,
+				558C008B16BD51E900E4B96F /* SoundButton.png */,
+				558C008C16BD51E900E4B96F /* CreditsButton.png */,
+				558C008D16BD51E900E4B96F /* CreditsButtonHL.png */,
+				558C008E16BD51E900E4B96F /* LeaderboardsButtonHL.png */,
+				558C008F16BD51E900E4B96F /* LeaderboardsButton.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		558C009A16BD695100E4B96F /* Objects */ = {
+			isa = PBXGroup;
+			children = (
 				5505212416B4F4BF0006D7F7 /* BombExplosion.h */,
 				5505212516B4F4C00006D7F7 /* BombExplosion.m */,
 				E6213AC716B5595E002F86CA /* TeslaCoil.h */,
@@ -1130,51 +1255,8 @@
 				E6A61C7816B33AD8000912CA /* WallGrid.m */,
 				554AD21916B49B9D00441632 /* ScoreAddLabel.h */,
 				554AD21A16B49B9D00441632 /* ScoreAddLabel.m */,
-				3891715816B4206C00EFAB71 /* MasterControlProgram.h */,
-				3891715916B4206C00EFAB71 /* MasterControlProgram.m */,
 			);
-			name = GameObjects;
-			sourceTree = "<group>";
-		};
-		553BA1AB16B32DEE00B4E22B /* ParticleSystems */ = {
-			isa = PBXGroup;
-			children = (
-				554AD1F716B450AB00441632 /* BloodParticleSystem.plist */,
-				55722C5116B391C9002D63D4 /* ExplosionParticleSystem.plist */,
-				55CDD45A16B38C0B00704F3B /* SimpleParticleTexture.png */,
-			);
-			name = ParticleSystems;
-			sourceTree = "<group>";
-		};
-		553BA1B616B33C8400B4E22B /* Gestures */ = {
-			isa = PBXGroup;
-			children = (
-				553BA1B716B33CA000B4E22B /* GestureRecognizer.h */,
-				553BA1B816B33CA000B4E22B /* GestureRecognizer.m */,
-			);
-			name = Gestures;
-			sourceTree = "<group>";
-		};
-		554AD1FA16B45C5900441632 /* Others */ = {
-			isa = PBXGroup;
-			children = (
-				554AD1FB16B45D1800441632 /* ScreenShaker.h */,
-				554AD1FC16B45D1800441632 /* ScreenShaker.m */,
-				55F18D9016B5243F0034650D /* RandomPicker.h */,
-				55F18D8E16B5234D0034650D /* RandomPicker.m */,
-				65A4C05416B80AD900515885 /* MenuButton.h */,
-				65A4C05516B80AD900515885 /* MenuButton.m */,
-			);
-			name = Others;
-			sourceTree = "<group>";
-		};
-		554AD20A16B4818200441632 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				5505212016B4CE740006D7F7 /* PixelFont.png */,
-				5505212116B4CE740006D7F7 /* PixelFont.fnt */,
-			);
-			name = Fonts;
+			name = Objects;
 			sourceTree = "<group>";
 		};
 		55B860A216B206CD00D5BA8D /* SRC */ = {
@@ -1184,6 +1266,7 @@
 				553BA19216B3148100B4E22B /* GameObjects */,
 				553BA1B616B33C8400B4E22B /* Gestures */,
 				554AD1FA16B45C5900441632 /* Others */,
+				5571D5D316BC882900E979BB /* Menu & HUD */,
 				55B860AB16B206DE00D5BA8D /* Scenes */,
 				553BA19116B3105000B4E22B /* Controllers */,
 				653B145816B3131600E2FD0F /* Models */,
@@ -1237,6 +1320,7 @@
 				650CCBA716B4AE52004F0241 /* menu-resume.png */,
 				65A4C05716B811CF00515885 /* menu-resume-h.png */,
 				659A0A5316B4690B00D3B1A8 /* pause.png */,
+				558C008016BD481900E4B96F /* pause-h.png */,
 				554AD1EB16B4469900441632 /* progress.png */,
 				554AD1EC16B4469900441632 /* progressBack.png */,
 				554AD1ED16B4469A00441632 /* progressBar.png */,
@@ -1392,6 +1476,17 @@
 				55F18DF016B568AA0034650D /* CoinHit3.wav in Resources */,
 				55F18DF116B568AA0034650D /* CoinHit1.wav in Resources */,
 				65A4C05816B811CF00515885 /* menu-resume-h.png in Resources */,
+				558C008116BD481900E4B96F /* pause-h.png in Resources */,
+				558C009016BD51E900E4B96F /* RemoveAdsButtonHL.png in Resources */,
+				558C009116BD51E900E4B96F /* AchievementsButtonHL.png in Resources */,
+				558C009216BD51E900E4B96F /* RemoveAdsButton.png in Resources */,
+				558C009316BD51E900E4B96F /* AchievementsButton.png in Resources */,
+				558C009416BD51E900E4B96F /* SoundButtonHL.png in Resources */,
+				558C009516BD51E900E4B96F /* SoundButton.png in Resources */,
+				558C009616BD51E900E4B96F /* CreditsButton.png in Resources */,
+				558C009716BD51E900E4B96F /* CreditsButtonHL.png in Resources */,
+				558C009816BD51E900E4B96F /* LeaderboardsButtonHL.png in Resources */,
+				558C009916BD51E900E4B96F /* LeaderboardsButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1536,6 +1631,11 @@
 				E6213AC916B5595F002F86CA /* TeslaCoil.m in Sources */,
 				65A4C05616B80AD900515885 /* MenuButton.m in Sources */,
 				E62E84F716BC5806002CC58F /* IAPModel.m in Sources */,
+				5571D5D016BC86D600E979BB /* Geom.m in Sources */,
+				5571D5D616BC884B00E979BB /* MainMenu.m in Sources */,
+				5571D5DC16BC9B2800E979BB /* GameHUD.m in Sources */,
+				5571D5DF16BCAA7300E979BB /* ScreenCapture.m in Sources */,
+				558C009D16BD697700E4B96F /* GameObjectManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

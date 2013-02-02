@@ -7,28 +7,15 @@
 //
 
 #import "GestureRecognizer.h"
-#import "CoinSprite.h"
-#import "EnemySprite.h"
-#import "BombSprite.h"
+#import "GameObjectManager.h"
 #import "BombSpawner.h"
 #import "MasterControlProgram.h"
-#import "EnemyBodyDebris.h"
-#import "ScoreAddLabel.h"
-#import "FlyingSkullSprite.h"
-#import "BombExplosion.h"
-#import "Lightning.h"
-#import "WaterSplash.h"
-#import "Trail.h"
+#import "MainMenu.h"
+#import "GameHUD.h"
+#import "AboutViewController.h"
 
-#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0f)
-#define GROUND_Y (IS_WIDESCREEN ? 89 : 60)
+#define GROUND_Y (IS_568H ? 89 : 60)
 
-@interface MainGameScene : CCScene <GestureRecognizerDelegate, CoinSpriteDelegate, EnemySpriteDelegate, BombSpriteDelegate, BombSpawnerDelegate, MainframeDelegate, EnemyBodyDebrisDelegate, ScoreAddLabelDelegate, FlyingSkullSpriteDelegate, BombExplosionDelegate,LightningDelegate, WaterSplashDelegate, TrailDelegate>
-
-@property (nonatomic, strong) CCLayer *menuBackground;
-@property (nonatomic, strong) UIView *mainView;
-
-@property (nonatomic, assign) BOOL pause;
-@property (nonatomic, assign) BOOL gameOver;
+@interface MainGameScene : CCScene <GestureRecognizerDelegate, BombSpawnerDelegate, MainFrame, GameObjectManagerDelegate, MainMenuDelegate, GameHUDDelegate, AboutViewControllerDelegate>
 
 @end

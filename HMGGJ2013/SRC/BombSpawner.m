@@ -28,6 +28,8 @@
 
 @implementation BombSpawner
 
+@synthesize spawning;
+
 - (id)init {
 
     self = [self initWithSpriteFrameName:@"progress1.png"];

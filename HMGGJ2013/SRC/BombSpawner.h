@@ -13,6 +13,7 @@
 
 @interface BombSpawner : CCSprite
 
+@property (nonatomic, readonly) BOOL spawning;
 @property (nonatomic, readonly) CGPoint pos;
 @property (nonatomic, weak) id <BombSpawnerDelegate> delegate;
 

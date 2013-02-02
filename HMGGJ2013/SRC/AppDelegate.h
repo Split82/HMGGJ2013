@@ -8,11 +8,8 @@
 
 #import "PlayerModel.h"
 
-@class MainMenuGameScene;
-
 @interface AppDelegate : NSObject <UIApplicationDelegate>
 
-+ (MainMenuGameScene *) mainMenuScene;
 + (PlayerModel *) player;
 @property (nonatomic, strong) PlayerModel *player;
 
